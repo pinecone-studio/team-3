@@ -1,0 +1,38 @@
+{
+	"name": "asset-management-service",
+	"version": "0.0.0",
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"deploy": "wrangler deploy",
+		"drizzle-generate": "drizzle-kit generate",
+		"drizzle-migrate": "drizzle-kit push",
+		"dev": "wrangler dev",
+		"start": "wrangler dev",
+		"test": "vitest",
+		"cf-typegen": "wrangler types",
+		"codegen": "graphql-codegen --config codegen.yml"
+	},
+	"devDependencies": {
+		"@cloudflare/vitest-pool-workers": "^0.12.4",
+		"@cloudflare/workers-types": "^4.20260307.1",
+		"@graphql-codegen/cli": "^6.1.3",
+		"@graphql-codegen/typescript": "^5.0.9",
+		"@graphql-codegen/typescript-operations": "^5.0.9",
+		"@graphql-codegen/typescript-resolvers": "^5.1.7",
+		"@types/node": "^25.3.5",
+		"drizzle-kit": "^0.31.9",
+		"ts-node": "^10.9.2",
+		"typescript": "^5.5.2",
+		"vitest": "~3.2.0",
+		"wrangler": "^4.71.0"
+	},
+	"dependencies": {
+		"@apollo/server": "^4.13.0",
+		"@as-integrations/cloudflare-workers": "^1.1.1",
+		"drizzle-orm": "^0.45.1",
+		"graphql": "^16.13.1",
+		"graphql-tag": "^2.12.6",
+		"nanoid": "^5.1.6"
+	}
+}
