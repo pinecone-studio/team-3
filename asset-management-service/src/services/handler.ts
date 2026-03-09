@@ -11,6 +11,7 @@ export const handler = startServerAndCreateCloudflareWorkersHandler<Env, Context
     context: async ({ env, request }) => {
         return {
             env,
+            DB:env.DB
         };
     },
 });
