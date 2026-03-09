@@ -15,6 +15,23 @@ export type Scalars = {
   Float: { input: number; output: number; }
 };
 
+export type Data = {
+  __typename?: 'Data';
+  category?: Maybe<Scalars['String']['output']>;
+  id: Scalars['String']['output'];
+  name: Scalars['String']['output'];
+};
+
+export type Mutation = {
+  __typename?: 'Mutation';
+  testMutation: Response;
+};
+
+export type Query = {
+  __typename?: 'Query';
+  testQuery: Array<Data>;
+};
+
 export enum Response {
   Failed = 'Failed',
   Success = 'Success'
@@ -23,6 +40,11 @@ export enum Response {
 export enum Test {
   Haha = 'haha'
 }
+
+export type TestQueryResponse = {
+  __typename?: 'TestQueryResponse';
+  result: Scalars['String']['output'];
+};
 
 
 
@@ -94,16 +116,47 @@ export type DirectiveResolverFn<TResult = Record<PropertyKey, never>, TParent = 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
+  Data: ResolverTypeWrapper<Data>;
+  Mutation: ResolverTypeWrapper<Record<PropertyKey, never>>;
+  Query: ResolverTypeWrapper<Record<PropertyKey, never>>;
   Response: Response;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
   Test: Test;
+  TestQueryResponse: ResolverTypeWrapper<TestQueryResponse>;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
   Boolean: Scalars['Boolean']['output'];
+  Data: Data;
+  Mutation: Record<PropertyKey, never>;
+  Query: Record<PropertyKey, never>;
   String: Scalars['String']['output'];
+  TestQueryResponse: TestQueryResponse;
 };
 
-export type Resolvers<ContextType = Context> = {};
+export type DataResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Data'] = ResolversParentTypes['Data']> = {
+  category?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+};
+
+export type MutationResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
+  testMutation?: Resolver<ResolversTypes['Response'], ParentType, ContextType>;
+};
+
+export type QueryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
+  testQuery?: Resolver<Array<ResolversTypes['Data']>, ParentType, ContextType>;
+};
+
+export type TestQueryResponseResolvers<ContextType = Context, ParentType extends ResolversParentTypes['TestQueryResponse'] = ResolversParentTypes['TestQueryResponse']> = {
+  result?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+};
+
+export type Resolvers<ContextType = Context> = {
+  Data?: DataResolvers<ContextType>;
+  Mutation?: MutationResolvers<ContextType>;
+  Query?: QueryResolvers<ContextType>;
+  TestQueryResponse?: TestQueryResponseResolvers<ContextType>;
+};
 

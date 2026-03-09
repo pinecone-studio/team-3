@@ -18,7 +18,7 @@
       "binding": "DB",
       "database_name": "asset-management",
       "database_id": "6875a5f9-1fc7-4723-891a-56e1864a0e85",
-      "migrations_dir": "src/db/migrations"
+    //   "migrations_dir": "src/db/migrations"
     }]
 	/**
 	 * Smart Placement
