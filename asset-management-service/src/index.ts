@@ -1,8 +1,6 @@
-import { handler } from "./services/handler";
-
+import { handler } from './services/handler';
+import { corsWrapper } from './utils/cors/cors-wrapper';
 
 export default {
-	fetch(request: Request, env: Env, ctx: ExecutionContext) {
-	  return handler(request, env, ctx);
-	}
-  };
+	fetch: corsWrapper(handler),
+};
