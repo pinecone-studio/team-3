@@ -9,7 +9,8 @@
     "export": "next export",
     "lint": "eslint",
     "codegen": "graphql-codegen",
-    "codegen:watch": "graphql-codegen --watch"
+    "codegen:watch": "graphql-codegen --watch",
+    "deploy": "wrangler pages deploy out"
   },
   "dependencies": {
     "@apollo/client": "^3.14.0",
