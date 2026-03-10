@@ -4,7 +4,7 @@ import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
 import { Slot } from "radix-ui"
 
-import { useIsMobile } from "@/hooks/use-mobile"
+
 import { cn } from "@/libs/utils"
 
 import { PanelLeftIcon } from "lucide-react"
@@ -14,6 +14,7 @@ import { Input } from "./input"
 import { Separator } from "./separator"
 import { Tooltip, TooltipContent, TooltipTrigger } from "./tooltip"
 import { Skeleton } from "./skeleton"
+import { useIsMobile } from "@/hooks/use-mobile"
 
 const SIDEBAR_COOKIE_NAME = "sidebar_state"
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7
