@@ -3,38 +3,41 @@ import { gql } from 'graphql-tag';
 export const assetTypeDefs = gql`
 	type Asset {
 		id: ID!
-		asset_tag: String!
+		assetTag: String!
 		category: String!
-		serial_number: String
+		serialNumber: String
 		status: String!
-		purchase_date: String
-		purchase_cost: Float
-		current_book_value: Float
-		location_id: String
-		assigned_to: String
+		purchaseDate: String
+		purchaseCost: Float
+		currentBookValue: Float
+		locationId: String
+		assignedTo: String
 		createdAt: String
 		updatedAt: String
 		deletedAt: String
 	}
 
-	# Use Inputs for Mutations to keep arguments organized
+	# Input for Mutations
 	input CreateAssetInput {
-		asset_tag: String!
+		assetTag: String!
 		category: String!
-		serial_number: String
+		serialNumber: String
 		status: String
-		location_id: String
-		purchase_date: String
-		purchase_cost: Float
+		locationId: String
+		purchaseDate: String
+		purchaseCost: Float
 	}
 
 	input UpdateAssetInput {
+		assetTag: String
 		category: String
 		status: String
-		serial_number: String
-		location_id: String
-		assigned_to: String
-		current_book_value: Float
+		serialNumber: String
+		locationId: String
+		assignedTo: String
+		currentBookValue: Float
+		purchaseDate: String
+		purchaseCost: Float
 	}
 
 	type Query {
