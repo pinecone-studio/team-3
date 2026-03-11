@@ -1,1 +1,1 @@
-export * from "./test-mutation"
+export * from './asset.mutation';

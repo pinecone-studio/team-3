@@ -1,12 +1,5 @@
-
-
 import { mergeTypeDefs } from '@graphql-tools/merge';
 import { commonTypeDefs } from './common.schema';
-import { testTypeDefs } from './test.schema';
+import { assetTypeDefs } from './asset.schema';
 
-
-
-export const typeDefs = mergeTypeDefs([
-    commonTypeDefs,
-    testTypeDefs
-]);
+export const typeDefs = mergeTypeDefs([commonTypeDefs, assetTypeDefs]);

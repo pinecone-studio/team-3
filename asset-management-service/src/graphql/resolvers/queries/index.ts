@@ -1,1 +1,1 @@
-export * from './test-query'
+export * from './assset-query';
