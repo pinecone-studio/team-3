@@ -8,6 +8,13 @@
       "when": 1773053485417,
       "tag": "0000_left_naoko",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1773215930380,
+      "tag": "0001_acoustic_earthquake",
+      "breakpoints": true
     }
   ]
 }
