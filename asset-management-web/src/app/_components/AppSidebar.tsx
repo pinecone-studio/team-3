@@ -1,4 +1,4 @@
-"use client";
+import Link from "next/link"
 import {
   Sidebar,
   SidebarContent,
@@ -57,9 +57,11 @@ export function AppSidebar() {
               </SidebarMenuBadge>
             </SidebarMenuItem>
             <SidebarMenuItem>
-              <SidebarMenuButton>
-                <CheckSquare /> Баталгаажуулалт
-              </SidebarMenuButton>
+              <Link href="/confirmation">
+               <SidebarMenuButton>
+               <CheckSquare /> Баталгаажуулалт
+                </SidebarMenuButton>
+                </Link>
               <SidebarMenuBadge className="bg-red-500 text-white">
                 1
               </SidebarMenuBadge>
