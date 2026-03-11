@@ -1,15 +1,8 @@
 import { Button } from "@/libs";
 import {
-  ArrowIcon,
   CheckListIcon,
-  CheckListMini,
   CubIcon,
-  DesctopIcon,
-  DocumentIcon,
   DocumentIconSmall,
-  IphoneIcon,
-  MacBook,
-  ProgressDemo,
   WarningBlueIcon,
 } from "./icons/icons";
 

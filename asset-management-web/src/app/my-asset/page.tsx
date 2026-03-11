@@ -66,7 +66,7 @@ export default function MyAssetsPage() {
           </p>
         </div>
 
-        <div className="grid grid-cols-[2fr_1.5fr_1fr_1fr_1fr_40px] gap-4 pb-4 border-b border-gray-100 mb-2">
+        <div className="grid grid-cols-[2fr_1.5fr_1fr_1fr_1fr_40px] gap-4 pb-4 border-b-2 border-gray-100 mb-2">
           <div className="text-[13px] font-bold text-gray-800">Төхөөрөмж</div>
           <div className="text-[13px] font-bold text-gray-800">
             Код / Серийн дугаар

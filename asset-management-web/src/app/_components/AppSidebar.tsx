@@ -1,4 +1,5 @@
-import Link from "next/link"
+"use client";
+import Link from "next/link";
 import {
   Sidebar,
   SidebarContent,
@@ -49,7 +50,7 @@ export function AppSidebar() {
               </SidebarMenuButton>
             </SidebarMenuItem>
             <SidebarMenuItem>
-              <SidebarMenuButton onClick={() => router.push("/my-assets")}>
+              <SidebarMenuButton onClick={() => router.push("/my-asset")}>
                 <Package /> Миний хөрөнгө
               </SidebarMenuButton>
               <SidebarMenuBadge className="bg-gray-200 text-gray-800">
@@ -58,10 +59,10 @@ export function AppSidebar() {
             </SidebarMenuItem>
             <SidebarMenuItem>
               <Link href="/confirmation">
-               <SidebarMenuButton>
-               <CheckSquare /> Баталгаажуулалт
+                <SidebarMenuButton>
+                  <CheckSquare /> Баталгаажуулалт
                 </SidebarMenuButton>
-                </Link>
+              </Link>
               <SidebarMenuBadge className="bg-red-500 text-white">
                 1
               </SidebarMenuBadge>
@@ -84,7 +85,7 @@ export function AppSidebar() {
           </SidebarMenu>
         </SidebarGroup>
 
-        <SidebarGroup className="border-t ">
+        <SidebarGroup className="border-t-3">
           <SidebarGroupLabel>Хэрэгсэл</SidebarGroupLabel>
           <SidebarMenu>
             <SidebarMenuItem>
@@ -99,11 +100,14 @@ export function AppSidebar() {
             </SidebarMenuItem>
           </SidebarMenu>
         </SidebarGroup>
-        <SidebarGroup className="border-t">
+        <SidebarGroup className="border-t-3">
           <SidebarGroupLabel>Чөлөөлөлт</SidebarGroupLabel>
           <SidebarMenu>
             <SidebarMenuItem className="bg-red-50/50 text-red-700 rounded-md">
-              <SidebarMenuButton className="">
+              <SidebarMenuButton
+                onClick={() => router.push("/asset-return")}
+                className=""
+              >
                 <RotateCcw /> Буцаалт
               </SidebarMenuButton>
               <SidebarMenuBadge className="text-white border bg-red-500">
@@ -114,7 +118,7 @@ export function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter className="p-4 border-t pb-30">
+      <SidebarFooter className="p-4 border-t-3 pb-30">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center">
             <User size={20} className="text-slate-400" />

@@ -5,7 +5,6 @@ import {
   Keyboard,
   MoreHorizontal,
 } from "lucide-react";
-import { AssetLimitType } from "@/libs/type";
 
 const getIcon = (type: string) => {
   switch (type.toLowerCase()) {
@@ -22,7 +21,7 @@ const getIcon = (type: string) => {
 
 export const AssetListItem = ({ data }: { data: any }) => {
   return (
-    <div className="grid grid-cols-[2fr_1.5fr_1fr_1fr_1fr_40px] gap-4 items-center py-4 border-b border-gray-100 last:border-0 hover:bg-gray-50 transition-colors">
+    <div className="grid grid-cols-[2fr_1.5fr_1fr_1fr_1fr_40px] gap-4 items-center py-4 border-b-2 border-gray-100 last:border-0 hover:bg-gray-50 transition-colors">
       <div className="flex items-center gap-3">
         <div className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center shrink-0">
           {getIcon(data.iconType)}
