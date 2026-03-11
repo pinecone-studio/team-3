@@ -1,3 +1,4 @@
+"use client";
 import {
   Sidebar,
   SidebarContent,
@@ -22,8 +23,10 @@ import {
   Settings,
   User,
 } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export function AppSidebar() {
+  const router = useRouter();
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader className="p-4 border-b">
@@ -46,7 +49,7 @@ export function AppSidebar() {
               </SidebarMenuButton>
             </SidebarMenuItem>
             <SidebarMenuItem>
-              <SidebarMenuButton>
+              <SidebarMenuButton onClick={() => router.push("/my-assets")}>
                 <Package /> Миний хөрөнгө
               </SidebarMenuButton>
               <SidebarMenuBadge className="bg-gray-200 text-gray-800">
