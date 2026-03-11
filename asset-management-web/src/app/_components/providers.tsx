@@ -6,5 +6,6 @@ import { client } from "../_hooks/apollo-client"
 
 
 export function Providers({ children }: { children: React.ReactNode }) {
-  return <ApolloProvider client={client}>{children}</ApolloProvider>
+  return <ApolloProvider client={client}>
+    {children}</ApolloProvider>
 }
