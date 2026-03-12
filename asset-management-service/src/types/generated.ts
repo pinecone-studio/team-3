@@ -21,7 +21,6 @@ export type Asset = {
   assetTag: Scalars['String']['output'];
   assignedTo?: Maybe<Scalars['String']['output']>;
   category: Scalars['String']['output'];
-  createdAt?: Maybe<Scalars['String']['output']>;
   currentBookValue?: Maybe<Scalars['Float']['output']>;
   deletedAt?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
@@ -30,7 +29,6 @@ export type Asset = {
   purchaseDate?: Maybe<Scalars['String']['output']>;
   serialNumber?: Maybe<Scalars['String']['output']>;
   status: AssetStatusEnum;
-  updatedAt?: Maybe<Scalars['String']['output']>;
 };
 
 export enum AssetStatusEnum {
@@ -67,10 +65,10 @@ export enum EmployeeStatusEnum {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  createAsset: Asset;
-  deleteAsset: Asset;
+  createAsset: Response;
+  deleteAsset: Response;
   testMutation: Response;
-  updateAsset: Asset;
+  updateAsset: Response;
 };
 
 
@@ -98,19 +96,19 @@ export enum PosStatusEnum {
 
 export type Query = {
   __typename?: 'Query';
-  asset?: Maybe<Asset>;
-  assets: Array<Asset>;
+  getAssetById?: Maybe<Asset>;
+  getAssets: Array<Asset>;
   testQuery: Array<Data>;
 };
 
 
-export type QueryAssetArgs = {
+export type QueryGetAssetByIdArgs = {
   id: Scalars['ID']['input'];
 };
 
 export enum Response {
-  Failed = 'Failed',
-  Success = 'Success'
+  Failed = 'FAILED',
+  Success = 'SUCCESS'
 }
 
 export enum Test {
@@ -248,7 +246,6 @@ export type AssetResolvers<ContextType = Context, ParentType extends ResolversPa
   assetTag?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   assignedTo?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   category?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  createdAt?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   currentBookValue?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
   deletedAt?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
@@ -257,7 +254,6 @@ export type AssetResolvers<ContextType = Context, ParentType extends ResolversPa
   purchaseDate?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   serialNumber?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   status?: Resolver<ResolversTypes['AssetStatusEnum'], ParentType, ContextType>;
-  updatedAt?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
 };
 
 export type DataResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Data'] = ResolversParentTypes['Data']> = {
@@ -267,15 +263,15 @@ export type DataResolvers<ContextType = Context, ParentType extends ResolversPar
 };
 
 export type MutationResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
-  createAsset?: Resolver<ResolversTypes['Asset'], ParentType, ContextType, RequireFields<MutationCreateAssetArgs, 'input'>>;
-  deleteAsset?: Resolver<ResolversTypes['Asset'], ParentType, ContextType, RequireFields<MutationDeleteAssetArgs, 'id'>>;
+  createAsset?: Resolver<ResolversTypes['Response'], ParentType, ContextType, RequireFields<MutationCreateAssetArgs, 'input'>>;
+  deleteAsset?: Resolver<ResolversTypes['Response'], ParentType, ContextType, RequireFields<MutationDeleteAssetArgs, 'id'>>;
   testMutation?: Resolver<ResolversTypes['Response'], ParentType, ContextType>;
-  updateAsset?: Resolver<ResolversTypes['Asset'], ParentType, ContextType, RequireFields<MutationUpdateAssetArgs, 'id' | 'input'>>;
+  updateAsset?: Resolver<ResolversTypes['Response'], ParentType, ContextType, RequireFields<MutationUpdateAssetArgs, 'id' | 'input'>>;
 };
 
 export type QueryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
-  asset?: Resolver<Maybe<ResolversTypes['Asset']>, ParentType, ContextType, RequireFields<QueryAssetArgs, 'id'>>;
-  assets?: Resolver<Array<ResolversTypes['Asset']>, ParentType, ContextType>;
+  getAssetById?: Resolver<Maybe<ResolversTypes['Asset']>, ParentType, ContextType, RequireFields<QueryGetAssetByIdArgs, 'id'>>;
+  getAssets?: Resolver<Array<ResolversTypes['Asset']>, ParentType, ContextType>;
   testQuery?: Resolver<Array<ResolversTypes['Data']>, ParentType, ContextType>;
 };
 
