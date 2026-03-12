@@ -3,9 +3,9 @@ import * as Query from './queries';
 
 export const resolvers = {
 	Query: {
-		...Query.assetQueries,
+		...Query,
 	},
 	Mutation: {
-		...Mutation.assetMutations,
+		...Mutation,
 	},
 };

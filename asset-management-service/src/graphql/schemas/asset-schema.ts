@@ -21,8 +21,6 @@ export const assetTypeDefs = gql`
 		currentBookValue: Float
 		locationId: String
 		assignedTo: String
-		createdAt: String
-		updatedAt: String
 		deletedAt: String
 	}
 
@@ -49,13 +47,13 @@ export const assetTypeDefs = gql`
 	}
 
 	type Query {
-		assets: [Asset!]!
-		asset(id: ID!): Asset
+		getAssets: [Asset!]!
+		getAssetById(id: ID!): Asset
 	}
 
 	type Mutation {
-		createAsset(input: CreateAssetInput!): Asset!
-		updateAsset(id: ID!, input: UpdateAssetInput!): Asset!
-		deleteAsset(id: ID!): Asset!
+		createAsset(input: CreateAssetInput!): Response!
+		updateAsset(id: ID!, input: UpdateAssetInput!): Response!
+		deleteAsset(id: ID!): Response!
 	}
 `;
