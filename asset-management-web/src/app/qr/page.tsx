@@ -1,4 +1,3 @@
-// app/batalgaajuulalt/page.tsx
 import type { Metadata } from "next";
 
 import QrVerificationHeader from "@/app/qr/components/QrHeader";
@@ -11,17 +10,15 @@ export const metadata: Metadata = {
 
 export default function BatalgaajuulaltPage() {
   return (
-    <div className="flex h-screen bg-gray-50">
-      <main className="flex-1 overflow-auto p-6">
-        <div className="mx-auto max-w-5xl">
-          <QrVerificationHeader />
+    <div className="min-h-screen bg-gray-100">
+      <main className="w-full px-8 py-8">
+        <QrVerificationHeader />
 
-          <div className="mt-6 rounded-xl bg-white shadow-sm">
-            <ProgressBar current={2} total={4} />
+        <div className="mt-6 rounded-2xl bg-white shadow-sm">
+          <ProgressBar current={2} total={4} />
 
-            <div className="p-6">
-              <DeviceList />
-            </div>
+          <div className="p-8">
+            <DeviceList />
           </div>
         </div>
       </main>

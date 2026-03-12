@@ -1,73 +1,92 @@
-
 const mockDevices = [
   {
     name: "MacBook Pro 14\"",
-    code: "MAC-2025-005",
-    date: "3/30/2025",
+    code: "MAC-2026-005",
+    date: "3/8/2026",
     status: "Баталгаажсан",
     isVerified: true,
+    icon: "💻"
   },
   {
     name: "Dell UltraSharp 27\"",
-    code: "MON-2025-012",
-    date: "3/30/2025 → 3/30/2026",
+    code: "MON-2026-012",
+    date: "3/8/2026",
     status: "Баталгаажсан",
     isVerified: true,
+    icon: "🖥"
   },
   {
-    name: "iPhone 15 Pro",
-    code: "PHN-2025-003",
-    date: "",
+    name: "MacBook Pro 14\"",
+    code: "MAC-2026-006",
+    description: "Зөөврийн компьютер",
     status: "Баталгаажуулах",
     isVerified: false,
+    icon: "💻"
   },
   {
-    name: "Magic Keyboard",
-    code: "PER-2025-008",
-    date: "",
+    name: "MacBook Pro 14\"",
+    code: "MAC-2026-008",
+    description: "Зөөврийн компьютер",
     status: "Баталгаажуулах",
     isVerified: false,
+    icon: "💻"
   },
 ];
 
 export default function DeviceList() {
   return (
-    <div className="space-y-4">
-      {mockDevices.map((device) => (
-        <div
-          key={device.code}
-          className="flex items-center justify-between rounded-lg border border-gray-200 p-4 hover:border-gray-300"
-        >
-          <div className="flex items-center gap-4">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gray-100 text-xl">
-              {device.name.includes("MacBook") || device.name.includes("iPhone")
-                ? ""
-                : "🖥"}
+    <div>
+      <h2 className="text-base font-semibold text-black mb-2">
+        Миний хөрөнгүүд
+      </h2>
+      <p className="text-sm text-gray-600 mb-6">
+        Доорх хөрөнгүүд танд олгогдсон байгааг баталгаажуулна уу
+      </p>
+
+      <div className="space-y-3">
+        {mockDevices.map((device, index) => (
+          <div
+            key={`${device.code}-${index}`}
+            className={`flex items-center justify-between rounded-lg p-4 ${
+              device.isVerified ? '' : 'bg-white'
+            }`}
+          >
+            <div className="flex items-center gap-4">
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gray-100 text-xl">
+                {device.icon}
+              </div>
+
+              <div>
+                <div className="flex items-center gap-3">
+                  <h3 className="font-medium text-black text-sm">
+                    {device.name}
+                  </h3>
+                  {device.isVerified && (
+                    <span className="rounded  px-2 py-0.5 text-xs font-medium text-dark">
+                      Баталгаажсан
+                    </span>
+                  )}
+                </div>
+                <p className="text-xs text-gray-500 mt-0.5">
+                  {device.code}
+                  {device.description && ` · ${device.description}`}
+                </p>
+                {device.date && (
+                  <p className="text-xs text-gray-500 mt-0.5">
+                    {device.date}
+                  </p>
+                )}
+              </div>
             </div>
 
-            <div>
-              <h3 className="font-medium text-gray-900">{device.name}</h3>
-              <p className="text-sm text-gray-500">{device.code}</p>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-6">
-            {device.date && (
-              <span className="text-sm text-gray-600">{device.date}</span>
-            )}
-
-            {device.isVerified ? (
-              <span className="rounded-full bg-green-100 px-3 py-1 text-sm font-medium text-green-700">
-                Баталгаажсан
-              </span>
-            ) : (
-              <button className="rounded-lg border border-green-600 px-4 py-1.5 text-sm font-medium text-green-700 hover:bg-green-50">
-                Баталгаажуулах
+            {!device.isVerified && (
+              <button className="text-sm font-medium text-gray-700 hover:text-gray-900">
+                Баталгаажуулаагүй
               </button>
             )}
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   );
 }
