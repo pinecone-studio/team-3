@@ -1,7 +1,9 @@
-import { assets, employees, assignments } from '../../../db/schema';
+import { assets, employees } from '../../../db/schema';
 import { eq, and, isNull } from 'drizzle-orm';
 import { GraphQLError } from 'graphql';
 import { drizzle } from 'drizzle-orm/d1';
+import { assignments } from '../../../db/schema/assigments.schema';
+import { AssetStatusEnum } from '../../../types/generated';
 
 export const assignmentMutations = {
 	assignAsset: async (_parent: any, { assetId, employeeId, condition }: any, context: any) => {
@@ -26,7 +28,7 @@ export const assignmentMutations = {
 		// 3. TRANSACTION: Update Asset AND Create Assignment
 		return await db.transaction(async (tx) => {
 			// Update Asset status to ASSIGNED
-			await tx.update(assets).set({ status: 'ASSIGNED', assignedTo: employeeId }).where(eq(assets.id, assetId));
+			await tx.update(assets).set({ status: AssetStatusEnum.Assigned, assignedTo: employeeId }).where(eq(assets.id, assetId));
 
 			// Create Assignment record
 			const [record] = await tx
