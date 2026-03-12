@@ -9,7 +9,9 @@ import {
   DocumentIconSmall,
   IphoneIcon,
   MacBook,
+  MiniDocumentIcon,
   ProgressDemo,
+  QrIcon,
   WarningBlueIcon,
 } from "./icons/icons";
 import { Cards } from "./Cards";
@@ -38,33 +40,44 @@ export function HomePage() {
   return (
     <div>
       <div>
-        <h1 className="text-4xl">Сайн байна уу, Энхжаргал</h1>
+        <h1 className="text-4xl">Сайн байна уу, Булгантуяа</h1>
         <p className="text-gray-400">Таны хөрөнгийн порталын тойм</p>
       </div>
 
-      <div className="bg-red-200 rounded-2xl  border-2 border-red-300 flex gap-3 items-center w-[1208px] h-[126px] justify-center gap-130">
+      <div className="bg-red-100 border border-red-300 rounded-2xl mt-10 px-6 py-4 flex items-center justify-between">
         <div className="flex items-center gap-5">
           <DocumentIcon />
 
           <div className="flex flex-col">
-            <h3>Баталгаажуулалт шаардлагатай</h3>
-            <p>Magic Keyboard (PER-2026-008) - гарын үсэг зурах шаардлагатай</p>
+            <h3 className="text-lg font-semibold text-gray-900">
+              Баталгаажуулалт шаардлагатай
+            </h3>
+
+            <p className="text-sm text-gray-600">
+              Magic Keyboard (PER-2026-008) - гарын үсэг зурах шаардлагатай
+            </p>
           </div>
         </div>
-        <Button>Баталгаажуулах</Button>
+
+        <Button className="flex items-center gap-2">
+          <MiniDocumentIcon />
+          Баталгаажуулах
+        </Button>
       </div>
 
       <Cards />
       <div className="border-2 rounded-2xl mt-5 pt-5 border-gray-400 w-[1208px] h-[340px]">
         {/* navbar */}
         <div className="flex items-center justify-between px-3">
-          <div>
-            <h1>Миний хөрөнгө</h1>
-            <p className="text-gray-400">Танд олгогдсон төхөөрөмжүүд</p>
+          <div className="mb-6">
+            <h2 className="text-lg font-semibold text-gray-900">
+              Миний хөрөнгө
+            </h2>
+            <p className="text-sm text-gray-500">Танд олгогдсон төхөөрөмжүүд</p>
           </div>
-          <Button className="flex items-center gap-2 border-1 border-gray-300 rounded-2xl bor text-black bg-white">
+          {/* <Button className="flex items-center gap-2 border-1 border-gray-300 rounded-2xl bor text-black bg-white">
             Бүгдийг харах <ArrowIcon />
-          </Button>
+          </Button> */}
         </div>
         {/* ends */}
         {/* mockdata */}
@@ -79,7 +92,7 @@ export function HomePage() {
                     {data.desc}
                   </div>
                 </div>
-                <Badge className="bg-gray-200 text-black border-2 border-gray-200">
+                <Badge className="rounded-md border-gray-200 bg-white px-3 py-1 text-xs text-gray-600">
                   {data.status}
                 </Badge>
               </div>
@@ -93,14 +106,13 @@ export function HomePage() {
         <h1 className="mt-5">Тооллогын баталгаажуулалт</h1>
         <div className="py-3 flex gap-4 flex-col text-gray-400">
           <p>2026 оны 1-р улирлын тооллого</p>
-          <p>Баталгаажуулсан</p>
         </div>
-        <div className="flex justify-between items-center  ">
+        <div className="flex justify-between items-center mt-7 ">
           <ProgressDemo />
           <p>2 / 4 хөрөнгө</p>
         </div>
-        <Button className="w-full bg-white border-gray-300 flex items-center justify-center text-black">
-          <CheckListMini />
+        <Button className=" ml-230 mt-5 bg-white border-gray-300 flex items-center justify-center text-black">
+          <QrIcon />
           Баталгаажуулалт үргэлжлүүлэх
         </Button>
       </div>

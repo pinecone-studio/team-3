@@ -16,10 +16,10 @@ export function Cards() {
       subtitle: "Хуваарилагдсан төхөөрөмж",
     },
     {
-      title: "Баталгаажуулалт",
+      title: "Гарын үсгэн баталгаажуулалт",
       icon: DocumentIconSmall(),
       number: "1",
-      requirement: "Шаардлагатай",
+      requirement: "",
 
       subtitle: "Хүлээгдэж буй гарын үсэг",
     },
@@ -45,11 +45,13 @@ export function Cards() {
           <div className="flex " key={i}>
             <div className="w-[290px] h-[166px] pl-5 pt-3 border-gray-200 border-2 rounded-2xl ">
               <div className="flex justify-between">
-                <p className="">{data.title}</p>
+                <p className="text-[20px] text-lg font-semibold h-12 leading-tight">
+                  {data.title}
+                </p>
                 <p className="pr-6">{data.icon}</p>
               </div>
-              <div className="flex mt-10 gap-3 items-center">
-                <h1 className="text-[25px]">{data.number}</h1>
+              <div className="flex mt-3 gap-3 items-center">
+                <h1 className="text-[30px]">{data.number}</h1>
                 {data.requirement ? (
                   <Button className="bg-red-500 text-white">
                     Шаардлагатай
