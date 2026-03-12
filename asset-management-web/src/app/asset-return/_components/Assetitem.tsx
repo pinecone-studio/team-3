@@ -30,7 +30,7 @@ export default function AssetItem({ asset }: any) {
   };
   return (
     <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
-      <div className="flex justify-between items-start border-b-2 border-gray-100 pb-4">
+      <div className="flex justify-between items-start border-b-2 border-gray-50 pb-4">
         <div className="flex gap-4 items-center">
           {getIcon()}
 
@@ -38,7 +38,7 @@ export default function AssetItem({ asset }: any) {
             <div className="flex items-center gap-2">
               <h1 className="font-medium text-[16px]">{asset.name}</h1>
 
-              <span className="px-2 py-0.5 bg-white text-[10px] rounded border border-gray-200 font-medium">
+              <span className="px-2 py-0.5 bg-white text-[12px] rounded-sm border border-gray-200 font-medium">
                 {asset.status == "pending"
                   ? "Хүлээгдэж байна"
                   : asset.status === "returned"
@@ -47,7 +47,7 @@ export default function AssetItem({ asset }: any) {
               </span>
             </div>
 
-            <p className="text-[14px] text-gray-500 font-medium tracking-wider">
+            <p className="text-[14px] text-[#555555] font-medium tracking-wider">
               {asset.code}
             </p>
           </div>
@@ -55,13 +55,13 @@ export default function AssetItem({ asset }: any) {
       </div>
 
       <div className="mt-4">
-        <p className="text-[13px] font-medium text-gray-800 mb-2">
+        <p className="text-[14px] font-bold text-gray-800 mb-2">
           Зааварчилгаа:
         </p>
-        <ul className="space-y-1.5 text-[14px] text-gray-500">
+        <ul className="space-y-1.5 text-[14px] font-medium text-[#555555]">
           {asset.instructions?.map((item: string, idx: number) => (
             <li key={idx} className="flex items-start gap-2">
-              <span className="mt-1.5 w-1 h-1 bg-gray-300 rounded-full shrink-0" />
+              <span className="mt-1.5 w-1.5 h-1.5 bg-gray-500 rounded-full shrink-0" />
               {item}
             </li>
           ))}

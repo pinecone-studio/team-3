@@ -1,4 +1,6 @@
+import { Button } from "@/libs";
 import StepItem from "./StepItem";
+import { PhoneCall } from "lucide-react";
 
 interface Step {
   id: number;
@@ -13,11 +15,13 @@ interface StepsSectionProps {
 
 export default function StepsSection({ steps }: StepsSectionProps) {
   return (
-    <div className="bg-white border border-gray-200 rounded-xl p-8 shadow-sm">
-      <h3 className="font-bold text-[16px] mb-1">Буцаалтын алхамууд</h3>
+    <div className="bg-white border border-gray-200  rounded-xl p-8 shadow-sm">
+      <h3 className="font-medium text-[16px] text-black mb-1">
+        Буцаалтын алхамууд
+      </h3>
 
-      <p className="text-[12px] text-gray-400 mb-8 font-medium">
-        Хөрөнгө буцаахын өмнө хийх зүйлс
+      <p className="text-[14px] text-black mb-8 font-normal">
+        Эдгээр төхөөрөмжүүдийг бүгдийг нь буцааж өгөх шаардлагатай
       </p>
       <div className="flex flex-col">
         {steps.map((step, idx) => (
@@ -30,6 +34,12 @@ export default function StepsSection({ steps }: StepsSectionProps) {
             isLast={idx === steps.length - 1}
           />
         ))}
+      </div>
+      <div className="flex  mt-2">
+        <Button className="bg-black hover:bg-[#1B4332] text-white px-5 py-4 rounded-lg flex items-center gap-2 text-sm font-bold shadow-md transition-all active:scale-95">
+          <PhoneCall size={18} />
+          IT хэлтэстэй холбогдох
+        </Button>
       </div>
     </div>
   );
