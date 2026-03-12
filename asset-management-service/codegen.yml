@@ -9,4 +9,4 @@ generates:
     config:
       contextType: Context
       makeResolverTypeCallable: true
-      maybeValue: T
+    maybeValue: T | null | undefined

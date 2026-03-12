@@ -1,10 +1,9 @@
 import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core';
-import { EmployeeStatusEnum } from '../../types/generated';
-
+import { EmployeeStatus } from '../../types/generated';
 
 // --- 1. EMPLOYEES ---
 export const employees = sqliteTable('employees', {
-	id: text('id').primaryKey(), 
+	id: text('id').primaryKey(),
 	entraId: text('entra_id').notNull().unique(),
 	firstName: text('first_name').notNull(),
 	lastName: text('last_name').notNull(),
@@ -14,7 +13,9 @@ export const employees = sqliteTable('employees', {
 	imageUrl: text('image_url'),
 	hireDate: integer('hire_date', { mode: 'timestamp' }).notNull(),
 	terminationDate: integer('termination_date', { mode: 'timestamp' }),
-	status: text('status', { enum: [EmployeeStatusEnum.Active,EmployeeStatusEnum.OnLeave,EmployeeStatusEnum.Terminated] }).default(EmployeeStatusEnum.Active),
+	status: text('status', { enum: [EmployeeStatus.Active, EmployeeStatus.OnLeave, EmployeeStatus.Terminated] }).default(
+		EmployeeStatus.Active,
+	),
 	department: text('department').notNull(),
 	branch: text('branch').notNull(),
 	employeeCode: text('employee_code').notNull().unique(),
@@ -25,4 +26,3 @@ export const employees = sqliteTable('employees', {
 	birthDayAndMonth: text('birthday_day_month'),
 	birthdayPoster: text('birthday_poster'),
 });
-

@@ -5,9 +5,22 @@ import { eq } from 'drizzle-orm';
 
 export const updateAsset: MutationResolvers['updateAsset'] = async (_, { id, input }, context) => {
 	const DB = drizzle(context.env.DB);
-	await DB.update(assets)
-		.set({ ...input, purchaseDate: input.purchaseDate ? new Date(input.purchaseDate) : null })
-		.where(eq(assets.id, id));
 
-	return Response.Success;
+	try {
+		// 1. Remove any keys that have a value of 'null'
+		// This transforms { assetTag: "New Name", locationId: null } -> { assetTag: "New Name" }
+		const cleanInput = Object.fromEntries(Object.entries(input).filter(([_, value]) => value !== null)) as any;
+
+		// 2. Handle the Date if it exists (assuming mode: 'date')
+		if (input.purchaseDate) {
+			cleanInput.purchaseDate = new Date(input.purchaseDate);
+		}
+
+		await DB.update(assets).set(cleanInput).where(eq(assets.id, id));
+
+		return Response.Success;
+	} catch (error) {
+		console.error('Update Asset Error:', error);
+		return Response.Failed;
+	}
 };
