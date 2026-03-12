@@ -29,7 +29,7 @@ export default function StatCard() {
           key={index}
           className="flex-1 bg-white border border-gray-200 rounded-2xl p-6 h-[148px] flex flex-col justify-between shadow-xs"
         >
-          <p className="text-[14px] font-medium text-gray-500">{item.label}</p>
+          <p className="text-[14px] font-medium text-[#000000]">{item.label}</p>
           <p className={`text-[32px] font-bold ${item.color}`}>{item.value}</p>
         </div>
       ))}

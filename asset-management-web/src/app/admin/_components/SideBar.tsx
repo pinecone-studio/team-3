@@ -23,7 +23,6 @@ import {
   AlertTriangle,
   Undo2,
   Bell,
-  User,
 } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 
@@ -39,9 +38,8 @@ const menuItems = [
   { title: "QR баталгаажуулалт", icon: QrCode, path: "/qr" },
   { title: "Асуудал мэдээлэх", icon: AlertTriangle, path: "/my-asset" },
   { title: "Түүх", icon: History },
-  { title: "admin panel", icon: User, path: "/admin" },
 ];
-export function AppSidebar() {
+export function AdminSidebar() {
   const router = useRouter();
   const pathname = usePathname();
   return (
