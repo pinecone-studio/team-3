@@ -34,7 +34,7 @@ export default function PendingAssetCard({ asset }: Props) {
             {asset.description}
           </p>
 
-          <div className="flex gap-4 mt-5 text-sm">
+          <div className="flex  gap-4 mt-5 text-sm">
 
             <div>
               <p className="text-gray-400">Нөхцөл</p>
