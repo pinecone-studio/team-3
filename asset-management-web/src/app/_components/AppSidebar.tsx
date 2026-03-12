@@ -1,5 +1,5 @@
 "use client";
-import Link from "next/link";
+
 import {
   Sidebar,
   SidebarContent,
@@ -10,123 +10,110 @@ import {
   SidebarMenu,
   SidebarMenuItem,
   SidebarMenuButton,
-  SidebarMenuBadge,
+  AvatarImage,
+  AvatarFallback,
+  Avatar,
 } from "@/libs";
 import {
-  Home,
   Package,
-  CheckSquare,
   QrCode,
-  AlertCircle,
   History,
-  RotateCcw,
-  ShieldCheck,
-  Settings,
-  User,
+  LayoutDashboard,
+  PenTool,
+  AlertTriangle,
+  Undo2,
+  Bell,
 } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
+const menuItems = [
+  {
+    title: "Хянах самбар",
+    icon: LayoutDashboard,
+    active: true,
+    path: "/",
+  },
+  { title: "Миний хөрөнгө", icon: Package, path: "/my-asset" },
+  { title: "Гарын үсэг", icon: PenTool, badge: 1, path: "/confirmation" },
+  { title: "QR баталгаажуулалт", icon: QrCode, path: "/qr" },
+  { title: "Асуудал мэдээлэх", icon: AlertTriangle, path: "/my-asset" },
+  { title: "Түүх", icon: History },
+];
 export function AppSidebar() {
   const router = useRouter();
+  const pathname = usePathname();
   return (
-    <Sidebar collapsible="icon">
-      <SidebarHeader className="p-4 border-b">
-        <div className="flex gap-2 flex-col justify-center">
-          <div>
-            <div className="   text-auto font-bold">AMS</div>
-            <div className="text-gray-400 ">Ажилтны портал</div>
-          </div>
+    <Sidebar className="border-r border-slate-200 bg-[#F8FAFC]">
+      <SidebarHeader className="p-6">
+        <div className="flex items-center gap-3 px-2">
+          <div className="h-8 w-8  rounded-full bg-black  items-center justify-center" />
+          <span className="font-bold text-lg tracking-tight ">Assets.M.S</span>
         </div>
       </SidebarHeader>
 
-      <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupLabel>Цэс</SidebarGroupLabel>
-          <SidebarMenu>
-            <SidebarMenuItem>
-              <SidebarMenuButton isActive>
-                <Home />
-                Нүүр
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-            <SidebarMenuItem>
-              <SidebarMenuButton onClick={() => router.push("/my-asset")}>
-                <Package /> Миний хөрөнгө
-              </SidebarMenuButton>
-              <SidebarMenuBadge className="bg-gray-200 text-gray-800">
-                4
-              </SidebarMenuBadge>
-            </SidebarMenuItem>
-            <SidebarMenuItem>
-              <Link href="/confirmation">
-                <SidebarMenuButton>
-                  <CheckSquare /> Баталгаажуулалт
+      <SidebarContent className="px-2">
+        <SidebarMenu className="">
+          {menuItems.map((item) => {
+            const isActive = pathname === item.path;
+            return (
+              <SidebarMenuItem className="" key={item.title}>
+                <SidebarMenuButton
+                  onClick={() => item.path && router.push(item.path)}
+                  className={`flex  items-center gap-3 px-4 py-6  transition-all ${
+                    item.active
+                      ? "bg-slate-100/80 text-black font-medium"
+                      : "text-slate-600 hover:bg-white"
+                  }`}
+                >
+                  <item.icon className="w-5 h-5" />
+                  <span className="flex-1 font-medium text-[14px] text-[#222222] ">
+                    {item.title}
+                  </span>
+                  {item.badge && (
+                    <span className="bg-black text-white text-[10px] w-5 h-5 flex items-center justify-center rounded-md">
+                      {item.badge}
+                    </span>
+                  )}
                 </SidebarMenuButton>
-              </Link>
-              <SidebarMenuBadge className="bg-red-500 text-white">
-                1
-              </SidebarMenuBadge>
-            </SidebarMenuItem>
-            <SidebarMenuItem>
-              <SidebarMenuButton>
-                <QrCode /> QR баталгаажуулалт
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-            <SidebarMenuItem>
-              <SidebarMenuButton>
-                <AlertCircle /> Асуудал мэдэгдэх
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-            <SidebarMenuItem>
-              <SidebarMenuButton>
-                <History /> Түүх
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          </SidebarMenu>
-        </SidebarGroup>
+              </SidebarMenuItem>
+            );
+          })}
+        </SidebarMenu>
 
-        <SidebarGroup className="border-t-3">
-          <SidebarGroupLabel>Хэрэгсэл</SidebarGroupLabel>
+        <SidebarGroup className="mt-4">
+          <SidebarGroupLabel className="px-4  font-medium text-gray-500 text-[10px] uppercase">
+            Чөлөөлөлт
+          </SidebarGroupLabel>
           <SidebarMenu>
             <SidebarMenuItem>
-              <SidebarMenuButton>
-                <User /> Админ портал
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-            <SidebarMenuItem>
-              <SidebarMenuButton>
-                <Settings /> Тохиргоо
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          </SidebarMenu>
-        </SidebarGroup>
-        <SidebarGroup className="border-t-3">
-          <SidebarGroupLabel>Чөлөөлөлт</SidebarGroupLabel>
-          <SidebarMenu>
-            <SidebarMenuItem className="bg-red-50/50 text-red-700 rounded-md">
               <SidebarMenuButton
                 onClick={() => router.push("/asset-return")}
-                className=""
+                className="flex items-center gap-3 px-4 py-6 "
               >
-                <RotateCcw /> Буцаалт
+                <Undo2 className="w-5 h-5" />
+                <span className="text-[14px] font-medium">Буцаалт</span>
               </SidebarMenuButton>
-              <SidebarMenuBadge className="text-white border bg-red-500">
-                3
-              </SidebarMenuBadge>
             </SidebarMenuItem>
           </SidebarMenu>
         </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter className="p-4 border-t-3 pb-30">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center">
-            <User size={20} className="text-slate-400" />
+      <SidebarFooter className="p-6 mt-auto w-[239px]">
+        <div className="flex items-center gap-3 p-2 bg-slate-50 rounded-2xl border border-slate-100">
+          <Avatar className="h-10 w-10 border-2 border-white shadow-sm">
+            <AvatarImage src="https://github.com/shadcn.png" />
+            <AvatarFallback>ДБ</AvatarFallback>{" "}
+          </Avatar>
+
+          <div className="flex flex-col flex-1 ">
+            <span className="text-sm font-semibold text-slate-900 truncate">
+              Т. Энхжаргал
+            </span>
+            <span className="text-xs text-slate-500">Инженер</span>
           </div>
-          <div className="flex-1">
-            <div className="text-sm font-bold">Т. Энхжаргал</div>
-            <div className="text-xs text-slate-500">Инженер</div>
-          </div>
+          <button className="p-2 hover:bg-slate-200 rounded-full transition-colors">
+            <Bell className="w-4 h-4 text-slate-600" />
+          </button>
         </div>
       </SidebarFooter>
     </Sidebar>

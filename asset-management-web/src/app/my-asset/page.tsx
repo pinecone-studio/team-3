@@ -46,34 +46,38 @@ export default function MyAssetsPage() {
   ];
 
   return (
-    <div className="flex flex-col gap-8 p-6 bg-[#F9FAFB] min-h-screen">
+    <div className="flex flex-col gap-8 p-8 bg-white min-h-screen">
       <div>
-        <h1 className="font-bold text-[28px] text-gray-900">Миний хөрөнгө</h1>
-        <p className="text-[14px] text-gray-500">
+        <h1 className="font-bold text-[24px] text-gray-900 tracking-tight">
+          Миний хөрөнгө
+        </h1>
+        <p className="text-[14px] text-gray-500 mt-1">
           Танд олгогдсон бүх төхөөрөмжүүдийн жагсаалт
         </p>
       </div>
 
       <StatCard />
 
-      <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
+      <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
         <div className="mb-6">
-          <h2 className="font-bold text-[16px] text-gray-900">
+          <h2 className=" text-[16px] font-medium text-black">
             Хөрөнгийн жагсаалт
           </h2>
-          <p className="text-[13px] text-gray-400">
+          <p className="text-[14px]  text-gray-500">
             Таны хариуцлагад байгаа бүх төхөөрөмжүүд
           </p>
         </div>
 
-        <div className="grid grid-cols-[2fr_1.5fr_1fr_1fr_1fr_40px] gap-4 pb-4 border-b-2 border-gray-100 mb-2">
-          <div className="text-[13px] font-bold text-gray-800">Төхөөрөмж</div>
-          <div className="text-[13px] font-bold text-gray-800">
+        <div className="grid grid-cols-[2.5fr_2fr_1.5fr_1fr_1.5fr_40px] gap-4 pb-4 border-b-2 border-gray-100 mb-2">
+          <div className="text-[14px] font-medium text-[#0B0B0D]">
+            Төхөөрөмж
+          </div>
+          <div className="text-[14px] font-medium text-[#0B0B0D]">
             Код / Серийн дугаар
           </div>
-          <div className="text-[13px] font-bold text-gray-800">Төлөв</div>
-          <div className="text-[13px] font-bold text-gray-800">Нөхцөл</div>
-          <div className="text-[13px] font-bold text-gray-800">
+          <div className="text-[14px] font-medium text-[#0B0B0D]">Төлөв</div>
+          <div className="text-[14px] font-medium text-[#0B0B0D]">Нөхцөл</div>
+          <div className="text-[14px] font-medium text-[#0B0B0D]">
             Олгосон огноо
           </div>
           <div></div>
