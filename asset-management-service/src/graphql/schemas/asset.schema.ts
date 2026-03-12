@@ -1,12 +1,21 @@
 import { gql } from 'graphql-tag';
 
 export const assetTypeDefs = gql`
+	enum AssetStatusEnum {
+		AVAILABLE
+		ASSIGNED
+		IN_REPAIR
+		PENDING_DISPOSAL
+		DISPOSED
+		LOST
+	}
+
 	type Asset {
 		id: ID!
 		assetTag: String!
 		category: String!
 		serialNumber: String
-		status: String!
+		status: AssetStatusEnum!
 		purchaseDate: String
 		purchaseCost: Float
 		currentBookValue: Float
@@ -17,12 +26,11 @@ export const assetTypeDefs = gql`
 		deletedAt: String
 	}
 
-	# Input for Mutations
 	input CreateAssetInput {
 		assetTag: String!
 		category: String!
 		serialNumber: String
-		status: String
+		status: AssetStatusEnum
 		locationId: String
 		purchaseDate: String
 		purchaseCost: Float
@@ -31,7 +39,7 @@ export const assetTypeDefs = gql`
 	input UpdateAssetInput {
 		assetTag: String
 		category: String
-		status: String
+		status: AssetStatusEnum
 		serialNumber: String
 		locationId: String
 		assignedTo: String
