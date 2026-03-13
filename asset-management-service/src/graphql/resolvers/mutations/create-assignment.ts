@@ -22,8 +22,6 @@ export const createAssignment: MutationResolvers['createAssignment'] = async (_,
 		const [employee] = await DB.select().from(employees).where(eq(employees.id, input.employeeId));
 
 		if (employee?.email) {
-			console.log('email', employee.email);
-
 			const secret = new TextEncoder().encode(context.env.JWT_SECRET);
 			const token = await new SignJWT({ assignmentId })
 				.setProtectedHeader({ alg: 'HS256' })
@@ -33,7 +31,6 @@ export const createAssignment: MutationResolvers['createAssignment'] = async (_,
 
 			const magicLink = `https://your-inventory-app.mn/sign/${token}`;
 			const demoLink = 'https://winnerscourse.com';
-			console.log(context.env.JWT_SECRET, context.env.RESEND_API_KEY, context.env.DB);
 			await fetch('https://api.resend.com/emails', {
 				method: 'POST',
 				headers: {
