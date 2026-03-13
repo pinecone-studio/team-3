@@ -1,0 +1,87 @@
+
+import { QrItem, mockQrItems } from "@/app/employee-dashboard/_components/mockData"
+
+interface QrTabProps {
+  items?: QrItem[]
+}
+
+export default function QrTab({ items }: QrTabProps) {
+  const displayItems = items || mockQrItems
+
+  return (
+    <div className="h-full  p-6">
+      <div className="space-y-8">
+
+        <div className="rounded-xl p-6 flex items-start gap-6 bg-white shadow-md border border-gray-200">
+
+          <div className="flex-shrink-0 mt-1">
+            <span className="text-red-600 text-3xl">⚠</span>
+          </div>
+
+          <div className="flex-1 min-w-0">
+            <h4 className="text-black font-semibold text-xl mb-1">
+              Хүлээгдэж буй баталгаажуулалт
+            </h4>
+            <p className="text-base text-gray-700">
+              Техникийн хүлээсэн авсан түүх QR уншуулгын баталгаажуулалтыг үү
+            </p>
+          </div>
+
+                   <button className="rounded-lg bg-[#0251CB] px-5 py-2.5 font-medium text-white hover:bg-gray-800 flex items-center gap-2">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M7.09938 13.1988V11.7788H8.51917V13.1988H7.09938ZM5.67958 11.7788V8.01917H7.09938V11.7788H5.67958ZM11.7788 9.11854V6.59938H13.1988V9.11854H11.7788ZM10.359 6.59938V5.17958H11.7788V6.59938H10.359ZM1.42 8.01917V6.59938H2.83979V8.01917H1.42ZM0 6.59938V5.17958H1.42V6.59938H0ZM6.59938 1.42V0H8.01917V1.42H6.59938ZM0.743542 3.51604H3.51604V0.743542H0.743542V3.51604ZM0 3.59083V0.675625C0 0.48618 0.0640975 0.326251 0.192292 0.195834C0.320486 0.0652783 0.479306 0 0.66875 0H3.58396C3.7734 0 3.9334 0.0640981 4.06396 0.192293C4.19438 0.320487 4.25958 0.479306 4.25958 0.668751V3.58396C4.25958 3.7734 4.19549 3.9334 4.06729 4.06396C3.93924 4.19438 3.78042 4.25958 3.59083 4.25958H0.675625C0.486181 4.25958 0.32625 4.19549 0.195834 4.06729C0.065278 3.93924 0 3.78042 0 3.59083ZM0.743542 12.4552H3.58021V9.68271H0.743542V12.4552ZM0 12.53V9.61479C0 9.42535 0.0640975 9.26535 0.192292 9.13479C0.320486 9.00438 0.479306 8.93917 0.66875 8.93917H3.64813C3.83757 8.93917 3.99757 9.00326 4.12813 9.13146C4.25854 9.25951 4.32375 9.41833 4.32375 9.60792V12.5231C4.32375 12.7126 4.25965 12.8725 4.13146 13.0029C4.00326 13.1335 3.84444 13.1988 3.655 13.1988H0.675625C0.486181 13.1988 0.32625 13.1347 0.195834 13.0065C0.065278 12.8783 0 12.7194 0 12.53ZM9.68271 3.51604H12.4552V0.743542H9.68271V3.51604ZM8.93917 3.59083V0.675625C8.93917 0.48618 9.00326 0.326251 9.13146 0.195834C9.25951 0.0652783 9.41833 0 9.60792 0H12.5231C12.7126 0 12.8725 0.0640981 13.0029 0.192293C13.1335 0.320487 13.1988 0.479306 13.1988 0.668751V3.58396C13.1988 3.7734 13.1347 3.9334 13.0065 4.06396C12.8783 4.19438 12.7194 4.25958 12.53 4.25958H9.61479C9.42535 4.25958 9.26535 4.19549 9.13479 4.06729C9.00438 3.93924 8.93917 3.78042 8.93917 3.59083ZM10.359 13.1988V10.5383H8.93917V9.11854H11.7788V11.7788H13.1988V13.1988H10.359ZM7.09938 8.01917V6.59938H10.359V8.01917H7.09938ZM4.25958 8.01917V6.59938H2.83979V5.17958H7.09938V6.59938H5.67958V8.01917H4.25958ZM5.17958 4.25958V1.42H6.59938V2.83979H8.01917V4.25958H5.17958ZM1.67792 2.58167V1.67792H2.58167V2.58167H1.67792ZM1.73396 11.4648V10.5608H2.63792V11.4648H1.73396ZM10.6171 2.58167V1.67792H11.5208V2.58167H10.6171Z" fill="white"/>
+</svg>
+
+        Баталгаажуулалт үргэлжлүүлэх
+      </button>
+
+        </div>
+
+       
+        <div className="space-y-6">
+
+          {displayItems.map((item, index) => (
+            <div key={index} className="space-y-5">
+
+              
+              <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-md">
+                <div className="flex items-start gap-6">
+                  <div className="text-3xl flex-shrink-0">⌨️</div>
+                  <div className="flex-1 min-w-0">
+                    <h4 className="text-base font-semibold text-gray-900 mb-2">
+                      {item.name}
+                    </h4>
+                    <p className="text-sm text-gray-700 mb-1">{item.code}</p>
+                    <p className="text-sm text-gray-500">{item.description}</p>
+                  </div>
+                </div>
+              </div>
+
+              
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 pl-0 sm:pl-16 text-sm">
+
+                <div>
+                  <p className="text-gray-500 mb-1">Байршил</p>
+                  <p className="text-gray-900 font-medium text-base">{item.location}</p>
+                </div>
+
+                <div>
+                  <p className="text-gray-500 mb-1">Өгөсөн огноо</p>
+                  <p className="text-gray-900 text-base">{item.date}</p>
+                </div>
+
+                <div>
+                  <p className="text-gray-500 mb-1">Өгсөн</p>
+                  <p className="text-gray-900 text-base">{item.owner}</p>
+                </div>
+
+              </div>
+
+            </div>
+          ))}
+
+        </div>
+      </div>
+    </div>
+  )
+}
