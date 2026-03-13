@@ -9,10 +9,7 @@ export const deleteEmployee: MutationResolvers['deleteEmployee'] = async (_, { i
 	try {
 		await DB.update(employees)
 			.set({
-				// Convert the user-provided string to a Date object
 				terminationDate: new Date(input.terminationDate),
-
-				// It's good practice to update the status to match the termination
 				status: 'TERMINATED' as any,
 			})
 			.where(eq(employees.id, id));

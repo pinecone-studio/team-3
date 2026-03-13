@@ -12,8 +12,8 @@
 		"test": "vitest",
 		"cf-typegen": "wrangler types",
 		"codegen": "graphql-codegen --config codegen.yml",
-		 "build": "tsc --project tsconfig.json --outDir dist",
-		 "build:worker": "wrangler build"
+		"build": "tsc --project tsconfig.json --outDir dist",
+		"build:worker": "wrangler build"
 	},
 	"devDependencies": {
 		"@cloudflare/vitest-pool-workers": "^0.12.4",
@@ -35,6 +35,7 @@
 		"drizzle-orm": "^0.45.1",
 		"graphql": "^16.13.1",
 		"graphql-tag": "^2.12.6",
+		"jose": "^6.2.1",
 		"nanoid": "^5.1.6"
 	}
 }

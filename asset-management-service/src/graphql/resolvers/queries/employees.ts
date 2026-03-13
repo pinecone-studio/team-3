@@ -10,14 +10,12 @@ export const getEmployees: QueryResolvers['getEmployees'] = async (_, __, contex
 		return {
 			...emp,
 			id: emp.id.toString(),
-			// Use "?? undefined" to convert nulls to undefined
 			status: (emp.status as EmployeeStatus) ?? EmployeeStatus.Active,
 			hireDate: emp.hireDate ? new Date(emp.hireDate).toISOString() : '',
 			terminationDate: emp.terminationDate ? new Date(emp.terminationDate).toISOString() : undefined,
 			imageUrl: emp.imageUrl ?? undefined,
 			birthDayAndMonth: emp.birthDayAndMonth ?? undefined,
 			birthdayPoster: emp.birthdayPoster ?? undefined,
-			// numberOfVacationDays: emp.numberOfVacationDays ?? undefined,
 			github: emp.github ?? undefined,
 		};
 	});

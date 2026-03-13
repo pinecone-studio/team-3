@@ -7,16 +7,11 @@ export const updateEmployee: MutationResolvers['updateEmployee'] = async (_, { i
 	const DB = drizzle(context.env.DB);
 
 	try {
-		// 1. Strip nulls to maintain existing data for fields not provided
 		const filteredInput = Object.fromEntries(Object.entries(input).filter(([_, v]) => v !== null));
-
-		// 2. Only transform fields that actually exist in the Update Input
-		// For example, terminationDate is likely the only Date field left here
 		const updateData = {
 			...filteredInput,
 			...(input.terminationDate && { terminationDate: new Date(input.terminationDate) }),
 		};
-
 		await DB.update(employees).set(updateData).where(eq(employees.id, id));
 
 		return Response.Success;

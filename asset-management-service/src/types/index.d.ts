@@ -1,7 +1,7 @@
 type Context = {
-    env: Env
-}
+	env: Env;
+};
 
 type Env = {
-    DB: D1Database
-}
+	DB: D1Database;
+};
