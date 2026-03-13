@@ -5,17 +5,11 @@ import { eq } from 'drizzle-orm';
 
 export const getAssetById: QueryResolvers['getAssetById'] = async (_, { id }, context) => {
 	const DB = drizzle(context.env.DB);
-
-	// 1. Fetch from DB
 	const result = await DB.select().from(assets).where(eq(assets.id, id)).get();
 
-	// 2. If no result, return null.
-	// If TS errors here, your 'npm run generate' hasn't picked up the schema change yet!
 	if (!result) {
 		return null;
 	}
-
-	// 3. Map everything to satisfy the 'Asset' type exactly
 	return {
 		id: result.id,
 		assetTag: result.assetTag,
