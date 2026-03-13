@@ -6,22 +6,22 @@ type Props = {
 
 export default function ConfirmedRow({ asset }: Props) {
   return (
-    <div className="border rounded-lg p-4 flex justify-between items-center">
+    <div className="border border-gray-200 rounded-lg p-4 flex justify-between items-center bg-white">
 
-      <div className="flex gap-4 items-center">
+      <div className="flex gap-3 items-center">
 
-        <div className="bg-green-100 text-green-600 p-2 rounded-full">
-          ✔
+        <div className="bg-green-100 text-[#006944] p-1.5 rounded-full w-8 h-8 flex items-center justify-center">
+          ✓
         </div>
 
         <div>
-          <p className="font-medium">{asset.name}</p>
-          <p className="text-sm text-gray-500">{asset.code}</p>
+          <p className="font-medium text-black text-sm">{asset.name}</p>
+          <p className="text-xs text-gray-500">{asset.code}</p>
         </div>
 
       </div>
 
-      <p className="text-gray-400 text-sm">
+      <p className="text-gray-500 text-sm">
         {asset.date}
       </p>
 

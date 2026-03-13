@@ -3,13 +3,15 @@ import { pendingAssets } from "./mockData"
 
 export default function PendingSection() {
   return (
-    <div className="border border-red-300 rounded-xl bg-white p-6 mb-8">
-        <div>    
-      <div className="text-black font-semibold mb-2"> 
-         Хүлээгдэж буй баталгаажуулалт
+    <div className="border border-[#CC272E80] rounded-xl  p-6 mb-6">
+      <div className="flex items-center gap-2 mb-2">
+        <span  className="text-red-600">⚠ </span>
+        <h2 className="text-black font-semibold text-base"> 
+          Хүлээгдэж буй баталгаажуулалт
+        </h2>
       </div>
-      </div>
-      <p className="text-gray-500 mb-6">
+      
+      <p className="text-gray-600 text-sm mb-6">
         Эдгээр төхөөрөмжүүдийг авснаа баталгаажуулна уу
       </p>
 
@@ -18,7 +20,6 @@ export default function PendingSection() {
           <PendingAssetCard key={asset.id} asset={asset} />
         ))}
       </div>
-
     </div>
   )
 }

@@ -35,7 +35,7 @@ const menuItems = [
     path: "/",
   },
   { title: "Миний хөрөнгө", icon: Package, path: "/my-asset" },
-  { title: "Гарын үсэг", icon: PenTool, badge: 1, path: "/confirmation" },
+  { title: "Гарын үсэг", icon: PenTool, badge: 1, path: "/signature" },
   { title: "QR баталгаажуулалт", icon: QrCode, path: "/qr" },
   { title: "Асуудал мэдээлэх", icon: AlertTriangle, path: "/my-asset" },
   { title: "Түүх", icon: History },
