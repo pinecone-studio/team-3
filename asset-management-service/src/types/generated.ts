@@ -40,6 +40,19 @@ export enum AssetStatusEnum {
   PendingDisposal = 'PENDING_DISPOSAL'
 }
 
+export type Assignment = {
+  __typename?: 'Assignment';
+  accessoriesJson?: Maybe<Scalars['String']['output']>;
+  assetId: Scalars['String']['output'];
+  assignedAt: Scalars['String']['output'];
+  conditionAtAssign: Scalars['String']['output'];
+  conditionAtReturn?: Maybe<Scalars['String']['output']>;
+  employeeId: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  returnedAt?: Maybe<Scalars['String']['output']>;
+  signatureR2Key?: Maybe<Scalars['String']['output']>;
+};
+
 export type CreateAssetInput = {
   assetTag: Scalars['String']['input'];
   category: Scalars['String']['input'];
@@ -48,6 +61,14 @@ export type CreateAssetInput = {
   purchaseDate?: InputMaybe<Scalars['String']['input']>;
   serialNumber?: InputMaybe<Scalars['String']['input']>;
   status?: InputMaybe<AssetStatusEnum>;
+};
+
+export type CreateAssignmentInput = {
+  accessoriesJson?: InputMaybe<Scalars['String']['input']>;
+  assetId: Scalars['String']['input'];
+  assignedAt?: InputMaybe<Scalars['String']['input']>;
+  conditionAtAssign: Scalars['String']['input'];
+  employeeId: Scalars['String']['input'];
 };
 
 export type CreateEmployeeInput = {
@@ -115,17 +136,25 @@ export enum EmployeeStatus {
 export type Mutation = {
   __typename?: 'Mutation';
   createAsset: Response;
+  createAssignment: Response;
   createEmployee: Response;
   deleteAsset: Response;
+  deleteAssignment: Response;
   deleteEmployee: Response;
   testMutation: Response;
   updateAsset: Response;
+  updateAssignment: Response;
   updateEmployee: Response;
 };
 
 
 export type MutationCreateAssetArgs = {
   input: CreateAssetInput;
+};
+
+
+export type MutationCreateAssignmentArgs = {
+  input: CreateAssignmentInput;
 };
 
 
@@ -139,6 +168,11 @@ export type MutationDeleteAssetArgs = {
 };
 
 
+export type MutationDeleteAssignmentArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
 export type MutationDeleteEmployeeArgs = {
   id: Scalars['ID']['input'];
   input: DeleteEmployeeInput;
@@ -148,6 +182,12 @@ export type MutationDeleteEmployeeArgs = {
 export type MutationUpdateAssetArgs = {
   id: Scalars['ID']['input'];
   input: UpdateAssetInput;
+};
+
+
+export type MutationUpdateAssignmentArgs = {
+  id: Scalars['ID']['input'];
+  input: UpdateAssignmentInput;
 };
 
 
@@ -167,6 +207,10 @@ export type Query = {
   __typename?: 'Query';
   getAssetById?: Maybe<Asset>;
   getAssets: Array<Asset>;
+  getAssignmentById?: Maybe<Assignment>;
+  getAssignments: Array<Assignment>;
+  getAssignmentsByAsset: Array<Assignment>;
+  getAssignmentsByEmployee: Array<Assignment>;
   getEmployeeByCode?: Maybe<Employee>;
   getEmployeeById?: Maybe<Employee>;
   getEmployees: Array<Employee>;
@@ -177,6 +221,21 @@ export type Query = {
 
 export type QueryGetAssetByIdArgs = {
   id: Scalars['ID']['input'];
+};
+
+
+export type QueryGetAssignmentByIdArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type QueryGetAssignmentsByAssetArgs = {
+  assetId: Scalars['ID']['input'];
+};
+
+
+export type QueryGetAssignmentsByEmployeeArgs = {
+  employeeId: Scalars['ID']['input'];
 };
 
 
@@ -225,6 +284,14 @@ export type UpdateAssetInput = {
   purchaseDate?: InputMaybe<Scalars['String']['input']>;
   serialNumber?: InputMaybe<Scalars['String']['input']>;
   status?: InputMaybe<AssetStatusEnum>;
+};
+
+export type UpdateAssignmentInput = {
+  accessoriesJson?: InputMaybe<Scalars['String']['input']>;
+  conditionAtAssign?: InputMaybe<Scalars['String']['input']>;
+  conditionAtReturn?: InputMaybe<Scalars['String']['input']>;
+  returnedAt?: InputMaybe<Scalars['String']['input']>;
+  signatureR2Key?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UpdateEmployeeInput = {
@@ -317,8 +384,10 @@ export type DirectiveResolverFn<TResult = Record<PropertyKey, never>, TParent = 
 export type ResolversTypes = {
   Asset: ResolverTypeWrapper<Asset>;
   AssetStatusEnum: AssetStatusEnum;
+  Assignment: ResolverTypeWrapper<Assignment>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
   CreateAssetInput: CreateAssetInput;
+  CreateAssignmentInput: CreateAssignmentInput;
   CreateEmployeeInput: CreateEmployeeInput;
   Data: ResolverTypeWrapper<Data>;
   DeleteEmployeeInput: DeleteEmployeeInput;
@@ -336,14 +405,17 @@ export type ResolversTypes = {
   TestQueryResponse: ResolverTypeWrapper<TestQueryResponse>;
   TicketStatusEnum: TicketStatusEnum;
   UpdateAssetInput: UpdateAssetInput;
+  UpdateAssignmentInput: UpdateAssignmentInput;
   UpdateEmployeeInput: UpdateEmployeeInput;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
   Asset: Asset;
+  Assignment: Assignment;
   Boolean: Scalars['Boolean']['output'];
   CreateAssetInput: CreateAssetInput;
+  CreateAssignmentInput: CreateAssignmentInput;
   CreateEmployeeInput: CreateEmployeeInput;
   Data: Data;
   DeleteEmployeeInput: DeleteEmployeeInput;
@@ -356,6 +428,7 @@ export type ResolversParentTypes = {
   String: Scalars['String']['output'];
   TestQueryResponse: TestQueryResponse;
   UpdateAssetInput: UpdateAssetInput;
+  UpdateAssignmentInput: UpdateAssignmentInput;
   UpdateEmployeeInput: UpdateEmployeeInput;
 };
 
@@ -371,6 +444,18 @@ export type AssetResolvers<ContextType = Context, ParentType extends ResolversPa
   purchaseDate?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   serialNumber?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   status?: Resolver<ResolversTypes['AssetStatusEnum'], ParentType, ContextType>;
+};
+
+export type AssignmentResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Assignment'] = ResolversParentTypes['Assignment']> = {
+  accessoriesJson?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  assetId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  assignedAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  conditionAtAssign?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  conditionAtReturn?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  employeeId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  returnedAt?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  signatureR2Key?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
 };
 
 export type DataResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Data'] = ResolversParentTypes['Data']> = {
@@ -405,17 +490,24 @@ export type EmployeeResolvers<ContextType = Context, ParentType extends Resolver
 
 export type MutationResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   createAsset?: Resolver<ResolversTypes['Response'], ParentType, ContextType, RequireFields<MutationCreateAssetArgs, 'input'>>;
+  createAssignment?: Resolver<ResolversTypes['Response'], ParentType, ContextType, RequireFields<MutationCreateAssignmentArgs, 'input'>>;
   createEmployee?: Resolver<ResolversTypes['Response'], ParentType, ContextType, RequireFields<MutationCreateEmployeeArgs, 'input'>>;
   deleteAsset?: Resolver<ResolversTypes['Response'], ParentType, ContextType, RequireFields<MutationDeleteAssetArgs, 'id'>>;
+  deleteAssignment?: Resolver<ResolversTypes['Response'], ParentType, ContextType, RequireFields<MutationDeleteAssignmentArgs, 'id'>>;
   deleteEmployee?: Resolver<ResolversTypes['Response'], ParentType, ContextType, RequireFields<MutationDeleteEmployeeArgs, 'id' | 'input'>>;
   testMutation?: Resolver<ResolversTypes['Response'], ParentType, ContextType>;
   updateAsset?: Resolver<ResolversTypes['Response'], ParentType, ContextType, RequireFields<MutationUpdateAssetArgs, 'id' | 'input'>>;
+  updateAssignment?: Resolver<ResolversTypes['Response'], ParentType, ContextType, RequireFields<MutationUpdateAssignmentArgs, 'id' | 'input'>>;
   updateEmployee?: Resolver<ResolversTypes['Response'], ParentType, ContextType, RequireFields<MutationUpdateEmployeeArgs, 'id' | 'input'>>;
 };
 
 export type QueryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   getAssetById?: Resolver<Maybe<ResolversTypes['Asset']>, ParentType, ContextType, RequireFields<QueryGetAssetByIdArgs, 'id'>>;
   getAssets?: Resolver<Array<ResolversTypes['Asset']>, ParentType, ContextType>;
+  getAssignmentById?: Resolver<Maybe<ResolversTypes['Assignment']>, ParentType, ContextType, RequireFields<QueryGetAssignmentByIdArgs, 'id'>>;
+  getAssignments?: Resolver<Array<ResolversTypes['Assignment']>, ParentType, ContextType>;
+  getAssignmentsByAsset?: Resolver<Array<ResolversTypes['Assignment']>, ParentType, ContextType, RequireFields<QueryGetAssignmentsByAssetArgs, 'assetId'>>;
+  getAssignmentsByEmployee?: Resolver<Array<ResolversTypes['Assignment']>, ParentType, ContextType, RequireFields<QueryGetAssignmentsByEmployeeArgs, 'employeeId'>>;
   getEmployeeByCode?: Resolver<Maybe<ResolversTypes['Employee']>, ParentType, ContextType, RequireFields<QueryGetEmployeeByCodeArgs, 'employeeCode'>>;
   getEmployeeById?: Resolver<Maybe<ResolversTypes['Employee']>, ParentType, ContextType, RequireFields<QueryGetEmployeeByIdArgs, 'id'>>;
   getEmployees?: Resolver<Array<ResolversTypes['Employee']>, ParentType, ContextType>;
@@ -429,6 +521,7 @@ export type TestQueryResponseResolvers<ContextType = Context, ParentType extends
 
 export type Resolvers<ContextType = Context> = {
   Asset?: AssetResolvers<ContextType>;
+  Assignment?: AssignmentResolvers<ContextType>;
   Data?: DataResolvers<ContextType>;
   Employee?: EmployeeResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
