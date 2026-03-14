@@ -1,3 +1,4 @@
+"use client";
 import AssetManagement from "./_components/AssetManagement";
 
 const mockAssets = [
