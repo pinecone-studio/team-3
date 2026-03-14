@@ -317,6 +317,14 @@ export type GetAssignmentByTokenQueryVariables = Exact<{
 
 export type GetAssignmentByTokenQuery = { __typename?: 'Query', getAssignmentByToken: { __typename?: 'Assignment', id: string, employeeId: string, asset?: { __typename?: 'Asset', id: string, assetTag: string, serialNumber?: string | null } | null } };
 
+export type UpdateAssignmentMutationVariables = Exact<{
+  updateAssignmentId: Scalars['ID']['input'];
+  input: UpdateAssignmentInput;
+}>;
+
+
+export type UpdateAssignmentMutation = { __typename?: 'Mutation', updateAssignment: Response };
+
 
 export const GetAssetByIdDocument = gql`
     query getAssetById($getAssetByIdId: ID!) {
@@ -378,3 +386,16 @@ export type GetAssignmentByTokenQueryHookResult = ReturnType<typeof useGetAssign
 export type GetAssignmentByTokenLazyQueryHookResult = ReturnType<typeof useGetAssignmentByTokenLazyQuery>;
 export type GetAssignmentByTokenSuspenseQueryHookResult = ReturnType<typeof useGetAssignmentByTokenSuspenseQuery>;
 export type GetAssignmentByTokenQueryResult = Apollo.QueryResult<GetAssignmentByTokenQuery, GetAssignmentByTokenQueryVariables>;
+export const UpdateAssignmentDocument = gql`
+    mutation UpdateAssignment($updateAssignmentId: ID!, $input: UpdateAssignmentInput!) {
+  updateAssignment(id: $updateAssignmentId, input: $input)
+}
+    `;
+export type UpdateAssignmentMutationFn = Apollo.MutationFunction<UpdateAssignmentMutation, UpdateAssignmentMutationVariables>;
+export function useUpdateAssignmentMutation(baseOptions?: Apollo.MutationHookOptions<UpdateAssignmentMutation, UpdateAssignmentMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateAssignmentMutation, UpdateAssignmentMutationVariables>(UpdateAssignmentDocument, options);
+      }
+export type UpdateAssignmentMutationHookResult = ReturnType<typeof useUpdateAssignmentMutation>;
+export type UpdateAssignmentMutationResult = Apollo.MutationResult<UpdateAssignmentMutation>;
+export type UpdateAssignmentMutationOptions = Apollo.BaseMutationOptions<UpdateAssignmentMutation, UpdateAssignmentMutationVariables>;
