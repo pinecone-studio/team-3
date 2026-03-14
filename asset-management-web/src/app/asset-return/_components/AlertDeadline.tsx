@@ -10,7 +10,7 @@ export default function AlertDeadline({
   deadline,
 }: AlertDeadlineProps) {
   return (
-    <div className=" flex gap-4 border bg-[#FAF1F2] border-[#E38C90] rounded-xl p-2 shadow-sm">
+    <div className=" flex gap-4 border bg-[#FDECEF] border-[#E25568] rounded-xl p-2 shadow-sm">
       <AlertTriangle className="  w-5 h-5 shrink-0 mt-0.5 text-[#222222]" />
 
       <div className="flex flex-col gap-1">

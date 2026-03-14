@@ -1,5 +1,5 @@
 import { MacBook } from "@/app/_components/icons/icons";
-import { Keyboard, Monitor, Phone } from "lucide-react";
+import { Clock, Keyboard, Monitor, Phone, Timer } from "lucide-react";
 
 interface Asset {
   id: number;
@@ -38,13 +38,16 @@ export default function AssetItem({ asset }: any) {
             <div className="flex items-center gap-2">
               <h1 className="font-medium text-[16px]">{asset.name}</h1>
 
-              <span className="px-2 py-0.5 bg-white text-[12px] rounded-sm border border-gray-200 font-medium">
-                {asset.status == "pending"
-                  ? "Хүлээгдэж байна"
-                  : asset.status === "returned"
-                    ? "Буцаагдсан"
-                    : "Алга болсон"}
-              </span>
+              <div className="px-2 py-0.5 text-center items-center justify-center gap-2 bg-[#FFF4DB] text-[12px] flex rounded-sm font-medium">
+                <Clock className="text-[#cf9816]" size={12} />
+                <p>
+                  {asset.status == "pending"
+                    ? "Хүлээгдэж байна"
+                    : asset.status === "returned"
+                      ? "Буцаагдсан"
+                      : "Алга болсон"}
+                </p>
+              </div>
             </div>
 
             <p className="text-[14px] text-[#555555] font-medium tracking-wider">
