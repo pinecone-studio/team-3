@@ -12,3 +12,10 @@ export * from './assignments';
 export * from './assignment-by-id';
 export * from './assignments-by-asset';
 export * from './assignments-by-employee';
+
+//Census
+export * from './census-events';
+export * from './census-event-by-id';
+export * from './census-tasks';
+export * from './census-task-by-id';
+export * from './census-report';
