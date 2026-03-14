@@ -13,7 +13,7 @@ export function Cards() {
       icon: CubIcon(),
       number: "4",
       requirement: "",
-      subtitle: "Хуваарилагдсан төхөөрөмж",
+      subtitle: "Хуваарилагдсан төхөөрмж",
     },
     {
       title: "Гарын үсгэн баталгаажуулалт",
