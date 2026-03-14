@@ -12,6 +12,7 @@ export const assignmentTypeDefs = gql`
 		signatureR2Key: String
 		# accessoriesJson is stored as a stringified JSON object
 		accessoriesJson: String
+		asset: Asset
 	}
 
 	type Query {
@@ -26,6 +27,8 @@ export const assignmentTypeDefs = gql`
 
 		# Get all assets currently or previously held by an employee
 		getAssignmentsByEmployee(employeeId: ID!): [Assignment!]!
+
+		getAssignmentByToken(token: String!): Assignment!
 	}
 
 	input CreateAssignmentInput {

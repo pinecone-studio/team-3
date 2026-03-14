@@ -5,13 +5,11 @@ import { eq } from 'drizzle-orm';
 export const assetMutations = {
 	createAsset: async (_parent: any, { input }: any, context: any) => {
 		const db = drizzle(context.env.DB);
-
 		return await db
 			.insert(assets)
 			.values({
 				id: crypto.randomUUID(),
 				...input,
-				// Override the string date with a proper Date object for Drizzle
 				purchaseDate: input.purchaseDate ? new Date(input.purchaseDate) : null,
 				status: input.status || 'AVAILABLE',
 			})
@@ -21,8 +19,6 @@ export const assetMutations = {
 
 	updateAsset: async (_parent: any, { id, input }: any, context: any) => {
 		const db = drizzle(context.env.DB);
-
-		// Filter out undefined and convert date string if it exists in the update
 		const updateData: any = {
 			...input,
 			updatedAt: new Date(),
@@ -38,7 +34,6 @@ export const assetMutations = {
 	deleteAsset: async (_parent: any, { id }: { id: string }, context: any) => {
 		const db = drizzle(context.env.DB);
 
-		// Soft delete logic: setting deletedAt to the current timestamp
 		return await db
 			.update(assets)
 			.set({

@@ -5,12 +5,13 @@ import AssetItem from "./Assetitem";
 
 export default function AssetReturnPageContent({ data }: any) {
   return (
-    <div className="flex flex-col gap-6 p-8 min-h-screen text-[#111827]">
+    <div className="flex flex-col gap-6 p-6 w-full min-h-screen text-[#111827] font-gilroy">
       <div>
-        <h1 className="font-bold text-[24px] text-gray-900 tracking-tight">
+        <h1 className="text-[24px] font-semibold leading-[125%]">
           Хөрөнгө буцаалт
         </h1>
-        <p className="text-[14px] font-normal text-gray-500 mt-1">
+
+        <p className="text-[#666666] text-[14px] font-normal leading-[125%] mt-1">
           Ажлаас гарах үеийн хөрөнгө буцаалтын мэдээлэл
         </p>
       </div>
@@ -22,7 +23,7 @@ export default function AssetReturnPageContent({ data }: any) {
         progress={{ done: 0, total: data.assets.length }}
         location={data.location}
       />
-
+      <StepsSection steps={data.steps} />
       <div className="mt-2 space-y-4 border p-5 rounded-2xl">
         <h3 className="font-medium text-[16px] text-gray-900">
           Буцаах хөрөнгүүд
@@ -35,8 +36,6 @@ export default function AssetReturnPageContent({ data }: any) {
           <AssetItem key={asset.id} asset={asset} />
         ))}
       </div>
-
-      <StepsSection steps={data.steps} />
     </div>
   );
 }

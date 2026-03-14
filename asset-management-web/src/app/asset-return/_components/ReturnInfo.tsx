@@ -18,7 +18,7 @@ export default function ReturnInfoSection({
   location,
 }: ReturnInfoSectionProps) {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-gilroy">
       <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm flex flex-col justify-between">
         <div>
           <h1 className="text-[16px] font-medium">Буцаалтын явц</h1>
@@ -54,7 +54,7 @@ export default function ReturnInfoSection({
               <p className="text-[10px] text-[#555555] uppercase font-normal tracking-tight">
                 Буцаах эцсийн хугацаа
               </p>
-              <p className="text-sm font-medium text-red-500">{deadline}</p>
+              <p className="text-sm font-medium ">{deadline}</p>
             </div>
           </div>
         </div>

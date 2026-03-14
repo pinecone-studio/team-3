@@ -1,7 +1,0 @@
-query TestQuery {
-  testQuery {
-    category
-    id
-    name
-  }
-}

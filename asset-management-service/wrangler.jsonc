@@ -15,7 +15,7 @@
 		{
 			"binding": "DB",
 			"database_name": "asset-management",
-			"database_id": "6875a5f9-1fc7-4723-891a-56e1864a0e85",
+			"database_id": "015264c1-6cf9-4020-9873-a2690e6c6394",
 			"migrations_dir": "src/db/migrations",
 		},
 	],
@@ -36,7 +36,7 @@
 	 * Note: Use secrets to store sensitive data.
 	 * https://developers.cloudflare.com/workers/configuration/secrets/
 	 */
-	// "vars": {  "MY_VARIABLE": "production_value" }
+	"vars": { "JWT_SECRET": "jwt_secret", "RESEND_API_KEY": "re_dAgJBn69_CyCE2bUUSSPH1kWns9oaTUes" },
 	/**
 	 * Static Assets
 	 * https://developers.cloudflare.com/workers/static-assets/binding/

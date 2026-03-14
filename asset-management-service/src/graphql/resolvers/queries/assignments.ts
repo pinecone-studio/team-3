@@ -9,10 +9,8 @@ export const getAssignments: QueryResolvers['getAssignments'] = async (_, __, co
 
 	return result.map((row) => ({
 		...row,
-		// Drizzle returns Date objects; GraphQL expects Strings.
 		assignedAt: row.assignedAt.toISOString(),
 		returnedAt: row.returnedAt?.toISOString(),
-		// Explicitly cast unknown to string
 		accessoriesJson: row.accessoriesJson as string,
 	}));
 };

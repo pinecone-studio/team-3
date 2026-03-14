@@ -43,6 +43,7 @@ export enum AssetStatusEnum {
 export type Assignment = {
   __typename?: 'Assignment';
   accessoriesJson?: Maybe<Scalars['String']['output']>;
+  asset?: Maybe<Asset>;
   assetId: Scalars['String']['output'];
   assignedAt: Scalars['String']['output'];
   conditionAtAssign: Scalars['String']['output'];
@@ -292,6 +293,7 @@ export type Query = {
   getAssetById?: Maybe<Asset>;
   getAssets: Array<Asset>;
   getAssignmentById?: Maybe<Assignment>;
+  getAssignmentByToken: Assignment;
   getAssignments: Array<Assignment>;
   getAssignmentsByAsset: Array<Assignment>;
   getAssignmentsByEmployee: Array<Assignment>;
@@ -315,6 +317,11 @@ export type QueryGetAssetByIdArgs = {
 
 export type QueryGetAssignmentByIdArgs = {
   id: Scalars['ID']['input'];
+};
+
+
+export type QueryGetAssignmentByTokenArgs = {
+  token: Scalars['String']['input'];
 };
 
 
@@ -585,6 +592,7 @@ export type AssetResolvers<ContextType = Context, ParentType extends ResolversPa
 
 export type AssignmentResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Assignment'] = ResolversParentTypes['Assignment']> = {
   accessoriesJson?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  asset?: Resolver<Maybe<ResolversTypes['Asset']>, ParentType, ContextType>;
   assetId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   assignedAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   conditionAtAssign?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -679,6 +687,7 @@ export type QueryResolvers<ContextType = Context, ParentType extends ResolversPa
   getAssetById?: Resolver<Maybe<ResolversTypes['Asset']>, ParentType, ContextType, RequireFields<QueryGetAssetByIdArgs, 'id'>>;
   getAssets?: Resolver<Array<ResolversTypes['Asset']>, ParentType, ContextType>;
   getAssignmentById?: Resolver<Maybe<ResolversTypes['Assignment']>, ParentType, ContextType, RequireFields<QueryGetAssignmentByIdArgs, 'id'>>;
+  getAssignmentByToken?: Resolver<ResolversTypes['Assignment'], ParentType, ContextType, RequireFields<QueryGetAssignmentByTokenArgs, 'token'>>;
   getAssignments?: Resolver<Array<ResolversTypes['Assignment']>, ParentType, ContextType>;
   getAssignmentsByAsset?: Resolver<Array<ResolversTypes['Assignment']>, ParentType, ContextType, RequireFields<QueryGetAssignmentsByAssetArgs, 'assetId'>>;
   getAssignmentsByEmployee?: Resolver<Array<ResolversTypes['Assignment']>, ParentType, ContextType, RequireFields<QueryGetAssignmentsByEmployeeArgs, 'employeeId'>>;
