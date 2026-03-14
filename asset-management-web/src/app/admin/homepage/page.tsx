@@ -1,3 +1,4 @@
+"use client";
 import ActivityList from "./_components/ActivityList";
 import AssetStatusChart from "./_components/AssetStatusChart";
 import QuickActions from "./_components/QuickActions";

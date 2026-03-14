@@ -21,6 +21,7 @@ import {
   AlertTriangle,
   Bell,
   Boxes,
+  Settings,
 } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 
@@ -34,6 +35,7 @@ const menuItems = [
 
   { title: "Асуудал мэдээлэх", icon: AlertTriangle, path: "/report" },
   { title: "Буцаалт", icon: Boxes, path: "/asset-return" },
+  { title: "admin asset ", icon: Settings, path: "/admin/asset-page" },
 ];
 export function AppSidebar() {
   const router = useRouter();
@@ -59,7 +61,7 @@ export function AppSidebar() {
                 <div
                   onClick={() => item.path && router.push(item.path)}
                   className={cn(
-                    "relative flex items-center gap-3 px-4 py-5 transition-all duration-300 rounded-none group",
+                    "relative flex items-center gap-3 px-4 py-4 transition-all duration-300 rounded-none group",
 
                     isActive
                       ? "bg-gradient-to-r from-transparent via-[#1e293b]/50 to-[#3b82f6]/20"
