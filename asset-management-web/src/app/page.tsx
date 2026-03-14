@@ -1,6 +1,5 @@
 "use client";
-import { useTestQueryQuery } from "@/gql/graphql";
-import { Button, Input } from "../libs";
+
 import { HomePage } from "./_components/HomePage";
 
 export default function Home() {

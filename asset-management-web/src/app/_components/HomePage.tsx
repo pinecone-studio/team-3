@@ -1,18 +1,12 @@
 import { Badge, Button } from "@/libs";
 import {
-  ArrowIcon,
-  CheckListIcon,
-  CheckListMini,
-  CubIcon,
   DesctopIcon,
   DocumentIcon,
-  DocumentIconSmall,
   IphoneIcon,
   MacBook,
   MiniDocumentIcon,
   ProgressDemo,
   QrIcon,
-  WarningBlueIcon,
 } from "./icons/icons";
 import { Cards } from "./Cards";
 
