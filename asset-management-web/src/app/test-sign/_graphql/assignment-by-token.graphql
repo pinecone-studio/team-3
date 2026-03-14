@@ -1,0 +1,11 @@
+query GetAssignmentByToken($token: String!) {
+  getAssignmentByToken(token: $token) {
+    asset {
+      id
+      assetTag
+      serialNumber
+    }
+    id
+    employeeId
+  }
+}

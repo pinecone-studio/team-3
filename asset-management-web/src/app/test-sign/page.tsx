@@ -1,16 +1,9 @@
 "use client";
 
-import { useState, useEffect, Suspense } from "react";
+import { useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import dynamic from "next/dynamic";
-
-interface PendingAsset {
-  id: string;
-  picture: string;
-  serialNumber: string;
-  accessoryJson: string;
-  assetTag: string;
-}
+import { useGetAssignmentByTokenQuery } from "@/gql/graphql";
 
 const SignaturePad = dynamic(() => import("./_components/SignaturePad"), {
   ssr: false,
@@ -22,45 +15,23 @@ const SignaturePad = dynamic(() => import("./_components/SignaturePad"), {
 function AcknowledgeContent() {
   const searchParams = useSearchParams();
   const token = searchParams.get("token");
+  const [isSuccess, setIsSuccess] = useState(false);
 
-  const [pendingAssets, setPendingAssets] = useState<PendingAsset[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    async function fetchAssets() {
-      if (!token) {
-        setError("No security token found in URL.");
-        setLoading(false);
-        return;
-      }
-
-      try {
-        // TODO: Replace with your actual GraphQL fetch
-        // const result = await GQL_CLIENT.query(GET_PENDING, { token });
-        // setPendingAssets(result.data.pendingAssetsForToken);
-      } catch (err) {
-        setError("Failed to verify assignments. The link may be expired.");
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchAssets();
-  }, [token]);
+  const { data, loading, error } = useGetAssignmentByTokenQuery({
+    variables: { token: token ?? "" },
+    skip: !token,
+  });
 
   const handleFinalize = async (assignmentId: string, signature: string) => {
     if (!token) return;
 
     try {
-      console.log(`Finalizing assignment ${assignmentId}...`);
+      console.log(`Finalizing assignment ${assignmentId}...`, signature);
 
-      // Perform Mutation Call here
+      // TODO: Call your updateAssignment mutation here
+      // This is where we will eventually send the signature to the backend
 
-      // Update local state by filtering out the finalized asset
-      setPendingAssets((prev) =>
-        prev.filter((asset) => asset.id !== assignmentId),
-      );
-      alert("Acknowledgment saved. PDF generated and stored.");
+      setIsSuccess(true);
     } catch (err) {
       alert("Error saving acknowledgment. Please try again.");
     }
@@ -69,16 +40,53 @@ function AcknowledgeContent() {
   if (loading)
     return (
       <div className="max-w-md mx-auto p-10 text-center text-gray-500">
-        Verifying assignments...
+        Verifying security token...
       </div>
     );
 
-  if (error)
+  if (error || (!data?.getAssignmentByToken && !isSuccess))
     return (
       <div className="max-w-md mx-auto p-10 text-center text-red-500 font-medium">
-        {error}
+        {error?.message ||
+          "Invalid or expired link. Please contact IT support."}
       </div>
     );
+
+  if (isSuccess) {
+    return (
+      <div className="text-center py-20 animate-in fade-in zoom-in duration-300">
+        <div className="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+          <svg
+            className="w-8 h-8 text-green-600"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M5 13l4 4L19 7"
+            />
+          </svg>
+        </div>
+        <h2 className="text-xl font-bold text-gray-900">All Set!</h2>
+        <p className="text-gray-500 mt-2 px-6">
+          The asset has been acknowledged. A record of this signature has been
+          stored.
+        </p>
+      </div>
+    );
+  }
+  if (!data?.getAssignmentByToken) return <div>No assignment found.</div>;
+  const assignment = data.getAssignmentByToken;
+  const asset = assignment.asset;
+
+  /* // ACCESSORIES LOGIC - ON HOLD
+    const accessories = assignment.accessoriesJson 
+      ? JSON.parse(assignment.accessoriesJson) 
+      : [];
+  */
 
   return (
     <div className="max-w-md mx-auto p-6 space-y-8 min-h-screen bg-gray-50/50">
@@ -87,89 +95,71 @@ function AcknowledgeContent() {
           Confirm Receipt
         </h1>
         <p className="text-sm text-gray-500">
-          Please review the details and sign for each piece of equipment.
+          Please review the details below and provide your signature.
         </p>
       </header>
 
       <div className="space-y-6">
-        {pendingAssets.map((asset) => (
-          <div
-            key={asset.id}
-            className="border border-gray-200 rounded-2xl p-6 shadow-sm bg-white space-y-5"
-          >
-            <div className="flex justify-between items-start">
-              <div className="space-y-1">
-                <h2 className="font-bold text-lg text-blue-600">
-                  {asset.assetTag}
-                </h2>
-                <p className="text-xs text-gray-500 font-mono">
-                  S/N: {asset.serialNumber}
-                </p>
-                {asset.accessoryJson && (
-                  <p className="text-xs text-gray-400 italic">
-                    Incl: {asset.accessoryJson}
-                  </p>
-                )}
-              </div>
-              <span className="text-[10px] bg-blue-50 text-blue-700 px-2 py-1 rounded-full uppercase font-bold">
-                Pending
-              </span>
-            </div>
-
-            {/* Optional: Render picture if available */}
-            {asset.picture && (
-              <div className="w-full h-32 bg-gray-100 rounded-lg overflow-hidden">
-                <img
-                  src={asset.picture}
-                  alt={asset.assetTag}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-            )}
-
-            <div className="pt-4 border-t border-gray-100">
-              <p className="text-xs font-semibold text-gray-400 uppercase mb-3 tracking-wider">
-                Authorized Signature
+        <div className="border border-gray-200 rounded-2xl p-6 shadow-sm bg-white space-y-5">
+          <div className="flex justify-between items-start">
+            <div className="space-y-1">
+              <h2 className="font-bold text-lg text-blue-600">
+                {asset?.assetTag || "Asset Assigned"}
+              </h2>
+              <p className="text-xs text-gray-500 font-mono">
+                S/N: {asset?.serialNumber || "N/A"}
               </p>
-              <SignaturePad
-                onConfirm={(base64) => handleFinalize(asset.id, base64)}
+            </div>
+            <span className="text-[10px] bg-blue-50 text-blue-700 px-2 py-1 rounded-full uppercase font-bold">
+              Action Required
+            </span>
+          </div>
+
+          {/* {asset?.picture && (
+            <div className="w-full h-48 bg-gray-100 rounded-lg overflow-hidden border">
+              <img
+                src={asset.picture}
+                alt={asset.assetTag}
+                className="w-full h-full object-cover"
               />
             </div>
-          </div>
-        ))}
-      </div>
+          )} */}
 
-      {pendingAssets.length === 0 && (
-        <div className="text-center py-20 animate-in fade-in zoom-in duration-300">
-          <div className="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-            <svg
-              className="w-8 h-8 text-green-600"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M5 13l4 4L19 7"
-              />
-            </svg>
+          {/* {accessories.length > 0 && (
+              <div className="bg-gray-50 p-3 rounded-lg">
+                <p className="text-[10px] font-bold text-gray-400 uppercase mb-1">Included Accessories</p>
+                <ul className="text-xs text-gray-600 space-y-1">
+                  {accessories.map((item: any, idx: number) => (
+                    <li key={idx}>• {item.name || item}</li>
+                  ))}
+                </ul>
+              </div>
+            )} 
+          */}
+
+          <div className="pt-4 border-t border-gray-100">
+            <p className="text-xs font-semibold text-gray-400 uppercase mb-3 tracking-wider text-center">
+              Digital Signature
+            </p>
+            <SignaturePad
+              onConfirm={(base64) => handleFinalize(assignment.id, base64)}
+            />
           </div>
-          <h2 className="text-xl font-bold text-gray-900">All Set!</h2>
-          <p className="text-gray-500 mt-2">
-            All assigned assets have been acknowledged. You may now close this
-            browser window.
-          </p>
         </div>
-      )}
+      </div>
     </div>
   );
 }
 
 export default function AcknowledgePage() {
   return (
-    <Suspense fallback={<div className="p-10 text-center">Loading...</div>}>
+    <Suspense
+      fallback={
+        <div className="p-10 text-center text-gray-400">
+          Loading secure form...
+        </div>
+      }
+    >
       <AcknowledgeContent />
     </Suspense>
   );
