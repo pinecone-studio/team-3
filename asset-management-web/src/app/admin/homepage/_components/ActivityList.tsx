@@ -1,4 +1,3 @@
-import React from "react";
 import { Check, Plus, ArrowLeftRight, Info, Clock } from "lucide-react";
 
 const activities = [

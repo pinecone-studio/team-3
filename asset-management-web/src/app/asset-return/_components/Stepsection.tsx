@@ -36,9 +36,9 @@ export default function StepsSection({ steps }: StepsSectionProps) {
         ))}
       </div>
       <div className="flex  mt-2">
-        <Button className="bg-black hover:bg-[#1B4332] text-white px-5 py-4 rounded-lg flex items-center gap-2 text-sm font-bold shadow-md transition-all active:scale-95">
+        <Button className="bg-[#2F6FED]  text-white px-2 py-4 rounded-lg flex items-center gap-2 text-sm font-bold shadow-md transition-all active:scale-95">
           <PhoneCall size={18} />
-          IT хэлтэстэй холбогдох
+          IT-тай холбогдох
         </Button>
       </div>
     </div>
