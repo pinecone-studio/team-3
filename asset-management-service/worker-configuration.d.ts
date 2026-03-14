@@ -7,6 +7,7 @@ declare namespace Cloudflare {
 	}
 	interface Env {
 		DB: D1Database;
+		FILES: R2Bucket;
 		JWT_SECRET: 'jwt_secret';
 		RESEND_API_KEY: 're_dAgJBn69_CyCE2bUUSSPH1kWns9oaTUes';
 	}
