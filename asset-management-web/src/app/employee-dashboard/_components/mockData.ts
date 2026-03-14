@@ -86,7 +86,12 @@ export interface QrItem {
   date: string
   owner: string
 }
-
+    export interface Progress {
+  label: string;
+  sublabel: string;
+  value: number;
+  text: string;
+}
 export const mockQrItems: QrItem[] = [
   {
     name: "Magic Keyboard",

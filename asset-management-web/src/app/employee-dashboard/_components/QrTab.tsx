@@ -34,7 +34,7 @@ export default function QrTab({ items }: QrTabProps) {
 
         Баталгаажуулалт үргэлжлүүлэх
       </button>
-
+            
         </div>
 
        

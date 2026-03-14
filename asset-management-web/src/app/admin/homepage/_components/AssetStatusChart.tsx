@@ -1,4 +1,4 @@
-
+"use client";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
 
 const data = [
