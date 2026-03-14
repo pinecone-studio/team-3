@@ -20,68 +20,76 @@ const PREVIOUS_REPORTS = [
     reportedDate: "10/5/2025",
     resolvedDate: "10/12/2025",
     category: "Гэмтэл",
-    icon: <Monitor strokeWidth={1.5} size={24} />,
+    icon: <Monitor strokeWidth={1.2} size={22} />,
   },
 ];
 
 export default function PreviousReports() {
   return (
-    <div className="w-full border-[#E2E8F0] border p-6 rounded-xl flex flex-col gap-4">
+    <div className="w-full border-[#E2E8F0] border p-6 rounded-xl flex flex-col gap-5 bg-white">
       <div>
-        <div className="leading-[30px] font-medium text-[16px]">
+        <h3 className="font-medium text-[16px] leading-[20px] text-[#0F172A]">
           Өмнөх мэдэгдлүүд
-        </div>
-        <div className="text-[#666666] text-[14px] font-normal leading-[125%] mt-1">
+        </h3>
+        <p className="text-[#666666] text-[14px] font-regular leading-[125%] mt-1">
           Шийдвэрлэгдсэн асуудлуудын түүх
-        </div>
+        </p>
       </div>
 
-      {PREVIOUS_REPORTS.map((report) => {
-        return (
+      <div className="flex flex-col gap-4">
+        {PREVIOUS_REPORTS.map((report) => (
           <div
             key={report.id}
-            className="w-full bg-white border border-gray-200 rounded-xl p-6 flex items-start justify-between"
+            className="w-full bg-white border border-[#E2E8F0] rounded-xl p-5 flex items-start justify-between"
           >
             <div className="flex gap-4">
-              <div className="w-12 h-12 flex items-center justify-center bg-[#F8FAFC] rounded-lg text-[#666666]">
+              <div className="w-12 h-12 flex items-center justify-center bg-[#F8FAFC] rounded-lg text-[#64748B]">
                 {report.icon}
               </div>
 
-              <div>
+              <div className="flex flex-col">
                 <div className="flex items-center gap-3">
-                  <h2 className="text-[16px] font-medium leading-[20px]">
+                  <h4 className="text-[16px] font-medium leading-[20px] text-[#0F172A]">
                     {report.title}
-                  </h2>
-
-                  <span className="flex items-center gap-1.5 bg-[#F2F8F5] text-[12px] text-[#475467] px-2.5 py-1 rounded-md font-medium">
-                    <CheckSmall />
-                    Шийдвэрлэгдсэн
+                  </h4>
+                  <span className="flex items-center gap-1 bg-[#F0FDF4] text-[12px] text-[#166534] px-2.5 py-1 rounded-md font-medium border border-[#DCFCE7]">
+                    <CheckSmall /> Шийдвэрлэгдсэн
                   </span>
                 </div>
 
-                <p className="text-[#555555] text-[14px] font-normal leading-[125%] mt-1">
+                <p className="text-[#94A3B8] text-[14px] font-normal mt-0.5">
                   {report.code}
                 </p>
 
-                <p className="text-[#334155] text-[14px] mt-3 font-normal leading-[125%]">
+                <p className="text-[#334155] text-[14px] mt-3 leading-[125%]">
                   <span className="font-medium">Шалтгаан:</span> {report.reason}
                 </p>
 
-                <div className="flex gap-6 text-[13px] text-[#666666] mt-3 font-normal">
-                  <p>Мэдэгдсэн хугацаа:{report.reportedDate}</p>
-                  <p>Шийдвэрлэсэн хугацаа:{report.resolvedDate}</p>
+                <div className="flex gap-6 text-[12px] text-[#64748B] mt-4 font-normal">
+                  <p>
+                    Мэдэгдсэн хугацаа:{" "}
+                    <span className="text-[#0F172A]">
+                      {report.reportedDate}
+                    </span>
+                  </p>
+                  <p>
+                    Шийдвэрлэсэн хугацаа:{" "}
+                    <span className="text-[#0F172A]">
+                      {report.resolvedDate}
+                    </span>
+                  </p>
                 </div>
               </div>
             </div>
 
-            <div>
-              <span className="text-[12px] border border-[#E2E8F0] text-[#666666] px-3 py-1.5 rounded-md font-medium bg-white">
+            <div className="hidden sm:block">
+              <span className="text-[12px] border border-[#E2E8F0] text-[#64748B] px-3 py-1.5 rounded-lg font-medium bg-[#F8FAFC]">
                 {report.category}
               </span>
             </div>
           </div>
-        );
-      })}
+        ))}
+      </div>
     </div>
   );
 }

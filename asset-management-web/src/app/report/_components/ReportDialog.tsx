@@ -23,16 +23,6 @@ import { useState } from "react";
 const myAssets = [
   { id: "1", name: 'MacBook Pro 14"', assetTag: "MAC-2026-005" },
   { id: "2", name: 'Dell UltraSharp 27"', assetTag: "MON-2026-012" },
-  { id: "3", name: "iPhone 15 Pro", assetTag: "PHN-2026-003" },
-  { id: "4", name: "Magic Keyboard", assetTag: "PER-2026-008" },
-];
-
-const issueTypes = [
-  { value: "hardware", label: "Техник хангамж" },
-  { value: "software", label: "Програм хангамж" },
-  { value: "damage", label: "Гэмтэл" },
-  { value: "lost", label: "Алдагдсан" },
-  { value: "other", label: "Бусад" },
 ];
 
 export default function ReportDialog() {
@@ -41,37 +31,30 @@ export default function ReportDialog() {
   const [issueType, setIssueType] = useState("");
   const [description, setDescription] = useState("");
 
-  const handleSubmit = () => {
-    setDialogOpen(false);
-    setSelectedAsset("");
-    setIssueType("");
-    setDescription("");
-  };
-
   return (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
       <DialogTrigger asChild>
-        <Button className="bg-[#0251CB] w-[149px] h-[36px] transition-colors py-2.5 px-4 cursor-pointer text-[#FFFFFF] text-[14px] font-medium rounded-md flex items-center gap-2">
-          <Plus className=" h-4 w-4 " />
+        <Button className="bg-[#0251CB] hover:bg-[#0241a1] h-[36px] px-4 text-[#FFFFFF] text-[14px] font-medium rounded-lg flex items-center gap-2 transition-colors">
+          <Plus className="h-4 w-4" />
           Шинэ мэдэгдэл
         </Button>
       </DialogTrigger>
 
-      <DialogContent className="sm:max-w-[500px] rounded-md">
+      <DialogContent className="sm:max-w-[500px] rounded-xl font-gilroy">
         <DialogHeader>
-          <DialogTitle className="font-bold  text-[20px]">
+          <DialogTitle className="font-semibold text-[20px] leading-[125%]">
             Асуудал мэдэгдэх
           </DialogTitle>
-          <DialogDescription className="text-[16px]">
+          <DialogDescription className="text-[#666666] text-[14px] leading-[125%]">
             Төхөөрөмжтэй холбоотой асуудлаа дэлгэрэнгүй тайлбарлана уу
           </DialogDescription>
         </DialogHeader>
 
-        <div className="space-y-4 py-4">
+        <div className="space-y-5 py-4">
           <div className="space-y-2">
-            <Label>Төхөөрөмж сонгох</Label>
+            <Label className="text-[14px] font-medium">Төхөөрөмж сонгох</Label>
             <Select value={selectedAsset} onValueChange={setSelectedAsset}>
-              <SelectTrigger>
+              <SelectTrigger className="h-10 border-[#E2E8F0]">
                 <SelectValue placeholder="Төхөөрөмж сонгоно уу" />
               </SelectTrigger>
               <SelectContent>
@@ -85,24 +68,9 @@ export default function ReportDialog() {
           </div>
 
           <div className="space-y-2">
-            <Label>Асуудлын төрөл</Label>
-            <Select value={issueType} onValueChange={setIssueType}>
-              <SelectTrigger>
-                <SelectValue placeholder="Төрөл сонгоно уу" />
-              </SelectTrigger>
-              <SelectContent>
-                {issueTypes.map((type) => (
-                  <SelectItem key={type.value} value={type.value}>
-                    {type.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-
-          <div className="space-y-2">
-            <Label>Тайлбар</Label>
+            <Label className="text-[14px] font-medium">Тайлбар</Label>
             <Textarea
+              className="border-[#E2E8F0] resize-none focus-visible:ring-[#0251CB]"
               placeholder="Асуудлаа дэлгэрэнгүй тайлбарлана уу..."
               value={description}
               onChange={(e) => setDescription(e.target.value)}
@@ -111,29 +79,29 @@ export default function ReportDialog() {
           </div>
 
           <div className="space-y-2">
-            <Label>Зураг хавсаргах (заавал биш)</Label>
-            <div className="border-2 border-dashed border-border rounded-lg p-6 text-center">
-              <Upload className="h-8 w-8 mx-auto text-muted-foreground mb-2" />
-              <p className="text-sm text-muted-foreground">
-                Зураг чирж оруулах эсвэл
+            <Label className="text-[14px] font-medium">Зураг хавсаргах</Label>
+            <div className="border border-dashed border-[#E2E8F0] rounded-xl p-8 text-center bg-[#F8FAFC] hover:bg-[#F1F5F9] transition-colors cursor-pointer">
+              <Upload className="h-6 w-6 mx-auto text-[#94A3B8] mb-2" />
+              <p className="text-[13px] text-[#64748B]">
+                Зураг чирж оруулах эсвэл{" "}
+                <span className="text-[#0251CB] font-medium">Файл сонгох</span>
               </p>
-              <Button variant="link" className="text-primary">
-                Файл сонгох
-              </Button>
             </div>
           </div>
         </div>
 
-        <DialogFooter>
-          <Button variant="outline" onClick={() => setDialogOpen(false)}>
+        <DialogFooter className="gap-2">
+          <Button
+            variant="outline"
+            className="h-10 px-6 border-[#E2E8F0] text-[#64748B]"
+            onClick={() => setDialogOpen(false)}
+          >
             Болих
           </Button>
-
           <Button
-            onClick={handleSubmit}
-            disabled={!selectedAsset || !issueType || !description}
+            className="bg-[#0251CB] h-10 px-6 text-white"
+            disabled={!selectedAsset || !description}
           >
-            <AlertTriangle className="mr-2 h-4 w-4" />
             Мэдэгдэл илгээх
           </Button>
         </DialogFooter>
