@@ -29,7 +29,7 @@ export const createAssignment: MutationResolvers['createAssignment'] = async (_,
 				.setExpirationTime('72h')
 				.sign(secret);
 
-			const magicLink = `https://your-inventory-app.mn/sign/${token}`;
+			const magicLink = `http://localhost:3000/test-sign?token=${token}`;
 			const demoLink = 'https://winnerscourse.com';
 			await fetch('https://api.resend.com/emails', {
 				method: 'POST',
@@ -44,8 +44,8 @@ export const createAssignment: MutationResolvers['createAssignment'] = async (_,
 					html: `
 			            <p>Hello ${employee.firstName},</p>
 			            <p>An asset has been assigned to you. Please click the link below to verify the condition and sign for the item:</p>
-			            <a href="${demoLink}" style="padding: 10px 20px; background-color: #0070f3; color: white; text-decoration: none; border-radius: 5px;">Sign for Equipment</a>
-			            <p>This link will expire in 48 hours.</p>
+			            <a href="${magicLink}" style="padding: 10px 20px; background-color: #0070f3; color: white; text-decoration: none; border-radius: 5px;">Sign for Equipment</a>
+			            <p>This link will expire in 72 hours.</p>
 			        `,
 				}),
 			});
