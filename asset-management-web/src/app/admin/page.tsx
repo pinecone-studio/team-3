@@ -1,7 +1,8 @@
 "use client";
-import { useTestQueryQuery } from "@/gql/graphql";
-import AdminHomePage from "./homepage/page";
 
+import dynamic from "next/dynamic";
+
+const AdminHomePage = dynamic(() => import("./homepage/page"), { ssr: false });
 export default function AdminPage() {
   // const { data, loading, error, refetch } = useTestQueryQuery()
   // if (loading) return <p>Loading...</p>

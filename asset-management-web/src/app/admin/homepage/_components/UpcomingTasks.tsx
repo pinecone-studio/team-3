@@ -1,4 +1,3 @@
-import React from "react";
 import { ClipboardList, UserCheck, Wrench, FileCheck } from "lucide-react";
 
 const tasks = [

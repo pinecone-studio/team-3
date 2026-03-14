@@ -1,5 +1,3 @@
-import AdminNav from "./_components/Navber";
-
 export default function AdminLayout({
   children,
 }: Readonly<{
