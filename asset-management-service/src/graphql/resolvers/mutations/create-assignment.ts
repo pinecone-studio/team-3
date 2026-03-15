@@ -62,7 +62,7 @@ export const createAssignment: MutationResolvers['createAssignment'] = async (_,
 					'Content-Type': 'application/json',
 				},
 				body: JSON.stringify({
-					from: 'Inventory System <onboarding@resend.dev>', // Update this after verifying your domain!
+					from: 'Asset Manager <noreply@pinequest.winnerscourse.com>',
 					to: employee.email,
 					subject: 'Action Required: Equipment Assignment Signature',
 					html: `
