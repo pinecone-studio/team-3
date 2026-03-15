@@ -315,8 +315,6 @@ export enum PosStatusEnum {
 
 export type Query = {
   __typename?: 'Query';
-  categories: Array<Category>;
-  category?: Maybe<Category>;
   getAssetById?: Maybe<Asset>;
   getAssets: Array<Asset>;
   getAssignmentById?: Maybe<Assignment>;
@@ -324,6 +322,8 @@ export type Query = {
   getAssignments: Array<Assignment>;
   getAssignmentsByAsset: Array<Assignment>;
   getAssignmentsByEmployee: Array<Assignment>;
+  getCategories: Array<Category>;
+  getCategoryById?: Maybe<Category>;
   getCensusEventById?: Maybe<CensusEvent>;
   getCensusEvents: Array<CensusEvent>;
   getCensusReport: CensusReport;
@@ -334,11 +334,6 @@ export type Query = {
   getEmployees: Array<Employee>;
   getEmployeesByStatus: Array<Employee>;
   testQuery: Array<Data>;
-};
-
-
-export type QueryCategoryArgs = {
-  id: Scalars['ID']['input'];
 };
 
 
@@ -364,6 +359,11 @@ export type QueryGetAssignmentsByAssetArgs = {
 
 export type QueryGetAssignmentsByEmployeeArgs = {
   employeeId: Scalars['ID']['input'];
+};
+
+
+export type QueryGetCategoryByIdArgs = {
+  id: Scalars['ID']['input'];
 };
 
 
@@ -729,8 +729,6 @@ export type MutationResolvers<ContextType = Context, ParentType extends Resolver
 };
 
 export type QueryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
-  categories?: Resolver<Array<ResolversTypes['Category']>, ParentType, ContextType>;
-  category?: Resolver<Maybe<ResolversTypes['Category']>, ParentType, ContextType, RequireFields<QueryCategoryArgs, 'id'>>;
   getAssetById?: Resolver<Maybe<ResolversTypes['Asset']>, ParentType, ContextType, RequireFields<QueryGetAssetByIdArgs, 'id'>>;
   getAssets?: Resolver<Array<ResolversTypes['Asset']>, ParentType, ContextType>;
   getAssignmentById?: Resolver<Maybe<ResolversTypes['Assignment']>, ParentType, ContextType, RequireFields<QueryGetAssignmentByIdArgs, 'id'>>;
@@ -738,6 +736,8 @@ export type QueryResolvers<ContextType = Context, ParentType extends ResolversPa
   getAssignments?: Resolver<Array<ResolversTypes['Assignment']>, ParentType, ContextType>;
   getAssignmentsByAsset?: Resolver<Array<ResolversTypes['Assignment']>, ParentType, ContextType, RequireFields<QueryGetAssignmentsByAssetArgs, 'assetId'>>;
   getAssignmentsByEmployee?: Resolver<Array<ResolversTypes['Assignment']>, ParentType, ContextType, RequireFields<QueryGetAssignmentsByEmployeeArgs, 'employeeId'>>;
+  getCategories?: Resolver<Array<ResolversTypes['Category']>, ParentType, ContextType>;
+  getCategoryById?: Resolver<Maybe<ResolversTypes['Category']>, ParentType, ContextType, RequireFields<QueryGetCategoryByIdArgs, 'id'>>;
   getCensusEventById?: Resolver<Maybe<ResolversTypes['CensusEvent']>, ParentType, ContextType, RequireFields<QueryGetCensusEventByIdArgs, 'id'>>;
   getCensusEvents?: Resolver<Array<ResolversTypes['CensusEvent']>, ParentType, ContextType>;
   getCensusReport?: Resolver<ResolversTypes['CensusReport'], ParentType, ContextType, RequireFields<QueryGetCensusReportArgs, 'censusId'>>;

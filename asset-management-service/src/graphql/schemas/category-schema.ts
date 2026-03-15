@@ -12,8 +12,8 @@ export const categoryTypeDefs = gql`
 		picture: String
 	}
 	type Query {
-		categories: [Category!]!
-		category(id: ID!): Category
+		getCategories: [Category!]!
+		getCategoryById(id: ID!): Category
 	}
 	type Mutation {
 		createCategory(input: CreateCategoryInput!): Response!
