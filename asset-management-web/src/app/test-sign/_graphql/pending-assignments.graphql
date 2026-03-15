@@ -1,0 +1,13 @@
+query GetPendingAssignments($token: String!) {
+  getPendingAssignments(token: $token) {
+    id
+    asset {
+      assetTag
+      serialNumber
+      category {
+        picture
+        name
+      }
+    }
+  }
+}

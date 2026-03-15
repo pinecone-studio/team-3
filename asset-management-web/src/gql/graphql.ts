@@ -21,7 +21,7 @@ export type Asset = {
   __typename?: 'Asset';
   assetTag: Scalars['String']['output'];
   assignedTo?: Maybe<Scalars['String']['output']>;
-  category: Scalars['String']['output'];
+  category?: Maybe<Category>;
   currentBookValue?: Maybe<Scalars['Float']['output']>;
   deletedAt?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
@@ -55,9 +55,52 @@ export type Assignment = {
   signatureR2Key?: Maybe<Scalars['String']['output']>;
 };
 
+export type Category = {
+  __typename?: 'Category';
+  assets?: Maybe<Array<Asset>>;
+  id: Scalars['ID']['output'];
+  name: Scalars['String']['output'];
+  picture?: Maybe<Scalars['String']['output']>;
+};
+
+export type CensusEvent = {
+  __typename?: 'CensusEvent';
+  closedAt?: Maybe<Scalars['String']['output']>;
+  createdBy: Scalars['String']['output'];
+  deletedAt?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
+  name: Scalars['String']['output'];
+  scope: Scalars['String']['output'];
+  scopeFilter?: Maybe<Scalars['String']['output']>;
+  startedAt?: Maybe<Scalars['String']['output']>;
+};
+
+export type CensusReport = {
+  __typename?: 'CensusReport';
+  actionItems: Scalars['Int']['output'];
+  conditionChanges: Scalars['Int']['output'];
+  discrepancies: Scalars['Int']['output'];
+  totalAssets: Scalars['Int']['output'];
+  verifiedCount: Scalars['Int']['output'];
+  verifiedPercentage: Scalars['Float']['output'];
+};
+
+export type CensusTask = {
+  __typename?: 'CensusTask';
+  assetId: Scalars['String']['output'];
+  censusId: Scalars['String']['output'];
+  conditionReported?: Maybe<Scalars['String']['output']>;
+  deletedAt?: Maybe<Scalars['String']['output']>;
+  discrepancyFlag?: Maybe<Scalars['Boolean']['output']>;
+  id: Scalars['ID']['output'];
+  locationConfirmed?: Maybe<Scalars['Boolean']['output']>;
+  verifiedAt?: Maybe<Scalars['String']['output']>;
+  verifierId?: Maybe<Scalars['String']['output']>;
+};
+
 export type CreateAssetInput = {
   assetTag: Scalars['String']['input'];
-  category: Scalars['String']['input'];
+  categoryId?: InputMaybe<Scalars['String']['input']>;
   locationId?: InputMaybe<Scalars['String']['input']>;
   purchaseCost?: InputMaybe<Scalars['Float']['input']>;
   purchaseDate?: InputMaybe<Scalars['String']['input']>;
@@ -71,6 +114,30 @@ export type CreateAssignmentInput = {
   assignedAt?: InputMaybe<Scalars['String']['input']>;
   conditionAtAssign: Scalars['String']['input'];
   employeeId: Scalars['String']['input'];
+};
+
+export type CreateCategoryInput = {
+  name: Scalars['String']['input'];
+  picture?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type CreateCensusEventInput = {
+  closedAt?: InputMaybe<Scalars['String']['input']>;
+  createdBy: Scalars['String']['input'];
+  name: Scalars['String']['input'];
+  scope: Scalars['String']['input'];
+  scopeFilter?: InputMaybe<Scalars['String']['input']>;
+  startedAt?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type CreateCensusTaskInput = {
+  assetId: Scalars['String']['input'];
+  censusId: Scalars['String']['input'];
+  conditionReported?: InputMaybe<Scalars['String']['input']>;
+  discrepancyFlag?: InputMaybe<Scalars['Boolean']['input']>;
+  locationConfirmed?: InputMaybe<Scalars['Boolean']['input']>;
+  verifiedAt?: InputMaybe<Scalars['String']['input']>;
+  verifierId?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type CreateEmployeeInput = {
@@ -132,12 +199,19 @@ export type Mutation = {
   __typename?: 'Mutation';
   createAsset: Response;
   createAssignment: Response;
+  createCategory: Response;
+  createCensusEvent: Response;
+  createCensusTask: Response;
   createEmployee: Response;
   deleteAsset: Response;
   deleteAssignment: Response;
+  deleteCategory: Response;
+  deleteCensusEvent: Response;
   deleteEmployee: Response;
   updateAsset: Response;
   updateAssignment: Response;
+  updateCensusEvent: Response;
+  updateCensusTask: Response;
   updateEmployee: Response;
 };
 
@@ -152,6 +226,21 @@ export type MutationCreateAssignmentArgs = {
 };
 
 
+export type MutationCreateCategoryArgs = {
+  input: CreateCategoryInput;
+};
+
+
+export type MutationCreateCensusEventArgs = {
+  input: CreateCensusEventInput;
+};
+
+
+export type MutationCreateCensusTaskArgs = {
+  input: CreateCensusTaskInput;
+};
+
+
 export type MutationCreateEmployeeArgs = {
   input: CreateEmployeeInput;
 };
@@ -163,6 +252,16 @@ export type MutationDeleteAssetArgs = {
 
 
 export type MutationDeleteAssignmentArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type MutationDeleteCategoryArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type MutationDeleteCensusEventArgs = {
   id: Scalars['ID']['input'];
 };
 
@@ -185,6 +284,16 @@ export type MutationUpdateAssignmentArgs = {
 };
 
 
+export type MutationUpdateCensusEventArgs = {
+  input: UpdateCensusEventInput;
+};
+
+
+export type MutationUpdateCensusTaskArgs = {
+  input: UpdateCensusTaskInput;
+};
+
+
 export type MutationUpdateEmployeeArgs = {
   id: Scalars['ID']['input'];
   input: UpdateEmployeeInput;
@@ -202,14 +311,21 @@ export type Query = {
   getAssetById?: Maybe<Asset>;
   getAssets: Array<Asset>;
   getAssignmentById?: Maybe<Assignment>;
-  getAssignmentByToken: Assignment;
   getAssignments: Array<Assignment>;
   getAssignmentsByAsset: Array<Assignment>;
   getAssignmentsByEmployee: Array<Assignment>;
+  getCategories: Array<Category>;
+  getCategoryById?: Maybe<Category>;
+  getCensusEventById?: Maybe<CensusEvent>;
+  getCensusEvents: Array<CensusEvent>;
+  getCensusReport: CensusReport;
+  getCensusTaskById?: Maybe<CensusTask>;
+  getCensusTasks: Array<CensusTask>;
   getEmployeeByCode?: Maybe<Employee>;
   getEmployeeById?: Maybe<Employee>;
   getEmployees: Array<Employee>;
   getEmployeesByStatus: Array<Employee>;
+  getPendingAssignments: Array<Assignment>;
 };
 
 
@@ -223,11 +339,6 @@ export type QueryGetAssignmentByIdArgs = {
 };
 
 
-export type QueryGetAssignmentByTokenArgs = {
-  token: Scalars['String']['input'];
-};
-
-
 export type QueryGetAssignmentsByAssetArgs = {
   assetId: Scalars['ID']['input'];
 };
@@ -235,6 +346,26 @@ export type QueryGetAssignmentsByAssetArgs = {
 
 export type QueryGetAssignmentsByEmployeeArgs = {
   employeeId: Scalars['ID']['input'];
+};
+
+
+export type QueryGetCategoryByIdArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type QueryGetCensusEventByIdArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type QueryGetCensusReportArgs = {
+  censusId: Scalars['ID']['input'];
+};
+
+
+export type QueryGetCensusTaskByIdArgs = {
+  id: Scalars['ID']['input'];
 };
 
 
@@ -252,6 +383,11 @@ export type QueryGetEmployeesByStatusArgs = {
   status: EmployeeStatus;
 };
 
+
+export type QueryGetPendingAssignmentsArgs = {
+  token: Scalars['String']['input'];
+};
+
 export enum Response {
   Failed = 'FAILED',
   Success = 'SUCCESS'
@@ -267,7 +403,7 @@ export enum TicketStatusEnum {
 export type UpdateAssetInput = {
   assetTag?: InputMaybe<Scalars['String']['input']>;
   assignedTo?: InputMaybe<Scalars['String']['input']>;
-  category?: InputMaybe<Scalars['String']['input']>;
+  categoryId?: InputMaybe<Scalars['String']['input']>;
   currentBookValue?: InputMaybe<Scalars['Float']['input']>;
   locationId?: InputMaybe<Scalars['String']['input']>;
   purchaseCost?: InputMaybe<Scalars['Float']['input']>;
@@ -282,6 +418,25 @@ export type UpdateAssignmentInput = {
   conditionAtReturn?: InputMaybe<Scalars['String']['input']>;
   returnedAt?: InputMaybe<Scalars['String']['input']>;
   signatureR2Key?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type UpdateCensusEventInput = {
+  closedAt?: InputMaybe<Scalars['String']['input']>;
+  createdBy?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['ID']['input'];
+  name?: InputMaybe<Scalars['String']['input']>;
+  scope?: InputMaybe<Scalars['String']['input']>;
+  scopeFilter?: InputMaybe<Scalars['String']['input']>;
+  startedAt?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type UpdateCensusTaskInput = {
+  conditionReported?: InputMaybe<Scalars['String']['input']>;
+  discrepancyFlag?: InputMaybe<Scalars['Boolean']['input']>;
+  id: Scalars['ID']['input'];
+  locationConfirmed?: InputMaybe<Scalars['Boolean']['input']>;
+  verifiedAt?: InputMaybe<Scalars['String']['input']>;
+  verifierId?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UpdateEmployeeInput = {
@@ -310,12 +465,12 @@ export type GetAssetByIdQueryVariables = Exact<{
 
 export type GetAssetByIdQuery = { __typename?: 'Query', getAssetById?: { __typename?: 'Asset', id: string, serialNumber?: string | null, assetTag: string } | null };
 
-export type GetAssignmentByTokenQueryVariables = Exact<{
+export type GetPendingAssignmentsQueryVariables = Exact<{
   token: Scalars['String']['input'];
 }>;
 
 
-export type GetAssignmentByTokenQuery = { __typename?: 'Query', getAssignmentByToken: { __typename?: 'Assignment', id: string, employeeId: string, asset?: { __typename?: 'Asset', id: string, assetTag: string, serialNumber?: string | null } | null } };
+export type GetPendingAssignmentsQuery = { __typename?: 'Query', getPendingAssignments: Array<{ __typename?: 'Assignment', id: string, asset?: { __typename?: 'Asset', assetTag: string, serialNumber?: string | null, category?: { __typename?: 'Category', picture?: string | null, name: string } | null } | null }> };
 
 export type UpdateAssignmentMutationVariables = Exact<{
   updateAssignmentId: Scalars['ID']['input'];
@@ -354,38 +509,40 @@ export type GetAssetByIdQueryHookResult = ReturnType<typeof useGetAssetByIdQuery
 export type GetAssetByIdLazyQueryHookResult = ReturnType<typeof useGetAssetByIdLazyQuery>;
 export type GetAssetByIdSuspenseQueryHookResult = ReturnType<typeof useGetAssetByIdSuspenseQuery>;
 export type GetAssetByIdQueryResult = Apollo.QueryResult<GetAssetByIdQuery, GetAssetByIdQueryVariables>;
-export const GetAssignmentByTokenDocument = gql`
-    query GetAssignmentByToken($token: String!) {
-  getAssignmentByToken(token: $token) {
+export const GetPendingAssignmentsDocument = gql`
+    query GetPendingAssignments($token: String!) {
+  getPendingAssignments(token: $token) {
+    id
     asset {
-      id
       assetTag
       serialNumber
+      category {
+        picture
+        name
+      }
     }
-    id
-    employeeId
   }
 }
     `;
-export function useGetAssignmentByTokenQuery(baseOptions: Apollo.QueryHookOptions<GetAssignmentByTokenQuery, GetAssignmentByTokenQueryVariables> & ({ variables: GetAssignmentByTokenQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+export function useGetPendingAssignmentsQuery(baseOptions: Apollo.QueryHookOptions<GetPendingAssignmentsQuery, GetPendingAssignmentsQueryVariables> & ({ variables: GetPendingAssignmentsQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetAssignmentByTokenQuery, GetAssignmentByTokenQueryVariables>(GetAssignmentByTokenDocument, options);
+        return Apollo.useQuery<GetPendingAssignmentsQuery, GetPendingAssignmentsQueryVariables>(GetPendingAssignmentsDocument, options);
       }
-export function useGetAssignmentByTokenLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAssignmentByTokenQuery, GetAssignmentByTokenQueryVariables>) {
+export function useGetPendingAssignmentsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetPendingAssignmentsQuery, GetPendingAssignmentsQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetAssignmentByTokenQuery, GetAssignmentByTokenQueryVariables>(GetAssignmentByTokenDocument, options);
+          return Apollo.useLazyQuery<GetPendingAssignmentsQuery, GetPendingAssignmentsQueryVariables>(GetPendingAssignmentsDocument, options);
         }
 // @ts-ignore
-export function useGetAssignmentByTokenSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetAssignmentByTokenQuery, GetAssignmentByTokenQueryVariables>): Apollo.UseSuspenseQueryResult<GetAssignmentByTokenQuery, GetAssignmentByTokenQueryVariables>;
-export function useGetAssignmentByTokenSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetAssignmentByTokenQuery, GetAssignmentByTokenQueryVariables>): Apollo.UseSuspenseQueryResult<GetAssignmentByTokenQuery | undefined, GetAssignmentByTokenQueryVariables>;
-export function useGetAssignmentByTokenSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetAssignmentByTokenQuery, GetAssignmentByTokenQueryVariables>) {
+export function useGetPendingAssignmentsSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetPendingAssignmentsQuery, GetPendingAssignmentsQueryVariables>): Apollo.UseSuspenseQueryResult<GetPendingAssignmentsQuery, GetPendingAssignmentsQueryVariables>;
+export function useGetPendingAssignmentsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetPendingAssignmentsQuery, GetPendingAssignmentsQueryVariables>): Apollo.UseSuspenseQueryResult<GetPendingAssignmentsQuery | undefined, GetPendingAssignmentsQueryVariables>;
+export function useGetPendingAssignmentsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetPendingAssignmentsQuery, GetPendingAssignmentsQueryVariables>) {
           const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<GetAssignmentByTokenQuery, GetAssignmentByTokenQueryVariables>(GetAssignmentByTokenDocument, options);
+          return Apollo.useSuspenseQuery<GetPendingAssignmentsQuery, GetPendingAssignmentsQueryVariables>(GetPendingAssignmentsDocument, options);
         }
-export type GetAssignmentByTokenQueryHookResult = ReturnType<typeof useGetAssignmentByTokenQuery>;
-export type GetAssignmentByTokenLazyQueryHookResult = ReturnType<typeof useGetAssignmentByTokenLazyQuery>;
-export type GetAssignmentByTokenSuspenseQueryHookResult = ReturnType<typeof useGetAssignmentByTokenSuspenseQuery>;
-export type GetAssignmentByTokenQueryResult = Apollo.QueryResult<GetAssignmentByTokenQuery, GetAssignmentByTokenQueryVariables>;
+export type GetPendingAssignmentsQueryHookResult = ReturnType<typeof useGetPendingAssignmentsQuery>;
+export type GetPendingAssignmentsLazyQueryHookResult = ReturnType<typeof useGetPendingAssignmentsLazyQuery>;
+export type GetPendingAssignmentsSuspenseQueryHookResult = ReturnType<typeof useGetPendingAssignmentsSuspenseQuery>;
+export type GetPendingAssignmentsQueryResult = Apollo.QueryResult<GetPendingAssignmentsQuery, GetPendingAssignmentsQueryVariables>;
 export const UpdateAssignmentDocument = gql`
     mutation UpdateAssignment($updateAssignmentId: ID!, $input: UpdateAssignmentInput!) {
   updateAssignment(id: $updateAssignmentId, input: $input)

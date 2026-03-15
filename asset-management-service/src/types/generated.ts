@@ -318,7 +318,6 @@ export type Query = {
   getAssetById?: Maybe<Asset>;
   getAssets: Array<Asset>;
   getAssignmentById?: Maybe<Assignment>;
-  getAssignmentByToken: Assignment;
   getAssignments: Array<Assignment>;
   getAssignmentsByAsset: Array<Assignment>;
   getAssignmentsByEmployee: Array<Assignment>;
@@ -333,6 +332,7 @@ export type Query = {
   getEmployeeById?: Maybe<Employee>;
   getEmployees: Array<Employee>;
   getEmployeesByStatus: Array<Employee>;
+  getPendingAssignments: Array<Assignment>;
   testQuery: Array<Data>;
 };
 
@@ -344,11 +344,6 @@ export type QueryGetAssetByIdArgs = {
 
 export type QueryGetAssignmentByIdArgs = {
   id: Scalars['ID']['input'];
-};
-
-
-export type QueryGetAssignmentByTokenArgs = {
-  token: Scalars['String']['input'];
 };
 
 
@@ -394,6 +389,11 @@ export type QueryGetEmployeeByIdArgs = {
 
 export type QueryGetEmployeesByStatusArgs = {
   status: EmployeeStatus;
+};
+
+
+export type QueryGetPendingAssignmentsArgs = {
+  token: Scalars['String']['input'];
 };
 
 export enum Response {
@@ -732,7 +732,6 @@ export type QueryResolvers<ContextType = Context, ParentType extends ResolversPa
   getAssetById?: Resolver<Maybe<ResolversTypes['Asset']>, ParentType, ContextType, RequireFields<QueryGetAssetByIdArgs, 'id'>>;
   getAssets?: Resolver<Array<ResolversTypes['Asset']>, ParentType, ContextType>;
   getAssignmentById?: Resolver<Maybe<ResolversTypes['Assignment']>, ParentType, ContextType, RequireFields<QueryGetAssignmentByIdArgs, 'id'>>;
-  getAssignmentByToken?: Resolver<ResolversTypes['Assignment'], ParentType, ContextType, RequireFields<QueryGetAssignmentByTokenArgs, 'token'>>;
   getAssignments?: Resolver<Array<ResolversTypes['Assignment']>, ParentType, ContextType>;
   getAssignmentsByAsset?: Resolver<Array<ResolversTypes['Assignment']>, ParentType, ContextType, RequireFields<QueryGetAssignmentsByAssetArgs, 'assetId'>>;
   getAssignmentsByEmployee?: Resolver<Array<ResolversTypes['Assignment']>, ParentType, ContextType, RequireFields<QueryGetAssignmentsByEmployeeArgs, 'employeeId'>>;
@@ -747,6 +746,7 @@ export type QueryResolvers<ContextType = Context, ParentType extends ResolversPa
   getEmployeeById?: Resolver<Maybe<ResolversTypes['Employee']>, ParentType, ContextType, RequireFields<QueryGetEmployeeByIdArgs, 'id'>>;
   getEmployees?: Resolver<Array<ResolversTypes['Employee']>, ParentType, ContextType>;
   getEmployeesByStatus?: Resolver<Array<ResolversTypes['Employee']>, ParentType, ContextType, RequireFields<QueryGetEmployeesByStatusArgs, 'status'>>;
+  getPendingAssignments?: Resolver<Array<ResolversTypes['Assignment']>, ParentType, ContextType, RequireFields<QueryGetPendingAssignmentsArgs, 'token'>>;
   testQuery?: Resolver<Array<ResolversTypes['Data']>, ParentType, ContextType>;
 };
 
