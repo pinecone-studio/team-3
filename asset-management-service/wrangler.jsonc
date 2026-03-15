@@ -35,7 +35,14 @@
 	 * https://developers.cloudflare.com/workers/wrangler/configuration/#environment-variables
 	 * Note: Use secrets to store sensitive data.
 	 * https://developers.cloudflare.com/workers/configuration/secrets/
+	 
 	 */
+	"r2_buckets": [
+		{
+			"binding": "FILES",
+			"bucket_name": "asset-management",
+		},
+	],
 	"vars": { "JWT_SECRET": "jwt_secret", "RESEND_API_KEY": "re_dAgJBn69_CyCE2bUUSSPH1kWns9oaTUes" },
 	/**
 	 * Static Assets
