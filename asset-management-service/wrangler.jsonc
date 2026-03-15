@@ -43,7 +43,7 @@
 			"bucket_name": "asset-management",
 		},
 	],
-	"vars": { "JWT_SECRET": "jwt_secret", "RESEND_API_KEY": "re_dAgJBn69_CyCE2bUUSSPH1kWns9oaTUes" },
+	"vars": { "JWT_SECRET": "jwt_secret", "RESEND_API_KEY": "re_dAgJBn69_CyCE2bUUSSPH1kWns9oaTUes", "FRONTEND_URL": "http://localhost:3000" },
 	/**
 	 * Static Assets
 	 * https://developers.cloudflare.com/workers/static-assets/binding/

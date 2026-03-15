@@ -6,6 +6,7 @@ import { assetTypeDefs } from './asset-schema';
 import { employeeTypeDefs } from './employee-schema';
 import { assignmentTypeDefs } from './assignment-schema';
 import { censusTypeDefs } from './census.schema';
+import { categoryTypeDefs } from './category-schema';
 
 export const typeDefs = mergeTypeDefs([
 	commonTypeDefs,
@@ -15,4 +16,5 @@ export const typeDefs = mergeTypeDefs([
 	mainTenanceTicketsTypeDefs,
 	PurchaseOrdersTypeDefs,
 	censusTypeDefs,
+	categoryTypeDefs,
 ]);

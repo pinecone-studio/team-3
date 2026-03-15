@@ -13,7 +13,7 @@ export const assetTypeDefs = gql`
 	type Asset {
 		id: ID!
 		assetTag: String!
-		category: String!
+		category: Category
 		serialNumber: String
 		status: AssetStatusEnum!
 		purchaseDate: String
@@ -26,7 +26,7 @@ export const assetTypeDefs = gql`
 
 	input CreateAssetInput {
 		assetTag: String!
-		category: String!
+		categoryId: String
 		serialNumber: String
 		status: AssetStatusEnum
 		locationId: String
@@ -36,7 +36,7 @@ export const assetTypeDefs = gql`
 
 	input UpdateAssetInput {
 		assetTag: String
-		category: String
+		categoryId: String
 		status: AssetStatusEnum
 		serialNumber: String
 		locationId: String
