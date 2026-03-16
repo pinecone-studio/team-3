@@ -13,12 +13,9 @@ export * from './create-assignment';
 export * from './update-assignment';
 export * from './delete-assignment';
 
-//Census
 export * from './create-census-event';
-export * from './create-census-task';
 export * from './update-census-task';
-export * from './delete-census-event';
-
+export * from './finalize-census-event';
 // Categories
 export * from './create-category';
 export * from './delete-category';

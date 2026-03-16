@@ -12,7 +12,7 @@ export const getCensusEvents: QueryResolvers['getCensusEvents'] = async (_, __, 
 		name: event.name,
 		scope: event.scope ?? '',
 		scopeFilter: event.scopeFilter ? String(event.scopeFilter) : undefined,
-		startedAt: event.startedAt ? event.startedAt.toISOString() : undefined,
+		startedAt: event.startedAt ? event.startedAt.toISOString() : '',
 		closedAt: event.closedAt ? event.closedAt.toISOString() : undefined,
 		createdBy: event.createdBy ?? '',
 	}));

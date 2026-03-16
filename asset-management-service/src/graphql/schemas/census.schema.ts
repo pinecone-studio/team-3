@@ -6,10 +6,9 @@ export const censusTypeDefs = gql`
 		name: String!
 		scope: String!
 		scopeFilter: String
-		startedAt: String
+		startedAt: String!
 		closedAt: String
 		createdBy: String!
-		deletedAt: String
 	}
 
 	type CensusTask {
@@ -21,7 +20,6 @@ export const censusTypeDefs = gql`
 		conditionReported: String
 		locationConfirmed: Boolean
 		discrepancyFlag: Boolean
-		deletedAt: String
 	}
 
 	type CensusReport {
@@ -42,26 +40,6 @@ export const censusTypeDefs = gql`
 		createdBy: String!
 	}
 
-	input UpdateCensusEventInput {
-		id: ID!
-		name: String
-		scope: String
-		scopeFilter: String
-		startedAt: String
-		closedAt: String
-		createdBy: String
-	}
-
-	input CreateCensusTaskInput {
-		censusId: String!
-		assetId: String!
-		verifierId: String
-		verifiedAt: String
-		conditionReported: String
-		locationConfirmed: Boolean
-		discrepancyFlag: Boolean
-	}
-
 	input UpdateCensusTaskInput {
 		id: ID!
 		verifierId: String
@@ -70,21 +48,17 @@ export const censusTypeDefs = gql`
 		locationConfirmed: Boolean
 		discrepancyFlag: Boolean
 	}
-
 	extend type Query {
 		getCensusEvents: [CensusEvent!]!
 		getCensusEventById(id: ID!): CensusEvent
 		getCensusTasks: [CensusTask!]!
 		getCensusTaskById(id: ID!): CensusTask
+		getCensusTaskByAssetId(censusId: ID!, assetId: ID!): CensusTask
 		getCensusReport(censusId: ID!): CensusReport!
 	}
-
 	extend type Mutation {
 		createCensusEvent(input: CreateCensusEventInput!): Response!
-		updateCensusEvent(input: UpdateCensusEventInput!): Response!
-		deleteCensusEvent(id: ID!): Response!
-
-		createCensusTask(input: CreateCensusTaskInput!): Response!
 		updateCensusTask(input: UpdateCensusTaskInput!): Response!
+		finalizeCensusEvent(censusId: ID!): Response!
 	}
 `;
