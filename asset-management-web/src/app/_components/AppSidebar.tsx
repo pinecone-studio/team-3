@@ -3,23 +3,14 @@
 import {
   Sidebar,
   SidebarContent,
-  SidebarFooter,
-  SidebarGroup,
-  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuItem,
-  SidebarMenuButton,
-  AvatarImage,
-  AvatarFallback,
-  Avatar,
   cn,
 } from "@/libs";
 import {
-  Package,
   LayoutDashboard,
   AlertTriangle,
-  Bell,
   Boxes,
   Settings,
 } from "lucide-react";
@@ -97,23 +88,6 @@ export function AppSidebar() {
           })}
         </SidebarMenu>
       </SidebarContent>
-
-      <SidebarFooter className="p-6 mt-auto  bg-[#17203F]">
-        <div className="flex items-center gap-3 text-white p-2 rounded-2xl  ">
-          <Avatar className="h-10 w-10 border-2  shadow-sm">
-            <AvatarImage src="https://github.com/shadcn.png" />
-            <AvatarFallback>ДБ</AvatarFallback>{" "}
-          </Avatar>
-
-          <div className="flex flex-col flex-1 ">
-            <span className="text-sm font-semibold truncate">Т. Энхжаргал</span>
-            <span className="text-xs ">Инженер</span>
-          </div>
-          <button className="p-2 hover:bg-slate-200 rounded-full transition-colors">
-            <Bell className="w-4 h-4 " />
-          </button>
-        </div>
-      </SidebarFooter>
     </Sidebar>
   );
 }
