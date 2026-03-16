@@ -4,9 +4,7 @@ import { assignments } from '../../../db/schema/assigments.schema';
 
 export const getAssignments: QueryResolvers['getAssignments'] = async (_, __, context) => {
 	const DB = drizzle(context.env.DB);
-
 	const result = await DB.select().from(assignments);
-
 	return result.map((row) => ({
 		...row,
 		assignedAt: row.assignedAt.toISOString(),

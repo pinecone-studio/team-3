@@ -7,7 +7,6 @@ export const getEmployeeById: QueryResolvers['getEmployeeById'] = async (_, { id
 	const DB = drizzle(context.env.DB);
 	const result = await DB.select().from(employees).where(eq(employees.id, id)).limit(1);
 	const emp = result[0];
-
 	if (!emp) {
 		return null;
 	}
