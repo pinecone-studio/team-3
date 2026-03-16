@@ -9,13 +9,10 @@ interface Props {
 
 export default function SignaturePad({ onConfirm }: Props) {
   const sigRef = useRef<SignatureCanvas>(null);
-
   const handleConfirm = () => {
     if (sigRef.current?.isEmpty()) {
       return alert("Please provide a signature before confirming.");
     }
-
-    // Captures the trimmed signature as a PNG Base64 string
     const base64 = sigRef.current?.getTrimmedCanvas().toDataURL("image/png");
     if (base64) onConfirm(base64);
   };

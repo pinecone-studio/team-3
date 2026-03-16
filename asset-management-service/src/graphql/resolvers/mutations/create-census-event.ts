@@ -2,7 +2,7 @@ import { drizzle } from 'drizzle-orm/d1';
 import { eq, isNull } from 'drizzle-orm';
 import { MutationResolvers, Response } from '../../../types/generated';
 import { censusEvents, censusTasks, assets } from '../../../db';
-import { assignments } from '../../../db/schema/assigments.schema';
+import { assignments } from '../../../db/schema/assignments.schema';
 
 export const createCensusEvent: MutationResolvers['createCensusEvent'] = async (_, { input }, context) => {
 	const DB = drizzle(context.env.DB);

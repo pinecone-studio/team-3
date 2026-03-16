@@ -1,6 +1,8 @@
 import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core';
-import { assets, employees } from './index';
+// import { assets } from './assets.schema';
+import { employees } from './employees.schema';
 import { relations, sql } from 'drizzle-orm';
+import { assets } from './assets.schema';
 
 // --- 3. ASSIGNMENTS (History of Asset movement) ---
 export const assignments = sqliteTable('assignments', {

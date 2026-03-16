@@ -1,7 +1,7 @@
 import { drizzle } from 'drizzle-orm/d1';
 import { eq } from 'drizzle-orm';
 import { MutationResolvers, Response } from '../../../types/generated';
-import { assignments } from '../../../db/schema/assigments.schema';
+import { assignments } from '../../../db/schema/assignments.schema';
 
 export const deleteAssignment: MutationResolvers['deleteAssignment'] = async (_, { id }, context) => {
 	const DB = drizzle(context.env.DB);

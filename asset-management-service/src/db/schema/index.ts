@@ -1,5 +1,5 @@
 export * from './assets.schema';
-export * from './assigments.schema';
+export * from './assignments.schema';
 export * from './audit-logs';
 export * from './census-events';
 export * from './census-tasks';
