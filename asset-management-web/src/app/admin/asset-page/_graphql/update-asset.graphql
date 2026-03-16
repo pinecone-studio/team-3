@@ -1,0 +1,3 @@
+mutation UpdateAsset($updateAssetId: ID!, $input: UpdateAssetInput!) {
+  updateAsset(id: $updateAssetId, input: $input)
+}

@@ -1,93 +1,58 @@
 "use client";
+import { useDeleteAssetMutation, useGetAssetsQuery, useUpdateAssetMutation } from "@/gql/graphql";
 import AssetManagement from "./_components/AssetManagement";
 
-const mockAssets = [
-  {
-    id: "MAC-2026-001",
-    name: 'MacBook Pro 16"',
-    sn: "C02ZX1ABCD",
-    category: "MacBook",
-    status: "Хуваарилсан",
-    user: "T. Enkhjargal",
-    dept: "Engineering",
-    location: "HQ - Floor 3",
-    price: "₮ 4,125,000",
-    initial: "TE",
-  },
-  {
-    id: "MAC-2026-002",
-    name: 'MacBook Pro 14"',
-    sn: "C02ZX1ABCE",
-    category: "MacBook",
-    status: "Сул",
-    user: "-",
-    dept: "",
-    location: "Storage Room A",
-    price: "₮ 3,515,000",
-    initial: "",
-  },
-  {
-    id: "LPT-2025-042",
-    name: "Dell XPS 15",
-    sn: "DELLXPS42ABC",
-    category: "Laptop",
-    status: "Засварт",
-    user: "B. Ganzorig",
-    dept: "Design",
-    location: "Repair Center",
-    price: "₮ 2,400,000",
-    initial: "BG",
-  },
-  {
-    id: "LPT-2025-04",
-    name: "Dell XPS 15",
-    sn: "DELLXPS42ABC",
-    category: "Laptop",
-    status: "Засварт",
-    user: "B. Ganzorig",
-    dept: "Design",
-    location: "Repair Center",
-    price: "₮ 2,400,000",
-    initial: "BG",
-  },
-  {
-    id: "LPT-2025-04w",
-    name: "Dell XPS 15",
-    sn: "DELLXPS42ABC",
-    category: "Laptop",
-    status: "Засварт",
-    user: "B. Ganzorig",
-    dept: "Design",
-    location: "Repair Center",
-    price: "₮ 2,400,000",
-    initial: "BG",
-  },
-  {
-    id: "LPT-2023-04",
-    name: "Dell XPS 15",
-    sn: "DELLXPS42ABC",
-    category: "Laptop",
-    status: "Засварт",
-    user: "B. Ganzorig",
-    dept: "Design",
-    location: "Repair Center",
-    price: "₮ 2,400,000",
-    initial: "BG",
-  },
-  {
-    id: "LPT-2024-04w",
-    name: "Dell XPS 15",
-    sn: "DELLXPS42ABC",
-    category: "Laptop",
-    status: "Засварт",
-    user: "B. Ganzorig",
-    dept: "Design",
-    location: "Repair Center",
-    price: "₮ 2,400,000",
-    initial: "BG",
-  },
-];
-
 export default function AdminAssetPage() {
-  return <AssetManagement assets={mockAssets} />;
+  const { data, loading, error, refetch } = useGetAssetsQuery();
+  const [deleteAsset] = useDeleteAssetMutation();
+   const [updateAsset] = useUpdateAssetMutation();
+
+  const handleDelete = async (id: string) => {
+    if (!confirm("Та энэ хөрөнгийг устгахдаа итгэлтэй байна уу?")) return;
+
+    try {
+      await deleteAsset({ variables: { deleteAssetId: id } });
+      alert("Хөрөнгө амжилттай устлаа!");
+      refetch();
+    } catch (err: any) {
+      console.error(err);
+      alert("Устгах үед алдаа гарлаа: " + err.message);
+    }
+    
+  };
+  const handleUpdate = async (id: string, input: any) => {
+    try {
+      await updateAsset({ variables: { updateAssetId: id, input } });
+      alert("Хөрөнгө амжилттай шинэчлэгдлээ!");
+      refetch();
+    } catch (err: any) {
+      console.error(err);
+      alert("Шинэчлэх үед алдаа гарлаа: " + err.message);
+    }
+  };
+
+  if (error) {
+    return (
+      <div className="flex h-screen w-full items-center justify-center p-6 text-center">
+        <div className="bg-red-50 p-6 rounded-2xl border border-red-100">
+          <p className="text-red-600 font-bold font-gilroy">Алдаа гарлаа!</p>
+          <p className="text-red-500 text-sm mt-1">{error.message}</p>
+        </div>
+      </div>
+    );
+  }
+  if (loading) {
+    return (
+      <div className="flex h-screen w-full items-center justify-center bg-[#F9FAFB]">
+        <div className="text-center font-gilroy">
+          <div className="h-8 w-8 animate-spin rounded-full border-4 border-[#0251CB] border-t-transparent mx-auto"></div>
+          <p className="mt-4 text-gray-500">Уншиж байна...</p>
+        </div>
+      </div>
+    );
+  }
+
+  const assets = data?.getAssets || [];
+  console.log("data", data);
+  return <AssetManagement assets={assets} onDelete={handleDelete} onUpdate={handleUpdate}/>;
 }

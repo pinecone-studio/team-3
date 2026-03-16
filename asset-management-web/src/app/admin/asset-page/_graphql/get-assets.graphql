@@ -1,0 +1,13 @@
+query GetAssets {
+  getAssets {
+    assetTag
+    category {
+      name
+    }
+    serialNumber
+    status
+    currentBookValue
+    assignedTo
+    id
+  }
+}
