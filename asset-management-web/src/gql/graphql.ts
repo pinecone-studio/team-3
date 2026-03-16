@@ -51,6 +51,8 @@ export type Assignment = {
   conditionAtReturn?: Maybe<Scalars['String']['output']>;
   employeeId: Scalars['String']['output'];
   id: Scalars['ID']['output'];
+  recentSignatureKey?: Maybe<Scalars['String']['output']>;
+  recentSignatureUrl?: Maybe<Scalars['String']['output']>;
   returnedAt?: Maybe<Scalars['String']['output']>;
   signatureR2Key?: Maybe<Scalars['String']['output']>;
 };
@@ -67,12 +69,11 @@ export type CensusEvent = {
   __typename?: 'CensusEvent';
   closedAt?: Maybe<Scalars['String']['output']>;
   createdBy: Scalars['String']['output'];
-  deletedAt?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
   scope: Scalars['String']['output'];
   scopeFilter?: Maybe<Scalars['String']['output']>;
-  startedAt?: Maybe<Scalars['String']['output']>;
+  startedAt: Scalars['String']['output'];
 };
 
 export type CensusReport = {
@@ -90,7 +91,6 @@ export type CensusTask = {
   assetId: Scalars['String']['output'];
   censusId: Scalars['String']['output'];
   conditionReported?: Maybe<Scalars['String']['output']>;
-  deletedAt?: Maybe<Scalars['String']['output']>;
   discrepancyFlag?: Maybe<Scalars['Boolean']['output']>;
   id: Scalars['ID']['output'];
   locationConfirmed?: Maybe<Scalars['Boolean']['output']>;
@@ -128,16 +128,6 @@ export type CreateCensusEventInput = {
   scope: Scalars['String']['input'];
   scopeFilter?: InputMaybe<Scalars['String']['input']>;
   startedAt?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type CreateCensusTaskInput = {
-  assetId: Scalars['String']['input'];
-  censusId: Scalars['String']['input'];
-  conditionReported?: InputMaybe<Scalars['String']['input']>;
-  discrepancyFlag?: InputMaybe<Scalars['Boolean']['input']>;
-  locationConfirmed?: InputMaybe<Scalars['Boolean']['input']>;
-  verifiedAt?: InputMaybe<Scalars['String']['input']>;
-  verifierId?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type CreateEmployeeInput = {
@@ -201,16 +191,14 @@ export type Mutation = {
   createAssignment: Response;
   createCategory: Response;
   createCensusEvent: Response;
-  createCensusTask: Response;
   createEmployee: Response;
   deleteAsset: Response;
   deleteAssignment: Response;
   deleteCategory: Response;
-  deleteCensusEvent: Response;
   deleteEmployee: Response;
+  finalizeCensusEvent: Response;
   updateAsset: Response;
   updateAssignment: Response;
-  updateCensusEvent: Response;
   updateCensusTask: Response;
   updateEmployee: Response;
 };
@@ -236,11 +224,6 @@ export type MutationCreateCensusEventArgs = {
 };
 
 
-export type MutationCreateCensusTaskArgs = {
-  input: CreateCensusTaskInput;
-};
-
-
 export type MutationCreateEmployeeArgs = {
   input: CreateEmployeeInput;
 };
@@ -261,14 +244,14 @@ export type MutationDeleteCategoryArgs = {
 };
 
 
-export type MutationDeleteCensusEventArgs = {
-  id: Scalars['ID']['input'];
-};
-
-
 export type MutationDeleteEmployeeArgs = {
   id: Scalars['ID']['input'];
   input: DeleteEmployeeInput;
+};
+
+
+export type MutationFinalizeCensusEventArgs = {
+  censusId: Scalars['ID']['input'];
 };
 
 
@@ -281,11 +264,6 @@ export type MutationUpdateAssetArgs = {
 export type MutationUpdateAssignmentArgs = {
   id: Scalars['ID']['input'];
   input: UpdateAssignmentInput;
-};
-
-
-export type MutationUpdateCensusEventArgs = {
-  input: UpdateCensusEventInput;
 };
 
 
@@ -319,6 +297,7 @@ export type Query = {
   getCensusEventById?: Maybe<CensusEvent>;
   getCensusEvents: Array<CensusEvent>;
   getCensusReport: CensusReport;
+  getCensusTaskByAssetId?: Maybe<CensusTask>;
   getCensusTaskById?: Maybe<CensusTask>;
   getCensusTasks: Array<CensusTask>;
   getEmployeeByCode?: Maybe<Employee>;
@@ -360,6 +339,12 @@ export type QueryGetCensusEventByIdArgs = {
 
 
 export type QueryGetCensusReportArgs = {
+  censusId: Scalars['ID']['input'];
+};
+
+
+export type QueryGetCensusTaskByAssetIdArgs = {
+  assetId: Scalars['ID']['input'];
   censusId: Scalars['ID']['input'];
 };
 
@@ -418,16 +403,6 @@ export type UpdateAssignmentInput = {
   conditionAtReturn?: InputMaybe<Scalars['String']['input']>;
   returnedAt?: InputMaybe<Scalars['String']['input']>;
   signatureR2Key?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type UpdateCensusEventInput = {
-  closedAt?: InputMaybe<Scalars['String']['input']>;
-  createdBy?: InputMaybe<Scalars['String']['input']>;
-  id: Scalars['ID']['input'];
-  name?: InputMaybe<Scalars['String']['input']>;
-  scope?: InputMaybe<Scalars['String']['input']>;
-  scopeFilter?: InputMaybe<Scalars['String']['input']>;
-  startedAt?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type UpdateCensusTaskInput = {
@@ -490,7 +465,7 @@ export type GetPendingAssignmentsQueryVariables = Exact<{
 }>;
 
 
-export type GetPendingAssignmentsQuery = { __typename?: 'Query', getPendingAssignments: Array<{ __typename?: 'Assignment', id: string, asset?: { __typename?: 'Asset', assetTag: string, serialNumber?: string | null, category?: { __typename?: 'Category', picture?: string | null, name: string } | null } | null }> };
+export type GetPendingAssignmentsQuery = { __typename?: 'Query', getPendingAssignments: Array<{ __typename?: 'Assignment', id: string, signatureR2Key?: string | null, recentSignatureUrl?: string | null, recentSignatureKey?: string | null, asset?: { __typename?: 'Asset', id: string, assetTag: string, serialNumber?: string | null, category?: { __typename?: 'Category', name: string, picture?: string | null } | null } | null }> };
 
 export type UpdateAssignmentMutationVariables = Exact<{
   updateAssignmentId: Scalars['ID']['input'];
@@ -593,14 +568,18 @@ export const GetPendingAssignmentsDocument = gql`
     query GetPendingAssignments($token: String!) {
   getPendingAssignments(token: $token) {
     id
+    signatureR2Key
     asset {
+      id
       assetTag
       serialNumber
       category {
-        picture
         name
+        picture
       }
     }
+    recentSignatureUrl
+    recentSignatureKey
   }
 }
     `;
