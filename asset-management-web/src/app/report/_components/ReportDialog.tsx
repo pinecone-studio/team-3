@@ -1,6 +1,6 @@
 "use client";
 
-import { Plus, Upload, AlertTriangle } from "lucide-react";
+import { Plus, Upload } from "lucide-react";
 import {
   DialogTrigger,
   Dialog,
@@ -40,21 +40,36 @@ export default function ReportDialog() {
         </Button>
       </DialogTrigger>
 
-      <DialogContent className="sm:max-w-[500px] rounded-xl font-gilroy">
-        <DialogHeader>
-          <DialogTitle className="font-semibold text-[20px] leading-[125%]">
+      <DialogContent className="sm:max-w-[500px] items-center justify-between flex flex-col  p-6 rounded-xl font-gilroy">
+        <DialogHeader className="flex justify-end w-full">
+          <DialogTitle className="font-semibold text-[20px]  leading-[125%]">
             Асуудал мэдэгдэх
           </DialogTitle>
-          <DialogDescription className="text-[#666666] text-[14px] leading-[125%]">
-            Төхөөрөмжтэй холбоотой асуудлаа дэлгэрэнгүй тайлбарлана уу
-          </DialogDescription>
         </DialogHeader>
 
-        <div className="space-y-5 py-4">
+        <div className="space-y-5 py-4 w-full">
           <div className="space-y-2">
             <Label className="text-[14px] font-medium">Төхөөрөмж сонгох</Label>
             <Select value={selectedAsset} onValueChange={setSelectedAsset}>
-              <SelectTrigger className="h-10 border-[#E2E8F0]">
+              <SelectTrigger className="w-full py-5  border-[#E2E8F0]">
+                <SelectValue
+                  className="py-4"
+                  placeholder="Төхөөрөмж сонгоно уу"
+                />
+              </SelectTrigger>
+              <SelectContent>
+                {myAssets.map((asset) => (
+                  <SelectItem key={asset.id} value={asset.id}>
+                    {asset.name} ({asset.assetTag})
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="space-y-2 ">
+            <Label className="text-[14px] font-medium">Асуудлын төрөл</Label>
+            <Select value={selectedAsset} onValueChange={setSelectedAsset}>
+              <SelectTrigger className="w-full py-5 border-[#E2E8F0]">
                 <SelectValue placeholder="Төхөөрөмж сонгоно уу" />
               </SelectTrigger>
               <SelectContent>
@@ -66,11 +81,10 @@ export default function ReportDialog() {
               </SelectContent>
             </Select>
           </div>
-
           <div className="space-y-2">
             <Label className="text-[14px] font-medium">Тайлбар</Label>
             <Textarea
-              className="border-[#E2E8F0] resize-none focus-visible:ring-[#0251CB]"
+              className="border-[#E2E8F0]  h-[85px] max-h-[100px] p-2 resize-none focus-visible:ring-[#0251CB]"
               placeholder="Асуудлаа дэлгэрэнгүй тайлбарлана уу..."
               value={description}
               onChange={(e) => setDescription(e.target.value)}
@@ -90,19 +104,19 @@ export default function ReportDialog() {
           </div>
         </div>
 
-        <DialogFooter className="gap-2">
+        <DialogFooter className="gap-2   bg-white flex">
           <Button
             variant="outline"
-            className="h-10 px-6 border-[#E2E8F0] text-[#64748B]"
+            className="h-10 w-[220px] px-6 border-[#E2E8F0] text-[#000000]"
             onClick={() => setDialogOpen(false)}
           >
-            Болих
+            Буцах
           </Button>
           <Button
-            className="bg-[#0251CB] h-10 px-6 text-white"
+            className="bg-[#0251CB] w-[220px] h-10 px-6 text-white"
             disabled={!selectedAsset || !description}
           >
-            Мэдэгдэл илгээх
+            Илгээх
           </Button>
         </DialogFooter>
       </DialogContent>

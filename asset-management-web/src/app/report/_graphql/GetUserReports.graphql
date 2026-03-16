@@ -1,0 +1,12 @@
+query GetUserReports {
+  getUserReports {
+    id
+    title
+    code
+    reason
+    reportedDate
+    resolvedDate
+    category
+    status
+  }
+}
