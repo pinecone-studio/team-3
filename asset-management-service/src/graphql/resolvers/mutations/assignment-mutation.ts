@@ -2,7 +2,7 @@ import { assets, employees } from '../../../db/schema';
 import { eq, and, isNull } from 'drizzle-orm';
 import { GraphQLError } from 'graphql';
 import { drizzle } from 'drizzle-orm/d1';
-import { assignments } from '../../../db/schema/assigments.schema';
+import { assignments } from '../../../db/schema/assignments.schema';
 import { AssetStatusEnum } from '../../../types/generated';
 
 export const assignmentMutations = {

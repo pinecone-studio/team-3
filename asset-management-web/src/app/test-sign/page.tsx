@@ -22,21 +22,12 @@ const SignaturePad = dynamic(() => import("./_components/SignaturePad"), {
 function AcknowledgeContent() {
   const searchParams = useSearchParams();
   const token = searchParams.get("token");
-
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [isSuccess, setIsSuccess] = useState(false);
-
   const { data, loading, error } = useGetPendingAssignmentsQuery({
     variables: { token: token ?? "" },
     skip: !token,
-    onCompleted: (data) => {
-      // Auto-select all assets by default for convenience
-      if (data.getPendingAssignments) {
-        setSelectedIds(data.getPendingAssignments.map((a) => a.id));
-      }
-    },
   });
-
   const [updateAssignment, { loading: isUpdating }] =
     useUpdateAssignmentMutation();
 
@@ -50,7 +41,6 @@ function AcknowledgeContent() {
     if (!token || isUpdating || selectedIds.length === 0) return;
 
     try {
-      // Execute all updates in parallel
       await Promise.all(
         selectedIds.map((id) =>
           updateAssignment({
@@ -170,8 +160,6 @@ function AcknowledgeContent() {
               </button>
             ))}
           </div>
-
-          {/* Master Signature Pad */}
           <div className="bg-white border border-gray-100 rounded-[3rem] p-8 shadow-[0_20px_50px_rgba(0,0,0,0.04)] space-y-8">
             <div className="space-y-4">
               <div className="flex items-center justify-between px-1">
@@ -185,7 +173,6 @@ function AcknowledgeContent() {
                   </span>
                 )}
               </div>
-
               <div
                 className={`transition-all duration-500 ${isUpdating || selectedIds.length === 0 ? "opacity-30 grayscale pointer-events-none scale-[0.97]" : ""}`}
               >

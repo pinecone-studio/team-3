@@ -4,12 +4,11 @@ import { categories } from '../../../db';
 
 export const createCategory: MutationResolvers['createCategory'] = async (_, { input }, context) => {
 	const DB = drizzle(context.env.DB);
-
 	const newCategory = {
 		id: crypto.randomUUID(),
 		name: input.name,
 		picture: input.picture ?? undefined,
 	};
-	const result = await DB.insert(categories).values(newCategory).returning();
+	await DB.insert(categories).values(newCategory).returning();
 	return Response.Success;
 };

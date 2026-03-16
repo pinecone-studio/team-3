@@ -5,7 +5,6 @@ import { employees } from '../../../db';
 
 export const getEmployeesByStatus: QueryResolvers['getEmployeesByStatus'] = async (_, { status }, context) => {
 	const DB = drizzle(context.env.DB);
-
 	const result = await DB.select().from(employees).where(eq(employees.status, status));
 
 	return result.map((emp) => {
