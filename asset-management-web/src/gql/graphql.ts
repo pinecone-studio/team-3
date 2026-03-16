@@ -458,6 +458,26 @@ export type UpdateEmployeeInput = {
   terminationDate?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type DeleteAssetMutationVariables = Exact<{
+  deleteAssetId: Scalars['ID']['input'];
+}>;
+
+
+export type DeleteAssetMutation = { __typename?: 'Mutation', deleteAsset: Response };
+
+export type GetAssetsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetAssetsQuery = { __typename?: 'Query', getAssets: Array<{ __typename?: 'Asset', assetTag: string, serialNumber?: string | null, status: AssetStatusEnum, currentBookValue?: number | null, assignedTo?: string | null, id: string, category?: { __typename?: 'Category', name: string } | null }> };
+
+export type UpdateAssetMutationVariables = Exact<{
+  updateAssetId: Scalars['ID']['input'];
+  input: UpdateAssetInput;
+}>;
+
+
+export type UpdateAssetMutation = { __typename?: 'Mutation', updateAsset: Response };
+
 export type GetAssetByIdQueryVariables = Exact<{
   getAssetByIdId: Scalars['ID']['input'];
 }>;
@@ -481,6 +501,66 @@ export type UpdateAssignmentMutationVariables = Exact<{
 export type UpdateAssignmentMutation = { __typename?: 'Mutation', updateAssignment: Response };
 
 
+export const DeleteAssetDocument = gql`
+    mutation DeleteAsset($deleteAssetId: ID!) {
+  deleteAsset(id: $deleteAssetId)
+}
+    `;
+export type DeleteAssetMutationFn = Apollo.MutationFunction<DeleteAssetMutation, DeleteAssetMutationVariables>;
+export function useDeleteAssetMutation(baseOptions?: Apollo.MutationHookOptions<DeleteAssetMutation, DeleteAssetMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteAssetMutation, DeleteAssetMutationVariables>(DeleteAssetDocument, options);
+      }
+export type DeleteAssetMutationHookResult = ReturnType<typeof useDeleteAssetMutation>;
+export type DeleteAssetMutationResult = Apollo.MutationResult<DeleteAssetMutation>;
+export type DeleteAssetMutationOptions = Apollo.BaseMutationOptions<DeleteAssetMutation, DeleteAssetMutationVariables>;
+export const GetAssetsDocument = gql`
+    query GetAssets {
+  getAssets {
+    assetTag
+    category {
+      name
+    }
+    serialNumber
+    status
+    currentBookValue
+    assignedTo
+    id
+  }
+}
+    `;
+export function useGetAssetsQuery(baseOptions?: Apollo.QueryHookOptions<GetAssetsQuery, GetAssetsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetAssetsQuery, GetAssetsQueryVariables>(GetAssetsDocument, options);
+      }
+export function useGetAssetsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAssetsQuery, GetAssetsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetAssetsQuery, GetAssetsQueryVariables>(GetAssetsDocument, options);
+        }
+// @ts-ignore
+export function useGetAssetsSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetAssetsQuery, GetAssetsQueryVariables>): Apollo.UseSuspenseQueryResult<GetAssetsQuery, GetAssetsQueryVariables>;
+export function useGetAssetsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetAssetsQuery, GetAssetsQueryVariables>): Apollo.UseSuspenseQueryResult<GetAssetsQuery | undefined, GetAssetsQueryVariables>;
+export function useGetAssetsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetAssetsQuery, GetAssetsQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetAssetsQuery, GetAssetsQueryVariables>(GetAssetsDocument, options);
+        }
+export type GetAssetsQueryHookResult = ReturnType<typeof useGetAssetsQuery>;
+export type GetAssetsLazyQueryHookResult = ReturnType<typeof useGetAssetsLazyQuery>;
+export type GetAssetsSuspenseQueryHookResult = ReturnType<typeof useGetAssetsSuspenseQuery>;
+export type GetAssetsQueryResult = Apollo.QueryResult<GetAssetsQuery, GetAssetsQueryVariables>;
+export const UpdateAssetDocument = gql`
+    mutation UpdateAsset($updateAssetId: ID!, $input: UpdateAssetInput!) {
+  updateAsset(id: $updateAssetId, input: $input)
+}
+    `;
+export type UpdateAssetMutationFn = Apollo.MutationFunction<UpdateAssetMutation, UpdateAssetMutationVariables>;
+export function useUpdateAssetMutation(baseOptions?: Apollo.MutationHookOptions<UpdateAssetMutation, UpdateAssetMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateAssetMutation, UpdateAssetMutationVariables>(UpdateAssetDocument, options);
+      }
+export type UpdateAssetMutationHookResult = ReturnType<typeof useUpdateAssetMutation>;
+export type UpdateAssetMutationResult = Apollo.MutationResult<UpdateAssetMutation>;
+export type UpdateAssetMutationOptions = Apollo.BaseMutationOptions<UpdateAssetMutation, UpdateAssetMutationVariables>;
 export const GetAssetByIdDocument = gql`
     query getAssetById($getAssetByIdId: ID!) {
   getAssetById(id: $getAssetByIdId) {
