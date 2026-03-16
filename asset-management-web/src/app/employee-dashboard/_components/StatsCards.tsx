@@ -1,27 +1,40 @@
-interface Stat {
+import { StatIcon } from './icons';
+
+interface StatItem {
   label: string;
   value: number;
+  sublabel: string;
+  iconBg: string;
+  type: string;
 }
 
 interface StatsCardsProps {
-  stats: Stat[];
+  stats: StatItem[];
 }
+
+const iconColors: Record<string, string> = {
+  cube: '#185FA5',
+  doc: '#3B6D11',
+  qr: '#BA7517',
+  warning: '#A32D2D',
+};
 
 export default function StatsCards({ stats }: StatsCardsProps) {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 mb-8">
-      {stats.map((stat, index) => (
-        <div
-          key={index}
-          className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm"
-        >
-          <p className="text-base text-gray-500 mb-2">
-            {stat.label}
-          </p>
-
-          <p className="text-4xl font-bold text-gray-800">
-            {stat.value}
-          </p>
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+      {stats.map((stat, i) => (
+        <div key={i} className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
+          <div className="flex items-start justify-between mb-4">
+            <p className="text-sm font-medium text-gray-600 leading-snug pr-2">{stat.label}</p>
+            <div
+              className="flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center"
+              style={{ backgroundColor: stat.iconBg }}
+            >
+              <StatIcon type={stat.type} color={iconColors[stat.type]} />
+            </div>
+          </div>
+          <p className="text-5xl font-semibold text-gray-900 mb-1">{stat.value}</p>
+          <p className="text-sm text-gray-400">{stat.sublabel}</p>
         </div>
       ))}
     </div>
