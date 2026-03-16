@@ -10,23 +10,18 @@ export const createAssignment: MutationResolvers['createAssignment'] = async (_,
 	const assignmentId = crypto.randomUUID();
 
 	try {
-		// 1. AVAILABILITY CHECK
 		const targetAsset = await DB.query.assets.findFirst({
 			where: (assets, { eq }) => eq(assets.id, input.assetId),
 			with: {
 				category: true,
 			},
 		});
-
 		if (!targetAsset) {
 			throw new Error('Asset not found.');
 		}
-
 		if (targetAsset.status !== AssetStatusEnum.Available) {
 			throw new Error(`Cannot assign: Asset is currently ${targetAsset.status}.`);
 		}
-
-		// 2. INSERT ASSIGNMENT
 		await DB.insert(assignments).values({
 			id: assignmentId,
 			assetId: input.assetId,
@@ -35,26 +30,17 @@ export const createAssignment: MutationResolvers['createAssignment'] = async (_,
 			conditionAtAssign: input.conditionAtAssign,
 			accessoriesJson: input.accessoriesJson ?? undefined,
 		});
-
-		// 3. FETCH EMPLOYEE FOR EMAIL
 		const [employee] = await DB.select().from(employees).where(eq(employees.id, input.employeeId));
 
 		if (employee?.email) {
 			const secret = new TextEncoder().encode(context.env.JWT_SECRET);
-
-			// 🔥 CHANGE: Sign the employeeId (sub) instead of assignmentId
-			// This allows the frontend to query for ALL pending items for this person.
 			const token = await new SignJWT({ employeeId: employee.id })
 				.setProtectedHeader({ alg: 'HS256' })
 				.setIssuedAt()
 				.setExpirationTime('72h')
 				.sign(secret);
-
 			const frontendUrl = context.env.FRONTEND_URL || 'http://localhost:3000';
-
-			// 🔥 CHANGE: Update path to reflect a "Portal" or "Verification" view
 			const magicLink = `${frontendUrl}/test-sign?token=${token}`;
-
 			await fetch('https://api.resend.com/emails', {
 				method: 'POST',
 				headers: {

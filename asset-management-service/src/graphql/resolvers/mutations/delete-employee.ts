@@ -5,7 +5,6 @@ import { employees } from '../../../db';
 
 export const deleteEmployee: MutationResolvers['deleteEmployee'] = async (_, { id, input }, context) => {
 	const DB = drizzle(context.env.DB);
-
 	try {
 		await DB.update(employees)
 			.set({

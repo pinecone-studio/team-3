@@ -1,10 +1,9 @@
 import { drizzle } from 'drizzle-orm/d1';
 import { MutationResolvers, QueryResolvers, Response } from '../../../types/generated';
-import { assets } from '../../../db'; // Assuming your table name is assets
+import { assets } from '../../../db';
 
 export const createAsset: MutationResolvers['createAsset'] = async (_, { input }, context) => {
 	const DB = drizzle(context.env.DB);
-
 	try {
 		await DB.insert(assets).values({
 			...input,

@@ -5,7 +5,6 @@ import { drizzle } from 'drizzle-orm/d1';
 
 export const deleteCategory: MutationResolvers['deleteCategory'] = async (_, { id }, context) => {
 	const DB = drizzle(context.env.DB);
-
 	try {
 		await DB.delete(categories).where(eq(categories.id, id));
 

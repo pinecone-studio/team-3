@@ -5,7 +5,6 @@ import { censusEvents } from '../../../db';
 
 export const deleteCensusEvent: MutationResolvers['deleteCensusEvent'] = async (_, { id }, context) => {
 	const DB = drizzle(context.env.DB);
-
 	try {
 		await DB.delete(censusEvents).where(eq(censusEvents.id, id));
 
