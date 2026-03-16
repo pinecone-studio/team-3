@@ -2,7 +2,8 @@ import { sqliteTable, text, integer, real } from 'drizzle-orm/sqlite-core';
 import { AssetStatusEnum } from '../../types/generated';
 import { employees } from './employees.schema';
 import { categories } from './categories.schema';
-import { relations } from 'drizzle-orm';
+import { Many, relations } from 'drizzle-orm';
+import { assignments } from './assigments.schema';
 
 // --- 2. ASSETS ---
 export const assets = sqliteTable('assets', {
@@ -29,9 +30,11 @@ export const assets = sqliteTable('assets', {
 	assignedTo: text('assigned_to').references(() => employees.id),
 	deletedAt: integer('deleted_at', { mode: 'timestamp' }),
 });
-export const assetsRelations = relations(assets, ({ one }) => ({
+export const assetsRelations = relations(assets, ({ one, many }) => ({
 	category: one(categories, {
 		fields: [assets.categoryId],
 		references: [categories.id],
 	}),
+
+	assignments: many(assignments),
 }));

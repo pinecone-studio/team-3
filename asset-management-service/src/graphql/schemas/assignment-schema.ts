@@ -25,10 +25,9 @@ export const assignmentTypeDefs = gql`
 		# Get the history of a specific asset
 		getAssignmentsByAsset(assetId: ID!): [Assignment!]!
 
+		getPendingAssignments(token: String!): [Assignment!]!
 		# Get all assets currently or previously held by an employee
 		getAssignmentsByEmployee(employeeId: ID!): [Assignment!]!
-
-		getAssignmentByToken(token: String!): Assignment!
 	}
 
 	input CreateAssignmentInput {

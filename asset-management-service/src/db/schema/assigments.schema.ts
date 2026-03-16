@@ -1,6 +1,6 @@
 import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core';
 import { assets, employees } from './index';
-import { sql } from 'drizzle-orm';
+import { relations, sql } from 'drizzle-orm';
 
 // --- 3. ASSIGNMENTS (History of Asset movement) ---
 export const assignments = sqliteTable('assignments', {
@@ -20,3 +20,14 @@ export const assignments = sqliteTable('assignments', {
 	signatureR2Key: text('signature_r2_key'),
 	accessoriesJson: text('accessories_json', { mode: 'json' }),
 });
+
+export const assignmentsRelations = relations(assignments, ({ one }) => ({
+	asset: one(assets, {
+		fields: [assignments.assetId],
+		references: [assets.id],
+	}),
+	employee: one(employees, {
+		fields: [assignments.employeeId],
+		references: [employees.id],
+	}),
+}));
