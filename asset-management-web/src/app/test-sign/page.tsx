@@ -1,12 +1,13 @@
 "use client";
 
-import { useState, Suspense, useEffect } from "react";
+import { useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import dynamic from "next/dynamic";
 import {
   useGetPendingAssignmentsQuery,
   useUpdateAssignmentMutation,
 } from "@/gql/graphql";
+import Image from "next/image";
 
 const SignaturePad = dynamic(() => import("./_components/SignaturePad"), {
   ssr: false,
@@ -21,47 +22,28 @@ const SignaturePad = dynamic(() => import("./_components/SignaturePad"), {
 
 function AcknowledgeContent() {
   const searchParams = useSearchParams();
-
-  // State to manage identity
-  const [effectiveToken, setEffectiveToken] = useState<string | null>(null);
-  const [isInitialized, setIsInitialized] = useState(false);
-
+  const urlToken = searchParams.get("token");
+  const localToken =
+    typeof window !== "undefined" ? localStorage.getItem("employeeId") : null;
+  const effectiveToken = urlToken || localToken;
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [isSuccess, setIsSuccess] = useState(false);
   const [useRecent, setUseRecent] = useState(false);
-
-  // Determine identity on mount (Browser only)
-  useEffect(() => {
-    const urlToken = searchParams.get("token");
-    const localToken = localStorage.getItem("employeeId");
-
-    // URL takes precedence, otherwise fallback to localStorage
-    const identity = urlToken || localToken;
-
-    setEffectiveToken(identity);
-    setIsInitialized(true);
-  }, [searchParams]);
-
-  // Query executes only once we know who the user is
   const { data, loading, error } = useGetPendingAssignmentsQuery({
     variables: { token: effectiveToken ?? "" },
-    skip: !isInitialized || !effectiveToken,
+    skip: !effectiveToken,
   });
-
   const [updateAssignment, { loading: isUpdating }] =
     useUpdateAssignmentMutation();
-
   const assignments = data?.getPendingAssignments ?? [];
   const history = assignments[0];
   const canReuse =
     !!history?.recentSignatureUrl && !!history?.recentSignatureKey;
-
   const handleToggleAsset = (id: string) => {
     setSelectedIds((prev) =>
       prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id],
     );
   };
-
   const handleFinalizeBatch = async (signature: string) => {
     if (!effectiveToken || isUpdating || selectedIds.length === 0) return;
 
@@ -82,9 +64,7 @@ function AcknowledgeContent() {
       alert("Batch verification failed. Please try again.");
     }
   };
-
-  // 1. Initial State: Loading/Resolving Identity
-  if (!isInitialized || (loading && !data)) {
+  if (loading && !data) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[80vh] space-y-4">
         <div className="w-10 h-10 border-4 border-blue-600/20 border-t-blue-600 rounded-full animate-spin" />
@@ -94,8 +74,6 @@ function AcknowledgeContent() {
       </div>
     );
   }
-
-  // 2. Error State: No token found in URL or LocalStorage
   if (!effectiveToken) {
     return (
       <div className="max-w-md mx-auto mt-20 p-10 text-center bg-white rounded-[2.5rem] border border-gray-100 shadow-2xl">
@@ -110,7 +88,6 @@ function AcknowledgeContent() {
     );
   }
 
-  // 3. Error State: API Error or No assignments found
   if (error || (assignments.length === 0 && !isSuccess)) {
     return (
       <div className="max-w-md mx-auto mt-20 p-10 text-center bg-white rounded-[2.5rem] border border-red-100 shadow-2xl shadow-red-900/5">
@@ -125,7 +102,6 @@ function AcknowledgeContent() {
     );
   }
 
-  // 4. Success State
   if (isSuccess) {
     return (
       <div className="max-w-md mx-auto pt-32 pb-12 px-6 text-center animate-in fade-in zoom-in-95 duration-500">

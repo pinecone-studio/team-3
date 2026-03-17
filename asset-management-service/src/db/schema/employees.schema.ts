@@ -5,6 +5,7 @@ import { EmployeeStatus } from '../../types/generated';
 export const employees = sqliteTable('employees', {
 	id: text('id').primaryKey(),
 	entraId: text('entra_id').notNull().unique(),
+	clerkId: text('clerk_id').unique(),
 	firstName: text('first_name').notNull(),
 	lastName: text('last_name').notNull(),
 	firstNameEng: text('first_name_eng').notNull(),
