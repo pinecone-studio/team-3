@@ -198,10 +198,10 @@ export type Mutation = {
   createCategory: Response;
   createCensusEvent: Response;
   createEmployee: Response;
-  deleteAllCategory: Response;
   deleteAsset: Response;
   deleteAssignment: Response;
   deleteCategory: Response;
+  deleteCategoryByIds: Response;
   deleteEmployee: Response;
   finalizeCensusEvent: Response;
   testMutation: Response;
@@ -237,11 +237,6 @@ export type MutationCreateEmployeeArgs = {
 };
 
 
-export type MutationDeleteAllCategoryArgs = {
-  ids: Array<Scalars['String']['input']>;
-};
-
-
 export type MutationDeleteAssetArgs = {
   id: Scalars['ID']['input'];
 };
@@ -254,6 +249,11 @@ export type MutationDeleteAssignmentArgs = {
 
 export type MutationDeleteCategoryArgs = {
   id: Scalars['ID']['input'];
+};
+
+
+export type MutationDeleteCategoryByIdsArgs = {
+  ids: Array<Scalars['String']['input']>;
 };
 
 
@@ -691,10 +691,10 @@ export type MutationResolvers<ContextType = Context, ParentType extends Resolver
   createCategory?: Resolver<ResolversTypes['Response'], ParentType, ContextType, RequireFields<MutationCreateCategoryArgs, 'input'>>;
   createCensusEvent?: Resolver<ResolversTypes['Response'], ParentType, ContextType, RequireFields<MutationCreateCensusEventArgs, 'input'>>;
   createEmployee?: Resolver<ResolversTypes['Response'], ParentType, ContextType, RequireFields<MutationCreateEmployeeArgs, 'input'>>;
-  deleteAllCategory?: Resolver<ResolversTypes['Response'], ParentType, ContextType, RequireFields<MutationDeleteAllCategoryArgs, 'ids'>>;
   deleteAsset?: Resolver<ResolversTypes['Response'], ParentType, ContextType, RequireFields<MutationDeleteAssetArgs, 'id'>>;
   deleteAssignment?: Resolver<ResolversTypes['Response'], ParentType, ContextType, RequireFields<MutationDeleteAssignmentArgs, 'id'>>;
   deleteCategory?: Resolver<ResolversTypes['Response'], ParentType, ContextType, RequireFields<MutationDeleteCategoryArgs, 'id'>>;
+  deleteCategoryByIds?: Resolver<ResolversTypes['Response'], ParentType, ContextType, RequireFields<MutationDeleteCategoryByIdsArgs, 'ids'>>;
   deleteEmployee?: Resolver<ResolversTypes['Response'], ParentType, ContextType, RequireFields<MutationDeleteEmployeeArgs, 'id' | 'input'>>;
   finalizeCensusEvent?: Resolver<ResolversTypes['Response'], ParentType, ContextType, RequireFields<MutationFinalizeCensusEventArgs, 'censusId'>>;
   testMutation?: Resolver<ResolversTypes['Response'], ParentType, ContextType>;

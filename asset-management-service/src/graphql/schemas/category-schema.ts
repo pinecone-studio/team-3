@@ -18,6 +18,6 @@ export const categoryTypeDefs = gql`
 	type Mutation {
 		createCategory(input: CreateCategoryInput!): Response!
 		deleteCategory(id: ID!): Response!
-		deleteAllCategory(ids:[String!]!):Response!
+		deleteCategoryByIds(ids:[String!]!):Response!
 	}
 `;
