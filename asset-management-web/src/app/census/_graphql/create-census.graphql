@@ -1,0 +1,3 @@
+mutation CreateCensusEvent($input: CreateCensusEventInput!) {
+  createCensusEvent(input: $input)
+}
