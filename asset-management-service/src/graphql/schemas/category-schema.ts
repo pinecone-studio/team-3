@@ -4,7 +4,7 @@ export const categoryTypeDefs = gql`
 	type Category {
 		id: ID!
 		name: String!
-		description:String
+		description: String
 		assets: [Asset!]
 	}
 	input CreateCategoryInput {
