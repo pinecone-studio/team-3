@@ -1,13 +1,17 @@
 query GetPendingAssignments($token: String!) {
   getPendingAssignments(token: $token) {
     id
+    signatureR2Key
     asset {
+      id
       assetTag
       serialNumber
       category {
-        picture
         name
+        picture
       }
     }
+    recentSignatureUrl
+    recentSignatureKey
   }
 }

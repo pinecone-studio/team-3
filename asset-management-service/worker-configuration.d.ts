@@ -11,6 +11,11 @@ declare namespace Cloudflare {
 		FRONTEND_URL: 'http://localhost:3000';
 		JWT_SECRET: 'jwt_secret';
 		RESEND_API_KEY: 're_dAgJBn69_CyCE2bUUSSPH1kWns9oaTUes';
+		R2_ACCOUNT_ID: '8341d4b31e574cb9873ce1bb80671685';
+		R2_ACCESS_KEY_ID: 'f29f036be48a8962e202edf2e6f33399';
+		R2_SECRET_ACCESS_KEY: 'de58bc374de5c1d65f62bd3f6b56acd2e254bc5646d7f9da7a4493a672f3de48';
+		R2_BUCKET_NAME: 'asset-management';
+		R2_BUCKET_TOKEN: 'pWp6QoOB0neAdTTGHmeDoSoR3k3HhH7L9o2IWjwU';
 	}
 }
 interface Env extends Cloudflare.Env {}

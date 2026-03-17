@@ -9,6 +9,7 @@ interface Props {
 
 export default function SignaturePad({ onConfirm }: Props) {
   const sigRef = useRef<SignatureCanvas>(null);
+
   const handleConfirm = () => {
     if (sigRef.current?.isEmpty()) {
       return alert("Please provide a signature before confirming.");
@@ -18,8 +19,8 @@ export default function SignaturePad({ onConfirm }: Props) {
   };
 
   return (
-    <div className="space-y-4">
-      <div className="border bg-gray-50 rounded-lg overflow-hidden touch-none">
+    <div className="space-y-6">
+      <div className="border-2 border-dashed border-gray-100 bg-gray-50 rounded-[2rem] overflow-hidden touch-none">
         <SignatureCanvas
           ref={sigRef}
           penColor="black"
@@ -28,20 +29,20 @@ export default function SignaturePad({ onConfirm }: Props) {
           }}
         />
       </div>
-      <div className="flex gap-2">
+      <div className="flex gap-3">
         <button
           type="button"
           onClick={() => sigRef.current?.clear()}
-          className="text-sm px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors"
+          className="text-[10px] px-6 py-4 border border-gray-200 text-gray-400 rounded-2xl font-black uppercase tracking-widest hover:bg-gray-50 transition-colors"
         >
           Clear
         </button>
         <button
           type="button"
           onClick={handleConfirm}
-          className="text-sm px-4 py-2 bg-blue-600 text-white rounded-md flex-1 font-medium hover:bg-blue-700 transition-colors"
+          className="text-[10px] px-6 py-4 bg-gray-900 text-white rounded-2xl flex-1 font-black uppercase tracking-widest hover:bg-black transition-all shadow-xl shadow-gray-200 active:scale-95"
         >
-          Confirm Signature
+          Confirm & Verify Batch
         </button>
       </div>
     </div>

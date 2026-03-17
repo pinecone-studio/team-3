@@ -50,6 +50,8 @@ export type Assignment = {
   conditionAtReturn?: Maybe<Scalars['String']['output']>;
   employeeId: Scalars['String']['output'];
   id: Scalars['ID']['output'];
+  recentSignatureKey?: Maybe<Scalars['String']['output']>;
+  recentSignatureUrl?: Maybe<Scalars['String']['output']>;
   returnedAt?: Maybe<Scalars['String']['output']>;
   signatureR2Key?: Maybe<Scalars['String']['output']>;
 };
@@ -604,6 +606,8 @@ export type AssignmentResolvers<ContextType = Context, ParentType extends Resolv
   conditionAtReturn?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   employeeId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  recentSignatureKey?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  recentSignatureUrl?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   returnedAt?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   signatureR2Key?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
 };

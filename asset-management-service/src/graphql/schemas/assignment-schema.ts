@@ -13,6 +13,8 @@ export const assignmentTypeDefs = gql`
 		# accessoriesJson is stored as a stringified JSON object
 		accessoriesJson: String
 		asset: Asset
+		recentSignatureUrl: String # New virtual field
+		recentSignatureKey: String
 	}
 
 	type Query {

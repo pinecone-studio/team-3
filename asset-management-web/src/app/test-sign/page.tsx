@@ -12,7 +12,7 @@ const SignaturePad = dynamic(() => import("./_components/SignaturePad"), {
   ssr: false,
   loading: () => (
     <div className="h-64 w-full bg-white/50 backdrop-blur-sm border-2 border-dashed border-gray-200 rounded-[2rem] animate-pulse flex items-center justify-center">
-      <span className="text-gray-400 text-sm font-medium">
+      <span className="text-gray-400 text-[10px] font-black uppercase tracking-widest">
         Initializing Secure Pad...
       </span>
     </div>
@@ -22,14 +22,21 @@ const SignaturePad = dynamic(() => import("./_components/SignaturePad"), {
 function AcknowledgeContent() {
   const searchParams = useSearchParams();
   const token = searchParams.get("token");
+
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [useRecent, setUseRecent] = useState(false);
+
   const { data, loading, error } = useGetPendingAssignmentsQuery({
     variables: { token: token ?? "" },
     skip: !token,
   });
+
   const [updateAssignment, { loading: isUpdating }] =
     useUpdateAssignmentMutation();
+  const history = data?.getPendingAssignments?.[0];
+  const canReuse =
+    !!history?.recentSignatureUrl && !!history?.recentSignatureKey;
 
   const handleToggleAsset = (id: string) => {
     setSelectedIds((prev) =>
@@ -71,12 +78,12 @@ function AcknowledgeContent() {
   if (error || (!data?.getPendingAssignments?.length && !isSuccess))
     return (
       <div className="max-w-md mx-auto mt-20 p-10 text-center bg-white rounded-[2.5rem] border border-red-100 shadow-2xl shadow-red-900/5">
-        <div className="bg-red-50 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6">
-          <span className="text-2xl">⚠️</span>
+        <div className="bg-red-50 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6 text-2xl">
+          ⚠️
         </div>
         <h2 className="text-xl font-black text-gray-900">Link Inactive</h2>
         <p className="text-gray-500 text-sm mt-3">
-          All assets in this batch have been signed or the link has expired.
+          All assets signed or link expired.
         </p>
       </div>
     );
@@ -128,7 +135,6 @@ function AcknowledgeContent() {
         </header>
 
         <main className="space-y-4">
-          {/* Asset Selection List */}
           <div className="space-y-3">
             {data?.getPendingAssignments?.map((assignment) => (
               <button
@@ -160,27 +166,52 @@ function AcknowledgeContent() {
               </button>
             ))}
           </div>
+
           <div className="bg-white border border-gray-100 rounded-[3rem] p-8 shadow-[0_20px_50px_rgba(0,0,0,0.04)] space-y-8">
             <div className="space-y-4">
               <div className="flex items-center justify-between px-1">
                 <p className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em]">
-                  Sign for {selectedIds.length} item
-                  {selectedIds.length !== 1 && "s"}
+                  {useRecent
+                    ? "Confirm Previous Signature"
+                    : `Sign for ${selectedIds.length} item${selectedIds.length !== 1 ? "s" : ""}`}
                 </p>
-                {isUpdating && (
-                  <span className="text-[10px] font-bold text-blue-600 animate-pulse uppercase tracking-widest">
-                    Syncing Batch...
-                  </span>
+                {canReuse && !isUpdating && (
+                  <button
+                    onClick={() => setUseRecent(!useRecent)}
+                    className="text-[10px] font-black text-blue-600 uppercase tracking-widest"
+                  >
+                    {useRecent ? "✎ Draw New" : "↺ Use Recent"}
+                  </button>
                 )}
               </div>
+
               <div
                 className={`transition-all duration-500 ${isUpdating || selectedIds.length === 0 ? "opacity-30 grayscale pointer-events-none scale-[0.97]" : ""}`}
               >
-                <SignaturePad onConfirm={handleFinalizeBatch} />
+                {useRecent && history?.recentSignatureUrl ? (
+                  <div className="space-y-6 animate-in fade-in zoom-in-95 duration-300">
+                    <div className="h-48 w-full bg-gray-50 border-2 border-dashed border-gray-100 rounded-[2rem] flex items-center justify-center p-6">
+                      <img
+                        src={history.recentSignatureUrl}
+                        alt="Recent"
+                        className="max-h-full max-w-full object-contain mix-blend-multiply"
+                      />
+                    </div>
+                    <button
+                      onClick={() =>
+                        handleFinalizeBatch(history.recentSignatureKey!)
+                      }
+                      className="w-full py-4 bg-gray-900 text-white rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] shadow-xl shadow-gray-200 active:scale-95"
+                    >
+                      Confirm & Verify Batch
+                    </button>
+                  </div>
+                ) : (
+                  <SignaturePad onConfirm={handleFinalizeBatch} />
+                )}
               </div>
             </div>
-
-            <p className="text-[10px] text-center text-gray-400 font-medium leading-relaxed px-6">
+            <p className="text-[10px] text-center text-gray-400 font-medium leading-relaxed px-6 italic">
               I confirm the receipt of selected equipment in good working order.
             </p>
           </div>
