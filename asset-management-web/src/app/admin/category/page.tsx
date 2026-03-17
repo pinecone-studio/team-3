@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Checkbox,  Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/libs"
+import { Checkbox, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/libs"
 import { useGetCategoriesQuery } from "@/gql/graphql"
 import { CategoryHeader } from "./_components/CategoryHeader"
 import { CategoryPagination } from "./_components/CategoryPagination"
@@ -14,7 +14,7 @@ export default function CategoryPage() {
     const [currentPage, setCurrentPage] = useState(1)
     const [itemsPerPage, setItemsPerPage] = useState("10")
 
-    const { data, loading ,refetch} = useGetCategoriesQuery()
+    const { data, loading, refetch } = useGetCategoriesQuery()
     const categories = data?.getCategories ?? []
 
     const filteredCategories = categories.filter((category) =>
@@ -62,9 +62,9 @@ export default function CategoryPage() {
     return (
         <div className="p-6 space-y-6">
             <h1 className="font-bold text-[22px]">Categories</h1>
-            <AddCategoryAndSearch refetch={refetch} searchQuery={searchQuery} handleSearch={handleSearch}/>
+            <AddCategoryAndSearch refetch={refetch} searchQuery={searchQuery} handleSearch={handleSearch} />
             <div className="border rounded-lg">
-                <CategoryHeader filteredCategories={filteredCategories} selectedCategories={selectedCategories} />
+                <CategoryHeader  filteredCategories={filteredCategories} selectedCategories={selectedCategories} />
                 <Table>
                     <TableHeader>
                         <TableRow>
@@ -75,8 +75,10 @@ export default function CategoryPage() {
                                 />
                             </TableHead>
                             <TableHead>Name</TableHead>
+                            <TableHead >Description</TableHead>
                             <TableHead className="text-center">Assets</TableHead>
                             <TableHead className="text-center">Actions</TableHead>
+
                         </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -110,6 +112,11 @@ export default function CategoryPage() {
                                                 {category.name}
                                             </span>
                                         </TableCell>
+                                        <TableCell>
+                                            <span className="inline-flex items-center px-2.5 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-800">
+                                                {category.description}
+                                            </span>
+                                        </TableCell>
                                         <TableCell className="text-center">
                                             {assetCount > 0 ? (
                                                 <span className="text-blue-600 font-medium cursor-pointer hover:underline">
@@ -119,7 +126,7 @@ export default function CategoryPage() {
                                                 <span className="text-muted-foreground">0</span>
                                             )}
                                         </TableCell>
-                                      <DeleteAndEditCategory refetch={refetch} categoryName={category.name} categoryId={category.id}/>
+                                        <DeleteAndEditCategory refetch={refetch} category={category} categoryId={category.id} />
                                     </TableRow>
                                 )
                             })
