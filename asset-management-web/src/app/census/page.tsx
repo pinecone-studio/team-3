@@ -2,10 +2,10 @@
 
 import { useState } from 'react';
 import { Plus } from 'lucide-react';
-import StatCard from '@/app/counting/_components/Statcard';
-import ProjectCard from '@/app/counting/_components/ProjectCard';
-import CreateModal from '@/app/counting/_components/CreateModal';
-import { mockData } from '@/app/counting/_components/mockdata';
+import StatCard from '@/app/census/_components/Statcard';
+import ProjectCard from '@/app/census/_components/ProjectCard';
+import CreateModal from '@/app/census/_components/CreateModal';
+import { mockData } from '@/app/census/_components/mockdata';
 
 export default function Page() {
   const [open, setOpen] = useState(false);

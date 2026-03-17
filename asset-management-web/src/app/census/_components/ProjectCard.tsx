@@ -1,4 +1,4 @@
-import { Project } from '@/app/counting/_components/mockdata';
+import { Project } from '@/app/census/_components/mockdata';
 
 export default function ProjectCard({ project }: { project: Project }) {
   return (
