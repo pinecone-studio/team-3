@@ -60,9 +60,9 @@ export type Assignment = {
 export type Category = {
   __typename?: 'Category';
   assets?: Maybe<Array<Asset>>;
+  description?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
-  picture?: Maybe<Scalars['String']['output']>;
 };
 
 export type CensusEvent = {
@@ -117,8 +117,8 @@ export type CreateAssignmentInput = {
 };
 
 export type CreateCategoryInput = {
+  description?: InputMaybe<Scalars['String']['input']>;
   name: Scalars['String']['input'];
-  picture?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type CreateCensusEventInput = {
@@ -195,7 +195,9 @@ export type Mutation = {
   deleteAsset: Response;
   deleteAssignment: Response;
   deleteCategory: Response;
+  deleteCategoryByIds: Response;
   deleteEmployee: Response;
+  editCategoryById: Response;
   finalizeCensusEvent: Response;
   updateAsset: Response;
   updateAssignment: Response;
@@ -244,9 +246,19 @@ export type MutationDeleteCategoryArgs = {
 };
 
 
+export type MutationDeleteCategoryByIdsArgs = {
+  ids: Array<Scalars['String']['input']>;
+};
+
+
 export type MutationDeleteEmployeeArgs = {
   id: Scalars['ID']['input'];
   input: DeleteEmployeeInput;
+};
+
+
+export type MutationEditCategoryByIdArgs = {
+  input: EditCategoryByIdInput;
 };
 
 
@@ -433,6 +445,12 @@ export type UpdateEmployeeInput = {
   terminationDate?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type EditCategoryByIdInput = {
+  description?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['String']['input'];
+  name?: InputMaybe<Scalars['String']['input']>;
+};
+
 export type DeleteAssetMutationVariables = Exact<{
   deleteAssetId: Scalars['ID']['input'];
 }>;
@@ -460,6 +478,13 @@ export type CreateCategoryMutationVariables = Exact<{
 
 export type CreateCategoryMutation = { __typename?: 'Mutation', createCategory: Response };
 
+export type DeleteCategoryByIdsMutationVariables = Exact<{
+  ids: Array<Scalars['String']['input']> | Scalars['String']['input'];
+}>;
+
+
+export type DeleteCategoryByIdsMutation = { __typename?: 'Mutation', deleteCategoryByIds: Response };
+
 export type DeleteCategoryMutationVariables = Exact<{
   deleteCategoryId: Scalars['ID']['input'];
 }>;
@@ -467,10 +492,17 @@ export type DeleteCategoryMutationVariables = Exact<{
 
 export type DeleteCategoryMutation = { __typename?: 'Mutation', deleteCategory: Response };
 
+export type EditCategoryByIdMutationVariables = Exact<{
+  input: EditCategoryByIdInput;
+}>;
+
+
+export type EditCategoryByIdMutation = { __typename?: 'Mutation', editCategoryById: Response };
+
 export type GetCategoriesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetCategoriesQuery = { __typename?: 'Query', getCategories: Array<{ __typename?: 'Category', id: string, name: string, assets?: Array<{ __typename?: 'Asset', id: string, assetTag: string, serialNumber?: string | null, status: AssetStatusEnum, purchaseDate?: string | null, purchaseCost?: number | null, currentBookValue?: number | null, locationId?: string | null, assignedTo?: string | null, deletedAt?: string | null, category?: { __typename?: 'Category', id: string, name: string } | null }> | null }> };
+export type GetCategoriesQuery = { __typename?: 'Query', getCategories: Array<{ __typename?: 'Category', id: string, name: string, description?: string | null, assets?: Array<{ __typename?: 'Asset', id: string, assetTag: string, serialNumber?: string | null, status: AssetStatusEnum, purchaseDate?: string | null, purchaseCost?: number | null, currentBookValue?: number | null, locationId?: string | null, assignedTo?: string | null, deletedAt?: string | null, category?: { __typename?: 'Category', id: string, name: string, description?: string | null } | null }> | null }> };
 
 export type GetAssetByIdQueryVariables = Exact<{
   getAssetByIdId: Scalars['ID']['input'];
@@ -484,7 +516,7 @@ export type GetPendingAssignmentsQueryVariables = Exact<{
 }>;
 
 
-export type GetPendingAssignmentsQuery = { __typename?: 'Query', getPendingAssignments: Array<{ __typename?: 'Assignment', id: string, signatureR2Key?: string | null, recentSignatureUrl?: string | null, recentSignatureKey?: string | null, asset?: { __typename?: 'Asset', id: string, assetTag: string, serialNumber?: string | null, category?: { __typename?: 'Category', name: string, picture?: string | null } | null } | null }> };
+export type GetPendingAssignmentsQuery = { __typename?: 'Query', getPendingAssignments: Array<{ __typename?: 'Assignment', id: string, signatureR2Key?: string | null, recentSignatureUrl?: string | null, recentSignatureKey?: string | null, asset?: { __typename?: 'Asset', id: string, assetTag: string, serialNumber?: string | null, category?: { __typename?: 'Category', name: string } | null } | null }> };
 
 export type UpdateAssignmentMutationVariables = Exact<{
   updateAssignmentId: Scalars['ID']['input'];
@@ -568,6 +600,19 @@ export function useCreateCategoryMutation(baseOptions?: Apollo.MutationHookOptio
 export type CreateCategoryMutationHookResult = ReturnType<typeof useCreateCategoryMutation>;
 export type CreateCategoryMutationResult = Apollo.MutationResult<CreateCategoryMutation>;
 export type CreateCategoryMutationOptions = Apollo.BaseMutationOptions<CreateCategoryMutation, CreateCategoryMutationVariables>;
+export const DeleteCategoryByIdsDocument = gql`
+    mutation DeleteCategoryByIds($ids: [String!]!) {
+  deleteCategoryByIds(ids: $ids)
+}
+    `;
+export type DeleteCategoryByIdsMutationFn = Apollo.MutationFunction<DeleteCategoryByIdsMutation, DeleteCategoryByIdsMutationVariables>;
+export function useDeleteCategoryByIdsMutation(baseOptions?: Apollo.MutationHookOptions<DeleteCategoryByIdsMutation, DeleteCategoryByIdsMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteCategoryByIdsMutation, DeleteCategoryByIdsMutationVariables>(DeleteCategoryByIdsDocument, options);
+      }
+export type DeleteCategoryByIdsMutationHookResult = ReturnType<typeof useDeleteCategoryByIdsMutation>;
+export type DeleteCategoryByIdsMutationResult = Apollo.MutationResult<DeleteCategoryByIdsMutation>;
+export type DeleteCategoryByIdsMutationOptions = Apollo.BaseMutationOptions<DeleteCategoryByIdsMutation, DeleteCategoryByIdsMutationVariables>;
 export const DeleteCategoryDocument = gql`
     mutation DeleteCategory($deleteCategoryId: ID!) {
   deleteCategory(id: $deleteCategoryId)
@@ -581,17 +626,32 @@ export function useDeleteCategoryMutation(baseOptions?: Apollo.MutationHookOptio
 export type DeleteCategoryMutationHookResult = ReturnType<typeof useDeleteCategoryMutation>;
 export type DeleteCategoryMutationResult = Apollo.MutationResult<DeleteCategoryMutation>;
 export type DeleteCategoryMutationOptions = Apollo.BaseMutationOptions<DeleteCategoryMutation, DeleteCategoryMutationVariables>;
+export const EditCategoryByIdDocument = gql`
+    mutation EditCategoryById($input: editCategoryByIdInput!) {
+  editCategoryById(input: $input)
+}
+    `;
+export type EditCategoryByIdMutationFn = Apollo.MutationFunction<EditCategoryByIdMutation, EditCategoryByIdMutationVariables>;
+export function useEditCategoryByIdMutation(baseOptions?: Apollo.MutationHookOptions<EditCategoryByIdMutation, EditCategoryByIdMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<EditCategoryByIdMutation, EditCategoryByIdMutationVariables>(EditCategoryByIdDocument, options);
+      }
+export type EditCategoryByIdMutationHookResult = ReturnType<typeof useEditCategoryByIdMutation>;
+export type EditCategoryByIdMutationResult = Apollo.MutationResult<EditCategoryByIdMutation>;
+export type EditCategoryByIdMutationOptions = Apollo.BaseMutationOptions<EditCategoryByIdMutation, EditCategoryByIdMutationVariables>;
 export const GetCategoriesDocument = gql`
     query GetCategories {
   getCategories {
     id
     name
+    description
     assets {
       id
       assetTag
       category {
         id
         name
+        description
       }
       serialNumber
       status
@@ -663,7 +723,6 @@ export const GetPendingAssignmentsDocument = gql`
       serialNumber
       category {
         name
-        picture
       }
     }
     recentSignatureUrl

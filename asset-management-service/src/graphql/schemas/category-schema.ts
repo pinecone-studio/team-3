@@ -11,6 +11,11 @@ export const categoryTypeDefs = gql`
      name: String!
      description:String
 }
+input editCategoryByIdInput {
+	id:String!
+	name:String
+	description:String
+}
 	type Query {
 		getCategories: [Category!]!
 		getCategoryById(id: ID!): Category
@@ -19,5 +24,6 @@ export const categoryTypeDefs = gql`
 		createCategory(input: CreateCategoryInput!): Response!
 		deleteCategory(id: ID!): Response!
 		deleteCategoryByIds(ids:[String!]!):Response!
+		editCategoryById(input:editCategoryByIdInput!):Response!
 	}
 `;
