@@ -1,0 +1,11 @@
+query GetAssetsForAssetPage {
+  getAssets {
+    assetTag
+    id
+    status
+    category {
+      id
+      name
+    }
+  }
+}
