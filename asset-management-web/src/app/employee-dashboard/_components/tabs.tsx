@@ -1,5 +1,3 @@
-
-
 interface TabsProps {
   activeTab: string;
   setActiveTab: (tab: string) => void;
@@ -7,26 +5,31 @@ interface TabsProps {
 
 export default function Tabs({ activeTab, setActiveTab }: TabsProps) {
   const tabs = [
-    { id: 'general', label: 'Хэрэглэгч' },
-    { id: 'gar', label: 'Гарын үсэг баталгаажуулалт' },
-    { id: 'qr', label: 'QR баталгаажуулалт' },
+    { id: 'general', label: 'Хэрэглэгч', badge: null },
+    { id: 'gar', label: 'Гарын үсэг баталгаажуулалт', badge: 3 },
+    { id: 'qr', label: 'QR баталгаажуулалт', badge: 4 },
   ];
 
   return (
-    <div className="flex gap-1 mb-6 border-b border-gray-300">
+    <div className="flex border-b border-gray-200">
       {tabs.map((tab) => (
         <button
           key={tab.id}
           onClick={() => setActiveTab(tab.id)}
-          className={`px-6 py-3 text-sm font-medium transition-colors relative ${
+          className={`flex items-center gap-2 px-5 py-3.5 text-base relative whitespace-nowrap transition-colors ${
             activeTab === tab.id
-              ? 'text-blue-600'
-              : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+              ? 'text-blue-600 font-medium'
+              : 'text-gray-500 hover:text-gray-800'
           }`}
         >
           {tab.label}
+          {tab.badge !== null && (
+            <span className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-blue-600 text-white text-xs font-semibold">
+              {tab.badge}
+            </span>
+          )}
           {activeTab === tab.id && (
-            <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-600"></div>
+            <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-blue-600" />
           )}
         </button>
       ))}

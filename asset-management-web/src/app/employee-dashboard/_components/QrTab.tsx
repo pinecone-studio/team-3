@@ -1,87 +1,94 @@
-
-import { QrItem, mockQrItems } from "@/app/employee-dashboard/_components/mockData"
+import { DeviceIcon, PendingBadge, WarningTriangle } from './icons';
+import { QrItem } from './mockData';
 
 interface QrTabProps {
-  items?: QrItem[]
+  items?: QrItem[];
 }
 
-export default function QrTab({ items }: QrTabProps) {
-  const displayItems = items || mockQrItems
+export default function QrTab({ items = [] }: QrTabProps) {
+  const total = items.length;
+  const done = 2;
+  const pct = total > 0 ? Math.round((done / total) * 100) : 50;
 
   return (
-    <div className="h-full  p-6">
-      <div className="space-y-8">
+    <div className="space-y-16">
 
-        <div className="rounded-xl p-6 flex items-start gap-6 bg-white shadow-md border border-gray-200">
-
-          <div className="flex-shrink-0 mt-1">
-            <span className="text-red-600 text-3xl">⚠</span>
+      {/* Progress header */}
+      <div className="space-y-10">
+        <div className="flex items-start  justify-between">
+          <div>
+            <p className="text-base font-semibold text-gray-900">Тооллогын баталгаажуулалт</p>
+            <p className="text-sm text-gray-400 mt-0.5">2026 оны 1-р улирлын тооллогын явц</p>
           </div>
-
-          <div className="flex-1 min-w-0">
-            <h4 className="text-black font-semibold text-xl mb-1">
-              Хүлээгдэж буй баталгаажуулалт
-            </h4>
-            <p className="text-base text-gray-700">
-              Техникийн хүлээсэн авсан түүх QR уншуулгын баталгаажуулалтыг үү
-            </p>
-          </div>
-
-                   <button className="rounded-lg bg-[#0251CB] px-5 py-2.5 font-medium text-white hover:bg-gray-800 flex items-center gap-2">
-        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M7.09938 13.1988V11.7788H8.51917V13.1988H7.09938ZM5.67958 11.7788V8.01917H7.09938V11.7788H5.67958ZM11.7788 9.11854V6.59938H13.1988V9.11854H11.7788ZM10.359 6.59938V5.17958H11.7788V6.59938H10.359ZM1.42 8.01917V6.59938H2.83979V8.01917H1.42ZM0 6.59938V5.17958H1.42V6.59938H0ZM6.59938 1.42V0H8.01917V1.42H6.59938ZM0.743542 3.51604H3.51604V0.743542H0.743542V3.51604ZM0 3.59083V0.675625C0 0.48618 0.0640975 0.326251 0.192292 0.195834C0.320486 0.0652783 0.479306 0 0.66875 0H3.58396C3.7734 0 3.9334 0.0640981 4.06396 0.192293C4.19438 0.320487 4.25958 0.479306 4.25958 0.668751V3.58396C4.25958 3.7734 4.19549 3.9334 4.06729 4.06396C3.93924 4.19438 3.78042 4.25958 3.59083 4.25958H0.675625C0.486181 4.25958 0.32625 4.19549 0.195834 4.06729C0.065278 3.93924 0 3.78042 0 3.59083ZM0.743542 12.4552H3.58021V9.68271H0.743542V12.4552ZM0 12.53V9.61479C0 9.42535 0.0640975 9.26535 0.192292 9.13479C0.320486 9.00438 0.479306 8.93917 0.66875 8.93917H3.64813C3.83757 8.93917 3.99757 9.00326 4.12813 9.13146C4.25854 9.25951 4.32375 9.41833 4.32375 9.60792V12.5231C4.32375 12.7126 4.25965 12.8725 4.13146 13.0029C4.00326 13.1335 3.84444 13.1988 3.655 13.1988H0.675625C0.486181 13.1988 0.32625 13.1347 0.195834 13.0065C0.065278 12.8783 0 12.7194 0 12.53ZM9.68271 3.51604H12.4552V0.743542H9.68271V3.51604ZM8.93917 3.59083V0.675625C8.93917 0.48618 9.00326 0.326251 9.13146 0.195834C9.25951 0.0652783 9.41833 0 9.60792 0H12.5231C12.7126 0 12.8725 0.0640981 13.0029 0.192293C13.1335 0.320487 13.1988 0.479306 13.1988 0.668751V3.58396C13.1988 3.7734 13.1347 3.9334 13.0065 4.06396C12.8783 4.19438 12.7194 4.25958 12.53 4.25958H9.61479C9.42535 4.25958 9.26535 4.19549 9.13479 4.06729C9.00438 3.93924 8.93917 3.78042 8.93917 3.59083ZM10.359 13.1988V10.5383H8.93917V9.11854H11.7788V11.7788H13.1988V13.1988H10.359ZM7.09938 8.01917V6.59938H10.359V8.01917H7.09938ZM4.25958 8.01917V6.59938H2.83979V5.17958H7.09938V6.59938H5.67958V8.01917H4.25958ZM5.17958 4.25958V1.42H6.59938V2.83979H8.01917V4.25958H5.17958ZM1.67792 2.58167V1.67792H2.58167V2.58167H1.67792ZM1.73396 11.4648V10.5608H2.63792V11.4648H1.73396ZM10.6171 2.58167V1.67792H11.5208V2.58167H10.6171Z" fill="white"/>
-</svg>
-
-        Баталгаажуулалт үргэлжлүүлэх
-      </button>
-            
+          <span className="text-base font-medium text-gray-600 whitespace-nowrap">
+            {done} / {total} хөрөнгө
+          </span>
         </div>
-
-       
-        <div className="space-y-6">
-
-          {displayItems.map((item, index) => (
-            <div key={index} className="space-y-5">
-
-              
-              <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-md">
-                <div className="flex items-start gap-6">
-                  <div className="text-3xl flex-shrink-0">⌨️</div>
-                  <div className="flex-1 min-w-0">
-                    <h4 className="text-base font-semibold text-gray-900 mb-2">
-                      {item.name}
-                    </h4>
-                    <p className="text-sm text-gray-700 mb-1">{item.code}</p>
-                    <p className="text-sm text-gray-500">{item.description}</p>
-                  </div>
-                </div>
-              </div>
-
-              
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 pl-0 sm:pl-16 text-sm">
-
-                <div>
-                  <p className="text-gray-500 mb-1">Байршил</p>
-                  <p className="text-gray-900 font-medium text-base">{item.location}</p>
-                </div>
-
-                <div>
-                  <p className="text-gray-500 mb-1">Өгөсөн огноо</p>
-                  <p className="text-gray-900 text-base">{item.date}</p>
-                </div>
-
-                <div>
-                  <p className="text-gray-500 mb-1">Өгсөн</p>
-                  <p className="text-gray-900 text-base">{item.owner}</p>
-                </div>
-
-              </div>
-
-            </div>
-          ))}
-
+        <div className="w-full h-2 bg-gray-200 rounded-full">
+          <div
+            className="h-2 bg-blue-600 rounded-full transition-all"
+            style={{ width: `${pct}%` }}
+          />
         </div>
       </div>
+
+      {/* Warning banner */}
+      <div className="flex items-center gap-4">
+        <WarningTriangle size={22} />
+        <div className="flex-1 min-w-0">
+          <p className="text-base font-semibold text-gray-900">Хүлээгдэж буй баталгаажуулалт</p>
+          <p className="text-sm text-gray-500 mt-0.5">
+            Төхөөрөмжүүдийг хүлээн авахын тулд QR уншуулан баталгаажуулна уу
+          </p>
+        </div>
+        <button className="flex-shrink-0 flex items-center gap-2 bg-[#0251CB] hover:bg-blue-700 text-white text-sm font-medium px-5 py-2.5 rounded-xl transition-colors">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M0 3.591V.676C0 .486.064.326.192.196.32.065.479 0 .669 0H3.584c.19 0 .35.064.48.192.131.128.196.287.196.477V3.584c0 .19-.064.35-.192.48-.128.13-.287.196-.477.196H.676C.486 4.26.326 4.196.196 4.067.065 3.939 0 3.78 0 3.591zm.744-.075h2.772V.744H.744v2.772zm0 9.014h2.772V9.858H.744v2.672zm-.744.669V9.784c0-.19.064-.35.192-.48.128-.13.287-.196.477-.196h2.979c.19 0 .35.064.48.192.13.128.196.287.196.477v2.908c0 .19-.064.35-.192.48-.128.134-.287.196-.477.196H.676C.486 13.161.326 13.097.196 12.969.065 12.84 0 12.682 0 12.492zm9.683-8.901h2.772V.744H9.683v2.772zm-.744.075V.676c0-.19.064-.35.192-.48C9.26.065 9.418 0 9.608 0h2.915c.19 0 .35.064.48.192.13.128.196.287.196.477V3.584c0 .19-.064.35-.192.48-.128.13-.287.196-.477.196H9.615C9.425 4.26 9.266 4.196 9.135 4.067 9.004 3.939 8.939 3.78 8.939 3.591zM6.599 0H8.019v1.42H6.599V0zm6.6 11.779v1.42H11.779v-1.42h1.42zm-1.42 0V10.36H10.36v1.42h1.419zm-1.42-1.42V8.94H8.94v1.42h1.42zM8.939 8.94V7.519H7.519V8.94h1.42zm-1.42-1.421V6.1H6.1v1.42h1.42zM4.26 8.94V7.519H2.84V6.1H7.52V7.52H6.1V8.94H4.26zM7.52 6.1V4.68H6.1V3.26H8.94V4.68H7.52V6.1zM0 6.1V4.68h1.42V6.1H0zm0-1.42V3.26h1.42V4.68H0zM5.18 4.26V1.42H6.6V2.84H8.02V4.26H5.18z" fill="white" />
+          </svg>
+          QR Уншуулах
+        </button>
+      </div>
+
+      {/* Items — no card, dividers only */}
+      <div className="divide-y divide-gray-100">
+        {items.map((item, i) => (
+          <div key={i} className="py-5 space-y-4">
+
+            {/* Device row */}
+            <div className="flex items-start gap-4">
+              <div className="w-11 h-11 bg-gray-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                <DeviceIcon type={item.type} size={20} />
+              </div>
+              <div>
+                <div className="flex items-center gap-2 flex-wrap mb-0.5">
+                  <span className="text-base font-semibold text-gray-900">{item.name}</span>
+                  <PendingBadge />
+                </div>
+                <p className="text-sm text-gray-500">{item.code}</p>
+                <p className="text-sm text-gray-400">{item.description}</p>
+              </div>
+            </div>
+
+            {/* Meta */}
+            <div className="grid grid-cols-3 gap-6 pl-[60px]">
+              <div>
+                <p className="text-sm text-gray-400 mb-1">Нөхцөл</p>
+                <p className="text-base font-medium text-gray-800">{item.location}</p>
+              </div>
+              <div>
+                <p className="text-sm text-gray-400 mb-1">Олгосон огноо</p>
+                <p className="text-base text-gray-800">{item.date}</p>
+              </div>
+              <div>
+                <p className="text-sm text-gray-400 mb-1">Олгосон</p>
+                <p className="text-base text-gray-800">{item.owner}</p>
+              </div>
+            </div>
+
+          </div>
+        ))}
+      </div>
+
     </div>
-  )
+  );
 }

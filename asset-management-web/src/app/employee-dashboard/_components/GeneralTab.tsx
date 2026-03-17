@@ -1,10 +1,11 @@
-
+import { DeviceIcon } from './icons';
 
 interface Device {
   name: string;
   model: string;
   code: string;
   status: string;
+  type: string;
 }
 
 interface Progress {
@@ -20,6 +21,7 @@ interface HistoryItem {
   period: string;
   usage: string;
   status: string;
+  type: string;
 }
 
 interface GeneralTabProps {
@@ -28,91 +30,69 @@ interface GeneralTabProps {
   history: HistoryItem[];
 }
 
-export default function GeneralTab({ devices, progress, history }: GeneralTabProps) {
+export default function GeneralTab({ devices, history }: GeneralTabProps) {
   return (
-    <div className="max-w-7xl">
-      <div className="space-y-8">
-      
-        <div>
-          <h3 className="text-lg font-semibold text-gray-900 mb-2">Миний хэрэглээ</h3>
-          <p className="text-sm text-gray-500 mb-4">Таны сонгосон төхөөрөмжүүд</p>
-          
-          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
-            {devices.map((device, index) => (
-              <div
-                key={index}
-                className="bg-white border border-gray-200 rounded-xl p-6 flex items-center justify-between shadow-sm"
-              >
-                <div className="flex items-center gap-4">
-                  <div className="text-2xl">💻</div>
-                  <div>
-                    <p className="text-base font-semibold text-gray-900">{device.name}</p>
-                    <p className="text-sm text-gray-500">{device.model} - {device.code}</p>
+    <div className="space-y-8">
+
+    
+      <div>
+        <h3 className="text-lg font-semibold text-gray-900 mb-1">Миний хөрөнгө</h3>
+        <p className="text-sm text-gray-400 mb-4">Танд олгогдсон төхөөрөмжүүд</p>
+        <div className="bg-blue-50/60 border border-blue-100 rounded-2xl p-5">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            {devices.map((device, i) => (
+              <div key={i} className="bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 bg-gray-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                    <DeviceIcon type={device.type} size={20} />
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-base font-semibold text-gray-900 truncate">{device.name}</p>
+                    <p className="text-sm text-gray-400 truncate">{device.model} · {device.code}</p>
                   </div>
                 </div>
-                <span className="text-base text-gray-600">{device.status}</span>
+                <p className="text-sm text-blue-600 font-medium">{device.status}</p>
               </div>
             ))}
           </div>
         </div>
-
-        <div className="max-w-3xl">
-          <h3 className="text-lg font-semibold text-gray-900 mb-2">{progress.label}</h3>
-          <p className="text-sm text-gray-500 mb-4">{progress.sublabel}</p>
-          
-          <div className="w-full bg-gray-200 rounded-full h-3 mb-3">
-            <div
-              className="bg-blue-600 h-3 rounded-full transition-all"
-              style={{ width: `${progress.value}%` }}
-            ></div>
-          </div>
-          <p className="text-base text-gray-600 text-right">{progress.text}</p>
-        </div>
-
-        <div>
-          <h3 className="text-lg font-semibold text-gray-900 mb-2">Түүх</h3>
-          <p className="text-sm text-gray-500 mb-4">Өнөө хүртэл бүртгэгдсэн төхөөрөмжүүд</p>
-          
-          <div className="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm">
-            <div className="overflow-x-auto">
-              <table className="w-full text-base">
-                <thead className="bg-gray-50 border-b border-gray-200">
-                  <tr>
-                    <th className="px-6 py-4 text-left text-sm font-semibold text-gray-600 whitespace-nowrap">Төхөөрөмж</th>
-                    <th className="px-6 py-4 text-left text-sm font-semibold text-gray-600 whitespace-nowrap">Код</th>
-                    <th className="px-6 py-4 text-left text-sm font-semibold text-gray-600 whitespace-nowrap">Хугацаа</th>
-                    <th className="px-6 py-4 text-left text-sm font-semibold text-gray-600 whitespace-nowrap">Ашиглах</th>
-                    <th className="px-6 py-4 text-left text-sm font-semibold text-gray-600 whitespace-nowrap">Бүртгэсэн ашиглалт</th>
-                  </tr>
-                </thead>
-
-                <tbody className="bg-white">
-                  {history.map((item, index) => (
-                    <tr
-                      key={index}
-                      className={`${index !== history.length - 1 ? 'border-b border-gray-200' : ''}`}
-                    >
-                      <td className="px-6 py-4">
-                        <div className="flex items-center gap-3">
-                          <span className="text-xl">💻</span>
-                          <span className="text-base text-gray-900 whitespace-nowrap">{item.device}</span>
-                        </div>
-                      </td>
-
-                      <td className="px-6 py-4 text-base text-gray-600 whitespace-nowrap">{item.code}</td>
-                      <td className="px-6 py-4 text-base text-gray-600 whitespace-nowrap">{item.period}</td>
-                      <td className="px-6 py-4 text-base text-gray-600 whitespace-nowrap">{item.usage}</td>
-                      <td className="px-6 py-4 text-base text-gray-600 whitespace-nowrap">{item.status}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-
-            </div>
-          </div>
-        </div>
-
       </div>
+
+      {/* History */}
+      <div>
+        <h3 className="text-lg font-semibold text-gray-900 mb-1">Түүх</h3>
+        <p className="text-sm text-gray-400 mb-4">Өмнө хэрэглэж байсан төхөөрөмжүүд</p>
+        <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm">
+          <table className="w-full">
+            <thead className="bg-gray-50 border-b border-gray-200">
+              <tr>
+                <th className="px-6 py-4 text-left text-sm font-semibold text-gray-500">Төхөөрмж</th>
+                <th className="px-6 py-4 text-left text-sm font-semibold text-gray-500">Код</th>
+                <th className="px-6 py-4 text-left text-sm font-semibold text-gray-500">Хугацаа</th>
+                <th className="px-6 py-4 text-left text-sm font-semibold text-gray-500">Ашиглах</th>
+                <th className="px-6 py-4 text-left text-sm font-semibold text-gray-500">Буцаасан шалтгаан</th>
+              </tr>
+            </thead>
+            <tbody>
+              {history.map((item, i) => (
+                <tr key={i} className={i !== history.length - 1 ? 'border-b border-gray-100' : ''}>
+                  <td className="px-6 py-4">
+                    <div className="flex items-center gap-3">
+                      <DeviceIcon type={item.type} size={18} />
+                      <span className="text-base text-gray-900 whitespace-nowrap">{item.device}</span>
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 text-base text-gray-500 whitespace-nowrap">{item.code}</td>
+                  <td className="px-6 py-4 text-base text-gray-500 whitespace-nowrap">{item.period}</td>
+                  <td className="px-6 py-4 text-base text-gray-500 whitespace-nowrap">{item.usage}</td>
+                  <td className="px-6 py-4 text-base text-gray-500 whitespace-nowrap">{item.status}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
     </div>
   );
 }
