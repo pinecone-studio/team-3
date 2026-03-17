@@ -60,9 +60,9 @@ export type Assignment = {
 export type Category = {
   __typename?: 'Category';
   assets?: Maybe<Array<Asset>>;
+  description?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
-  picture?: Maybe<Scalars['String']['output']>;
 };
 
 export type CensusEvent = {
@@ -117,8 +117,8 @@ export type CreateAssignmentInput = {
 };
 
 export type CreateCategoryInput = {
+  description?: InputMaybe<Scalars['String']['input']>;
   name: Scalars['String']['input'];
-  picture?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type CreateCensusEventInput = {
@@ -195,7 +195,9 @@ export type Mutation = {
   deleteAsset: Response;
   deleteAssignment: Response;
   deleteCategory: Response;
+  deleteCategoryByIds: Response;
   deleteEmployee: Response;
+  editCategoryById: Response;
   finalizeCensusEvent: Response;
   updateAsset: Response;
   updateAssignment: Response;
@@ -244,9 +246,19 @@ export type MutationDeleteCategoryArgs = {
 };
 
 
+export type MutationDeleteCategoryByIdsArgs = {
+  ids: Array<Scalars['String']['input']>;
+};
+
+
 export type MutationDeleteEmployeeArgs = {
   id: Scalars['ID']['input'];
   input: DeleteEmployeeInput;
+};
+
+
+export type MutationEditCategoryByIdArgs = {
+  input: EditCategoryByIdInput;
 };
 
 
@@ -433,6 +445,12 @@ export type UpdateEmployeeInput = {
   terminationDate?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type EditCategoryByIdInput = {
+  description?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['String']['input'];
+  name?: InputMaybe<Scalars['String']['input']>;
+};
+
 export type DeleteAssetMutationVariables = Exact<{
   deleteAssetId: Scalars['ID']['input'];
 }>;
@@ -484,7 +502,7 @@ export type GetPendingAssignmentsQueryVariables = Exact<{
 }>;
 
 
-export type GetPendingAssignmentsQuery = { __typename?: 'Query', getPendingAssignments: Array<{ __typename?: 'Assignment', id: string, signatureR2Key?: string | null, recentSignatureUrl?: string | null, recentSignatureKey?: string | null, asset?: { __typename?: 'Asset', id: string, assetTag: string, serialNumber?: string | null, category?: { __typename?: 'Category', name: string, picture?: string | null } | null } | null }> };
+export type GetPendingAssignmentsQuery = { __typename?: 'Query', getPendingAssignments: Array<{ __typename?: 'Assignment', id: string, signatureR2Key?: string | null, recentSignatureUrl?: string | null, recentSignatureKey?: string | null, asset?: { __typename?: 'Asset', id: string, assetTag: string, serialNumber?: string | null, category?: { __typename?: 'Category', name: string } | null } | null }> };
 
 export type UpdateAssignmentMutationVariables = Exact<{
   updateAssignmentId: Scalars['ID']['input'];
@@ -663,7 +681,6 @@ export const GetPendingAssignmentsDocument = gql`
       serialNumber
       category {
         name
-        picture
       }
     }
     recentSignatureUrl

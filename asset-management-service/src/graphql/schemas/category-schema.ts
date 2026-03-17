@@ -4,13 +4,13 @@ export const categoryTypeDefs = gql`
 	type Category {
 		id: ID!
 		name: String!
-		description:String
+		description: String
 		assets: [Asset!]
 	}
 	input CreateCategoryInput {
-     name: String!
-     description:String
-}
+		name: String!
+		description: String
+	}
 	type Query {
 		getCategories: [Category!]!
 		getCategoryById(id: ID!): Category
@@ -18,6 +18,6 @@ export const categoryTypeDefs = gql`
 	type Mutation {
 		createCategory(input: CreateCategoryInput!): Response!
 		deleteCategory(id: ID!): Response!
-		deleteCategoryByIds(ids:[String!]!):Response!
+		deleteCategoryByIds(ids: [String!]!): Response!
 	}
 `;
