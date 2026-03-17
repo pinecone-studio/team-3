@@ -1,19 +1,13 @@
-import { categories } from "../../../db";
-import { MutationResolvers, Response } from "../../../types/generated";
+
+
 import { drizzle } from 'drizzle-orm/d1';
 import { eq } from 'drizzle-orm';
+import { MutationResolvers, Response } from '../../../../types/generated';
+import { categories } from '../../../../db';
 
-let dbInstance: ReturnType<typeof drizzle> | null = null;
-
-const getDB = (d1: D1Database) => {
-  if (!dbInstance) {
-    dbInstance = drizzle(d1);
-  }
-  return dbInstance;
-};
 
 export const editCategoryById: MutationResolvers["editCategoryById"] = async (_, { input }, context) => {
-  const DB = getDB(context.env.DB);
+  const DB = drizzle(context.env.DB);
 
   const { id, name, description } = input;
 
