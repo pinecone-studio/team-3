@@ -7,7 +7,7 @@ export const createCategory: MutationResolvers['createCategory'] = async (_, { i
 	const newCategory = {
 		id: crypto.randomUUID(),
 		name: input.name,
-		picture: input.picture ?? undefined,
+		description:input.description 
 	};
 	await DB.insert(categories).values(newCategory).returning();
 	return Response.Success;

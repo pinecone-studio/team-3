@@ -59,9 +59,9 @@ export type Assignment = {
 export type Category = {
   __typename?: 'Category';
   assets?: Maybe<Array<Asset>>;
+  description?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
-  picture?: Maybe<Scalars['String']['output']>;
 };
 
 export type CensusEvent = {
@@ -116,8 +116,8 @@ export type CreateAssignmentInput = {
 };
 
 export type CreateCategoryInput = {
+  description?: InputMaybe<Scalars['String']['input']>;
   name: Scalars['String']['input'];
-  picture?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type CreateCensusEventInput = {
@@ -198,6 +198,7 @@ export type Mutation = {
   createCategory: Response;
   createCensusEvent: Response;
   createEmployee: Response;
+  deleteAllCategory: Response;
   deleteAsset: Response;
   deleteAssignment: Response;
   deleteCategory: Response;
@@ -233,6 +234,11 @@ export type MutationCreateCensusEventArgs = {
 
 export type MutationCreateEmployeeArgs = {
   input: CreateEmployeeInput;
+};
+
+
+export type MutationDeleteAllCategoryArgs = {
+  ids: Array<Scalars['String']['input']>;
 };
 
 
@@ -614,9 +620,9 @@ export type AssignmentResolvers<ContextType = Context, ParentType extends Resolv
 
 export type CategoryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Category'] = ResolversParentTypes['Category']> = {
   assets?: Resolver<Maybe<Array<ResolversTypes['Asset']>>, ParentType, ContextType>;
+  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  picture?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
 };
 
 export type CensusEventResolvers<ContextType = Context, ParentType extends ResolversParentTypes['CensusEvent'] = ResolversParentTypes['CensusEvent']> = {
@@ -685,6 +691,7 @@ export type MutationResolvers<ContextType = Context, ParentType extends Resolver
   createCategory?: Resolver<ResolversTypes['Response'], ParentType, ContextType, RequireFields<MutationCreateCategoryArgs, 'input'>>;
   createCensusEvent?: Resolver<ResolversTypes['Response'], ParentType, ContextType, RequireFields<MutationCreateCensusEventArgs, 'input'>>;
   createEmployee?: Resolver<ResolversTypes['Response'], ParentType, ContextType, RequireFields<MutationCreateEmployeeArgs, 'input'>>;
+  deleteAllCategory?: Resolver<ResolversTypes['Response'], ParentType, ContextType, RequireFields<MutationDeleteAllCategoryArgs, 'ids'>>;
   deleteAsset?: Resolver<ResolversTypes['Response'], ParentType, ContextType, RequireFields<MutationDeleteAssetArgs, 'id'>>;
   deleteAssignment?: Resolver<ResolversTypes['Response'], ParentType, ContextType, RequireFields<MutationDeleteAssignmentArgs, 'id'>>;
   deleteCategory?: Resolver<ResolversTypes['Response'], ParentType, ContextType, RequireFields<MutationDeleteCategoryArgs, 'id'>>;

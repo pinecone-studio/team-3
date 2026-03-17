@@ -8,6 +8,9 @@
 //       <main className="">{children}</main>
 //     </div>
 //   );
+
+import { Toaster } from "@/libs";
+
 // }
 export default function AdminLayout({
   children,
@@ -17,6 +20,7 @@ export default function AdminLayout({
   return (
     <div className="flex flex-col flex-1 min-h-screen">
       <main>{children}</main>
+      <Toaster />
     </div>
   );
 }
