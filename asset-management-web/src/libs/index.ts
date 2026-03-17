@@ -33,3 +33,5 @@ export * from "./shadcn/ui/toggle"
 export * from "./shadcn/ui/toggle-group"
 export * from "./shadcn/ui/tooltip"
 export * from './utils'
+export * from './shadcn/ui/table'
+export * from './shadcn/ui/field'

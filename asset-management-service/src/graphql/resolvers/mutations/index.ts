@@ -19,3 +19,4 @@ export * from './finalize-census-event';
 // Categories
 export * from './create-category';
 export * from './delete-category';
+export * from './delete-all-category'

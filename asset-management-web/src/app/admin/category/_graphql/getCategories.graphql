@@ -1,0 +1,24 @@
+query GetCategories {
+  getCategories {
+    id
+    name
+    # description
+    assets {
+      id
+      assetTag
+      category {
+        id
+        name
+        # description
+      }
+      serialNumber
+      status
+      purchaseDate
+      purchaseCost
+      currentBookValue
+      locationId
+      assignedTo
+      deletedAt
+    }
+  }
+}
