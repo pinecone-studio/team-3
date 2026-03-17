@@ -1,7 +1,7 @@
 import { drizzle } from 'drizzle-orm/d1';
 import { eq } from 'drizzle-orm'; // Import the "equal" operator
-import { QueryResolvers, EmployeeStatus, Employee } from '../../../types/generated';
-import { employees } from '../../../db';
+import { QueryResolvers, EmployeeStatus, Employee } from '../../../../types/generated';
+import { employees } from '../../../../db';
 
 export const getEmployeeById: QueryResolvers['getEmployeeById'] = async (_, { id }, context) => {
 	const DB = drizzle(context.env.DB);

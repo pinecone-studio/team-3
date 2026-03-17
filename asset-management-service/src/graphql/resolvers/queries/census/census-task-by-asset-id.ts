@@ -1,7 +1,7 @@
 import { drizzle } from 'drizzle-orm/d1';
 import { and, eq } from 'drizzle-orm';
-import { QueryResolvers } from '../../../types/generated';
-import { censusTasks } from '../../../db';
+import { QueryResolvers } from '../../../../types/generated';
+import { censusTasks } from '../../../../db';
 
 export const getCensusTaskByAssetId: QueryResolvers['getCensusTaskByAssetId'] = async (_, { censusId, assetId }, context) => {
 	const DB = drizzle(context.env.DB);

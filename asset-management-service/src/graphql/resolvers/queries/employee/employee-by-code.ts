@@ -1,7 +1,7 @@
 import { drizzle } from 'drizzle-orm/d1';
 import { eq } from 'drizzle-orm';
-import { QueryResolvers, EmployeeStatus } from '../../../types/generated';
-import { employees } from '../../../db';
+import { QueryResolvers, EmployeeStatus } from '../../../../types/generated';
+import { employees } from '../../../../db';
 
 export const getEmployeeByCode: QueryResolvers['getEmployeeByCode'] = async (_, { employeeCode }, context) => {
 	const DB = drizzle(context.env.DB);

@@ -1,6 +1,6 @@
 import { drizzle } from 'drizzle-orm/d1';
-import { QueryResolvers } from '../../../types/generated';
-import { censusTasks } from '../../../db';
+import { QueryResolvers } from '../../../../types/generated';
+import { censusTasks } from '../../../../db';
 
 export const getCensusTasks: QueryResolvers['getCensusTasks'] = async (_, __, context) => {
 	const DB = drizzle(context.env.DB);

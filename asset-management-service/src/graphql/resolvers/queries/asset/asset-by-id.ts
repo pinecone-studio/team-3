@@ -1,5 +1,5 @@
 import { drizzle } from 'drizzle-orm/d1';
-import { QueryResolvers } from '../../../types/generated';
+import { QueryResolvers } from '../../../../types/generated';
 import { assets, categories } from '../../../../db';
 
 export const getAssetById: QueryResolvers['getAssetById'] = async (_, { id }, context) => {

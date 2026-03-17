@@ -1,7 +1,7 @@
 import { drizzle } from 'drizzle-orm/d1';
 import { eq } from 'drizzle-orm';
-import { QueryResolvers } from '../../../types/generated';
-import { categories, assets } from '../../../db';
+import { QueryResolvers } from '../../../../types/generated';
+import { categories, assets } from '../../../../db';
 
 export const getCategories: QueryResolvers['getCategories'] = async (_, __, context) => {
 	const DB = drizzle(context.env.DB);
