@@ -196,6 +196,7 @@ export type Mutation = {
   deleteCategory: Response;
   deleteCategoryByIds: Response;
   deleteEmployee: Response;
+  editCategoryById: Response;
   finalizeCensusEvent: Response;
   updateAsset: Response;
   updateAssignment: Response;
@@ -252,6 +253,11 @@ export type MutationDeleteCategoryByIdsArgs = {
 export type MutationDeleteEmployeeArgs = {
   id: Scalars['ID']['input'];
   input: DeleteEmployeeInput;
+};
+
+
+export type MutationEditCategoryByIdArgs = {
+  input: EditCategoryByIdInput;
 };
 
 
@@ -438,6 +444,12 @@ export type UpdateEmployeeInput = {
   terminationDate?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type EditCategoryByIdInput = {
+  description?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['String']['input'];
+  name?: InputMaybe<Scalars['String']['input']>;
+};
+
 
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
@@ -536,6 +548,7 @@ export type ResolversTypes = {
   UpdateAssignmentInput: UpdateAssignmentInput;
   UpdateCensusTaskInput: UpdateCensusTaskInput;
   UpdateEmployeeInput: UpdateEmployeeInput;
+  editCategoryByIdInput: EditCategoryByIdInput;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -564,6 +577,7 @@ export type ResolversParentTypes = {
   UpdateAssignmentInput: UpdateAssignmentInput;
   UpdateCensusTaskInput: UpdateCensusTaskInput;
   UpdateEmployeeInput: UpdateEmployeeInput;
+  editCategoryByIdInput: EditCategoryByIdInput;
 };
 
 export type AssetResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Asset'] = ResolversParentTypes['Asset']> = {
@@ -667,6 +681,10 @@ export type MutationResolvers<ContextType = Context, ParentType extends Resolver
   deleteCategory?: Resolver<ResolversTypes['Response'], ParentType, ContextType, RequireFields<MutationDeleteCategoryArgs, 'id'>>;
   deleteCategoryByIds?: Resolver<ResolversTypes['Response'], ParentType, ContextType, RequireFields<MutationDeleteCategoryByIdsArgs, 'ids'>>;
   deleteEmployee?: Resolver<ResolversTypes['Response'], ParentType, ContextType, RequireFields<MutationDeleteEmployeeArgs, 'id' | 'input'>>;
+<<<<<<< HEAD
+=======
+  editCategoryById?: Resolver<ResolversTypes['Response'], ParentType, ContextType, RequireFields<MutationEditCategoryByIdArgs, 'input'>>;
+>>>>>>> 4667137 (category delete and edit mutation)
   finalizeCensusEvent?: Resolver<ResolversTypes['Response'], ParentType, ContextType, RequireFields<MutationFinalizeCensusEventArgs, 'censusId'>>;
   updateAsset?: Resolver<ResolversTypes['Response'], ParentType, ContextType, RequireFields<MutationUpdateAssetArgs, 'id' | 'input'>>;
   updateAssignment?: Resolver<ResolversTypes['Response'], ParentType, ContextType, RequireFields<MutationUpdateAssignmentArgs, 'id' | 'input'>>;
