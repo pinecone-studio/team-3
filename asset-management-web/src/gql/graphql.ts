@@ -142,6 +142,7 @@ export type CreateEmployeeInput = {
   github?: InputMaybe<Scalars['String']['input']>;
   hireDate: Scalars['String']['input'];
   imageUrl?: InputMaybe<Scalars['String']['input']>;
+  isAdmin?: InputMaybe<Scalars['Boolean']['input']>;
   isKpi?: InputMaybe<Scalars['Boolean']['input']>;
   isSalaryCompany?: InputMaybe<Scalars['Boolean']['input']>;
   lastName: Scalars['String']['input'];
@@ -169,6 +170,7 @@ export type Employee = {
   hireDate: Scalars['String']['output'];
   id: Scalars['ID']['output'];
   imageUrl?: Maybe<Scalars['String']['output']>;
+  isAdmin?: Maybe<Scalars['Boolean']['output']>;
   isKpi: Scalars['Boolean']['output'];
   isSalaryCompany: Scalars['Boolean']['output'];
   lastName: Scalars['String']['output'];
@@ -192,15 +194,12 @@ export type Mutation = {
   createCategory: Response;
   createCensusEvent: Response;
   createEmployee: Response;
-  createSubCategory: Response;
   deleteAsset: Response;
   deleteAssignment: Response;
   deleteCategory: Response;
   deleteCategoryByIds: Response;
   deleteEmployee: Response;
-  deleteSubCategoryById: Response;
   editCategoryById: Response;
-  editSubCategoryById: Response;
   finalizeCensusEvent: Response;
   updateAsset: Response;
   updateAssignment: Response;
@@ -234,11 +233,6 @@ export type MutationCreateEmployeeArgs = {
 };
 
 
-export type MutationCreateSubCategoryArgs = {
-  input: CreateSubCategoryInput;
-};
-
-
 export type MutationDeleteAssetArgs = {
   id: Scalars['ID']['input'];
 };
@@ -265,18 +259,8 @@ export type MutationDeleteEmployeeArgs = {
 };
 
 
-export type MutationDeleteSubCategoryByIdArgs = {
-  id: Scalars['ID']['input'];
-};
-
-
 export type MutationEditCategoryByIdArgs = {
   input: EditCategoryByIdInput;
-};
-
-
-export type MutationEditSubCategoryByIdArgs = {
-  input: EditSubCategoryInput;
 };
 
 
@@ -335,8 +319,6 @@ export type Query = {
   getEmployees: Array<Employee>;
   getEmployeesByStatus: Array<Employee>;
   getPendingAssignments: Array<Assignment>;
-  getSubCategories: Array<SubCategory>;
-  getSubCategoriesWithCategory: Array<GetSubCategoriesProps>;
 };
 
 
@@ -410,13 +392,6 @@ export enum Response {
   Success = 'SUCCESS'
 }
 
-export type SubCategory = {
-  __typename?: 'SubCategory';
-  categoryId?: Maybe<Scalars['String']['output']>;
-  id: Scalars['String']['output'];
-  name: Scalars['String']['output'];
-};
-
 export enum TicketStatusEnum {
   Cancelled = 'CANCELLED',
   InProgress = 'IN_PROGRESS',
@@ -472,27 +447,16 @@ export type UpdateEmployeeInput = {
   terminationDate?: InputMaybe<Scalars['String']['input']>;
 };
 
-export type CreateSubCategoryInput = {
-  categoryId: Scalars['String']['input'];
-  name: Scalars['String']['input'];
-};
-
 export type EditCategoryByIdInput = {
   description?: InputMaybe<Scalars['String']['input']>;
   id: Scalars['String']['input'];
   name?: InputMaybe<Scalars['String']['input']>;
 };
 
-export type EditSubCategoryInput = {
-  id: Scalars['String']['input'];
-  name: Scalars['String']['input'];
-};
+export type GetAdminEmployeesQueryVariables = Exact<{ [key: string]: never; }>;
 
-export type GetSubCategoriesProps = {
-  __typename?: 'getSubCategoriesProps';
-  categories?: Maybe<Category>;
-  sub_categories: SubCategory;
-};
+
+export type GetAdminEmployeesQuery = { __typename?: 'Query', getEmployees: Array<{ __typename?: 'Employee', id: string, entraId: string, firstName: string, lastName: string, terminationDate?: string | null, department: string, branch: string }> };
 
 export type DeleteAssetMutationVariables = Exact<{
   deleteAssetId: Scalars['ID']['input'];
@@ -547,13 +511,6 @@ export type GetCategoriesQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetCategoriesQuery = { __typename?: 'Query', getCategories: Array<{ __typename?: 'Category', id: string, name: string, description?: string | null, assets?: Array<{ __typename?: 'Asset', id: string, assetTag: string, serialNumber?: string | null, status: AssetStatusEnum, purchaseDate?: string | null, purchaseCost?: number | null, currentBookValue?: number | null, locationId?: string | null, assignedTo?: string | null, deletedAt?: string | null, category?: { __typename?: 'Category', id: string, name: string, description?: string | null } | null }> | null }> };
 
-export type CreateCensusEventMutationVariables = Exact<{
-  input: CreateCensusEventInput;
-}>;
-
-
-export type CreateCensusEventMutation = { __typename?: 'Mutation', createCensusEvent: Response };
-
 export type CreateAssignmentMutationVariables = Exact<{
   input: CreateAssignmentInput;
 }>;
@@ -579,6 +536,18 @@ export type UpdateEmployeeMutationVariables = Exact<{
 
 export type UpdateEmployeeMutation = { __typename?: 'Mutation', updateEmployee: Response };
 
+export type GetAssetsReturnQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetAssetsReturnQuery = { __typename?: 'Query', getAssets: Array<{ __typename?: 'Asset', id: string, assetTag: string, assignedTo?: string | null, status: AssetStatusEnum, category?: { __typename?: 'Category', name: string } | null }> };
+
+export type CreateCensusEventMutationVariables = Exact<{
+  input: CreateCensusEventInput;
+}>;
+
+
+export type CreateCensusEventMutation = { __typename?: 'Mutation', createCensusEvent: Response };
+
 export type GetAssetByIdQueryVariables = Exact<{
   getAssetByIdId: Scalars['ID']['input'];
 }>;
@@ -602,6 +571,38 @@ export type UpdateAssignmentMutationVariables = Exact<{
 export type UpdateAssignmentMutation = { __typename?: 'Mutation', updateAssignment: Response };
 
 
+export const GetAdminEmployeesDocument = gql`
+    query GetAdminEmployees {
+  getEmployees {
+    id
+    entraId
+    firstName
+    lastName
+    terminationDate
+    department
+    branch
+  }
+}
+    `;
+export function useGetAdminEmployeesQuery(baseOptions?: Apollo.QueryHookOptions<GetAdminEmployeesQuery, GetAdminEmployeesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetAdminEmployeesQuery, GetAdminEmployeesQueryVariables>(GetAdminEmployeesDocument, options);
+      }
+export function useGetAdminEmployeesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAdminEmployeesQuery, GetAdminEmployeesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetAdminEmployeesQuery, GetAdminEmployeesQueryVariables>(GetAdminEmployeesDocument, options);
+        }
+// @ts-ignore
+export function useGetAdminEmployeesSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetAdminEmployeesQuery, GetAdminEmployeesQueryVariables>): Apollo.UseSuspenseQueryResult<GetAdminEmployeesQuery, GetAdminEmployeesQueryVariables>;
+export function useGetAdminEmployeesSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetAdminEmployeesQuery, GetAdminEmployeesQueryVariables>): Apollo.UseSuspenseQueryResult<GetAdminEmployeesQuery | undefined, GetAdminEmployeesQueryVariables>;
+export function useGetAdminEmployeesSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetAdminEmployeesQuery, GetAdminEmployeesQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetAdminEmployeesQuery, GetAdminEmployeesQueryVariables>(GetAdminEmployeesDocument, options);
+        }
+export type GetAdminEmployeesQueryHookResult = ReturnType<typeof useGetAdminEmployeesQuery>;
+export type GetAdminEmployeesLazyQueryHookResult = ReturnType<typeof useGetAdminEmployeesLazyQuery>;
+export type GetAdminEmployeesSuspenseQueryHookResult = ReturnType<typeof useGetAdminEmployeesSuspenseQuery>;
+export type GetAdminEmployeesQueryResult = Apollo.QueryResult<GetAdminEmployeesQuery, GetAdminEmployeesQueryVariables>;
 export const DeleteAssetDocument = gql`
     mutation DeleteAsset($deleteAssetId: ID!) {
   deleteAsset(id: $deleteAssetId)
@@ -850,6 +851,38 @@ export function useUpdateEmployeeMutation(baseOptions?: Apollo.MutationHookOptio
 export type UpdateEmployeeMutationHookResult = ReturnType<typeof useUpdateEmployeeMutation>;
 export type UpdateEmployeeMutationResult = Apollo.MutationResult<UpdateEmployeeMutation>;
 export type UpdateEmployeeMutationOptions = Apollo.BaseMutationOptions<UpdateEmployeeMutation, UpdateEmployeeMutationVariables>;
+export const GetAssetsReturnDocument = gql`
+    query GetAssetsReturn {
+  getAssets {
+    id
+    assetTag
+    category {
+      name
+    }
+    assignedTo
+    status
+  }
+}
+    `;
+export function useGetAssetsReturnQuery(baseOptions?: Apollo.QueryHookOptions<GetAssetsReturnQuery, GetAssetsReturnQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetAssetsReturnQuery, GetAssetsReturnQueryVariables>(GetAssetsReturnDocument, options);
+      }
+export function useGetAssetsReturnLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAssetsReturnQuery, GetAssetsReturnQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetAssetsReturnQuery, GetAssetsReturnQueryVariables>(GetAssetsReturnDocument, options);
+        }
+// @ts-ignore
+export function useGetAssetsReturnSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetAssetsReturnQuery, GetAssetsReturnQueryVariables>): Apollo.UseSuspenseQueryResult<GetAssetsReturnQuery, GetAssetsReturnQueryVariables>;
+export function useGetAssetsReturnSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetAssetsReturnQuery, GetAssetsReturnQueryVariables>): Apollo.UseSuspenseQueryResult<GetAssetsReturnQuery | undefined, GetAssetsReturnQueryVariables>;
+export function useGetAssetsReturnSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetAssetsReturnQuery, GetAssetsReturnQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetAssetsReturnQuery, GetAssetsReturnQueryVariables>(GetAssetsReturnDocument, options);
+        }
+export type GetAssetsReturnQueryHookResult = ReturnType<typeof useGetAssetsReturnQuery>;
+export type GetAssetsReturnLazyQueryHookResult = ReturnType<typeof useGetAssetsReturnLazyQuery>;
+export type GetAssetsReturnSuspenseQueryHookResult = ReturnType<typeof useGetAssetsReturnSuspenseQuery>;
+export type GetAssetsReturnQueryResult = Apollo.QueryResult<GetAssetsReturnQuery, GetAssetsReturnQueryVariables>;
 export const CreateCensusEventDocument = gql`
     mutation CreateCensusEvent($input: CreateCensusEventInput!) {
   createCensusEvent(input: $input)

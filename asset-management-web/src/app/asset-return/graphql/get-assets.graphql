@@ -1,0 +1,11 @@
+query GetAssetsReturn {
+  getAssets {
+    id
+    assetTag
+    category {
+      name
+    }
+    assignedTo
+    status
+  }
+}
