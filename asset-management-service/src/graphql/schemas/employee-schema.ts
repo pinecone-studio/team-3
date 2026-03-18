@@ -26,6 +26,7 @@ export const employeeTypeDefs = gql`
 		branch: String!
 		level: String!
 		isKpi: Boolean!
+		isAdmin: Boolean
 		isSalaryCompany: Boolean!
 		birthDayAndMonth: String
 		birthdayPoster: String
@@ -57,6 +58,7 @@ export const employeeTypeDefs = gql`
 		level: String!
 		isKpi: Boolean = false
 		isSalaryCompany: Boolean = true
+		isAdmin: Boolean = false
 		github: String
 		birthDayAndMonth: String
 	}
