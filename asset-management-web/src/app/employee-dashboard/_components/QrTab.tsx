@@ -3,9 +3,10 @@ import { QrItem } from "./mockData";
 
 interface QrTabProps {
   items?: QrItem[];
+  onOpenScanner: () => void;
 }
 
-export default function QrTab({ items = [] }: QrTabProps) {
+export default function QrTab({ items = [], onOpenScanner }: QrTabProps) {
   const total = items.length;
   const done = 2;
   const pct = total > 0 ? Math.round((done / total) * 100) : 0;
@@ -53,7 +54,10 @@ export default function QrTab({ items = [] }: QrTabProps) {
             </div>
           </div>
 
-          <button className="flex shrink-0 items-center gap-2 rounded-xl bg-[#2563EB] px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-700">
+          <button
+            onClick={onOpenScanner}
+            className="flex shrink-0 items-center gap-2 rounded-xl bg-[#2563EB] px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-700"
+          >
             <svg width="16" height="16" viewBox="0 0 14 14" fill="none">
               <path
                 d="M0 3.591V.676C0 .486.064.326.192.196.32.065.479 0 .669 0H3.584c.19 0 .35.064.48.192.131.128.196.287.196.477V3.584c0 .19-.064.35-.192.48-.128.13-.287.196-.477.196H.676C.486 4.26.326 4.196.196 4.067.065 3.939 0 3.78 0 3.591zm.744-.075h2.772V.744H.744v2.772zm0 9.014h2.772V9.858H.744v2.672zm-.744.669V9.784c0-.19.064-.35.192-.48.128-.13.287-.196.477-.196h2.979c.19 0 .35.064.48.192.13.128.196.287.196.477v2.908c0 .19-.064.35-.192.48-.128.134-.287.196-.477.196H.676C.486 13.161.326 13.097.196 12.969.065 12.84 0 12.682 0 12.492zm9.683-8.901h2.772V.744H9.683v2.772zm-.744.075V.676c0-.19.064-.35.192-.48C9.26.065 9.418 0 9.608 0h2.915c.19 0 .35.064.48.192.13.128.196.287.196.477V3.584c0 .19-.064.35-.192.48-.128.13-.287.196-.477.196H9.615C9.425 4.26 9.266 4.196 9.135 4.067 9.004 3.939 8.939 3.78 8.939 3.591zM6.599 0H8.019v1.42H6.599V0zm6.6 11.779v1.42H11.779v-1.42h1.42zm-1.42 0V10.36H10.36v1.42h1.419zm-1.42-1.42V8.94H8.94v1.42h1.42zM8.939 8.94V7.519H7.519V8.94h1.42zm-1.42-1.421V6.1H6.1v1.42h1.42zM4.26 8.94V7.519H2.84V6.1H7.52V7.52H6.1V8.94H4.26zM7.52 6.1V4.68H6.1V3.26H8.94V4.68H7.52V6.1zM0 6.1V4.68h1.42V6.1H0zm0-1.42V3.26h1.42V4.68H0zM5.18 4.26V1.42H6.6V2.84H8.02V4.26H5.18z"

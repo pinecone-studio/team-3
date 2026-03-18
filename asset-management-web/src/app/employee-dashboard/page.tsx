@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { LayoutDashboard, QrCode, FileText, Bell } from "lucide-react"; // Optional: for visual flair
 import StatsCards from "./_components/StatsCards";
 import Tabs from "./_components/tabs";
+import { useUser } from "@clerk/nextjs";
+import QRScanModal from "./_components/QRScanModal";
 import GeneralTab from "./_components/GeneralTab";
 import GarTab from "./_components/Signature";
 import QrTab from "./_components/QrTab";
@@ -61,8 +63,11 @@ export default function AssetsPage() {
   const [qrItems, setQrItems] = useState<QrItem[]>([]);
   const [loadingQr, setLoadingQr] = useState(false);
   const [qrError, setQrError] = useState("");
-  const [employeeName, setEmployeeName] = useState("Хэрэглэгч");
+  const [employeeName, setEmployeeName] = useState("Булгантуяа");
+  const { user } = useUser();
+  const [isScannerOpen, setIsScannerOpen] = useState(false);
 
+  const ACTIVE_CENSUS_ID = "ede88790-5b49-47fe-8c2a-e77dbc5f16f9"; //daraa ni solin
   useEffect(() => {
     const fetchQrItems = async () => {
       try {
@@ -218,24 +223,24 @@ export default function AssetsPage() {
                 <div className="rounded-xl border border-red-100 bg-red-50 p-6 text-center">
                   <p className="text-sm font-medium text-red-600">{qrError}</p>
                 </div>
-              ) : qrItems.length === 0 ? (
-                <div className="flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-gray-200 bg-white p-12 text-center">
-                  <QrCode className="mb-4 text-gray-300" size={48} />
-                  <h3 className="text-lg font-medium text-gray-900">
-                    Хөрөнгө олдсонгүй
-                  </h3>
-                  <p className="text-sm text-gray-500">
-                    Танд одоогоор QR баталгаажуулах шаардлагатай хөрөнгө байхгүй
-                    байна.
-                  </p>
-                </div>
-              ) : (
-                <QrTab items={qrItems} />
+              )}
+
+              {!loadingQr && !qrError && qrItems.length > 0 && (
+                <QrTab
+                  items={qrItems}
+                  onOpenScanner={() => setIsScannerOpen(true)}
+                />
               )}
             </div>
           )}
         </div>
-      </main>
+      </div>
+      <QRScanModal
+        isOpen={isScannerOpen}
+        onClose={() => setIsScannerOpen(false)}
+        censusId={ACTIVE_CENSUS_ID}
+        verifierId={user?.id || EMPLOYEE_ID}
+      />
     </div>
   );
 }

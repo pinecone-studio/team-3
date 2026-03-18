@@ -87,6 +87,7 @@ export type CensusReport = {
 
 export type CensusTask = {
   __typename?: 'CensusTask';
+  asset?: Maybe<Asset>;
   assetId: Scalars['String']['output'];
   censusId: Scalars['String']['output'];
   conditionReported?: Maybe<Scalars['String']['output']>;
@@ -638,6 +639,7 @@ export type CensusReportResolvers<ContextType = Context, ParentType extends Reso
 };
 
 export type CensusTaskResolvers<ContextType = Context, ParentType extends ResolversParentTypes['CensusTask'] = ResolversParentTypes['CensusTask']> = {
+  asset?: Resolver<Maybe<ResolversTypes['Asset']>, ParentType, ContextType>;
   assetId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   censusId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   conditionReported?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;

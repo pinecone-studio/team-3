@@ -1,4 +1,4 @@
-export type StatType = 'active' | 'success' | 'warning' | 'pending';
+export type StatType = "active" | "success" | "warning" | "pending";
 
 export interface Stat {
   label: string;
@@ -8,9 +8,9 @@ export interface Stat {
 }
 
 export interface Project {
-  id: number;
+  id: string | number;
   title: string;
-  status: 'Идэвхтэй' | 'Дууссан';
+  status: "Идэвхтэй" | "Дууссан";
   tag: string;
   progress: number;
   pending: number;
@@ -27,64 +27,64 @@ export interface MockData {
 export const mockData: MockData = {
   stats: [
     {
-      label: 'Идэвхтэй тооллого',
+      label: "Идэвхтэй тооллого",
       value: 2,
-      subtext: 'Одоо явагдаж байгаа',
-      type: 'active'
+      subtext: "Одоо явагдаж байгаа",
+      type: "active",
     },
     {
-      label: 'Баталгаажсан',
+      label: "Баталгаажсан",
       value: 83,
-      subtext: '65% гүйцэтгэл',
-      type: 'success'
+      subtext: "65% гүйцэтгэл",
+      type: "success",
     },
     {
-      label: 'Зөрүү',
+      label: "Зөрүү",
       value: 5,
-      subtext: 'Анхаарах шаардлагатай',
-      type: 'warning'
+      subtext: "Анхаарах шаардлагатай",
+      type: "warning",
     },
     {
-      label: 'Хүлээгдэж буй',
+      label: "Хүлээгдэж буй",
       value: 45,
-      subtext: 'Баталгаажих хүлээлттэй',
-      type: 'pending'
-    }
+      subtext: "Баталгаажих хүлээлттэй",
+      type: "pending",
+    },
   ],
 
   projects: [
     {
       id: 1,
-      title: '2026 1-р улирлын бүрэн тооллого',
-      status: 'Идэвхтэй',
-      tag: 'All',
+      title: "2026 1-р улирлын бүрэн тооллого",
+      status: "Идэвхтэй",
+      tag: "All",
       progress: 65,
       pending: 45,
       error: 3,
-      createdBy: 'Бат-Эрдэнэ А.',
-      endDate: '2026.03.15'
+      createdBy: "Бат-Эрдэнэ А.",
+      endDate: "2026.03.15",
     },
     {
       id: 2,
-      title: 'Инженерийн хэлтсийн аудит',
-      status: 'Идэвхтэй',
-      tag: 'Engineering',
+      title: "Инженерийн хэлтсийн аудит",
+      status: "Идэвхтэй",
+      tag: "Engineering",
       progress: 71,
       pending: 13,
       error: 2,
-      createdBy: 'Оюунболд Д.',
-      endDate: '2026.03.12'
+      createdBy: "Оюунболд Д.",
+      endDate: "2026.03.12",
     },
     {
       id: 3,
-      title: '2025 оны жилийн эцсийн тооллого',
-      status: 'Дууссан',
-      tag: 'All',
+      title: "2025 оны жилийн эцсийн тооллого",
+      status: "Дууссан",
+      tag: "All",
       progress: 100,
       pending: 0,
       error: 0,
-      createdBy: 'Бат-Эрдэнэ А.',
-      endDate: '2025.12.20'
-    }
-  ]
+      createdBy: "Бат-Эрдэнэ А.",
+      endDate: "2025.12.20",
+    },
+  ],
 };

@@ -20,6 +20,7 @@ export const censusTypeDefs = gql`
 		conditionReported: String
 		locationConfirmed: Boolean
 		discrepancyFlag: Boolean
+		asset: Asset
 	}
 
 	type CensusReport {
