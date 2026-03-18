@@ -112,3 +112,7 @@ export const mockQrItems: QrItem[] = [
     type: 'monitor',
   },
 ];
+
+
+
+

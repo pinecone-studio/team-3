@@ -521,6 +521,13 @@ export type CreateCategoryMutationVariables = Exact<{
 
 export type CreateCategoryMutation = { __typename?: 'Mutation', createCategory: Response };
 
+export type DeleteCategoryByIdsMutationVariables = Exact<{
+  ids: Array<Scalars['String']['input']> | Scalars['String']['input'];
+}>;
+
+
+export type DeleteCategoryByIdsMutation = { __typename?: 'Mutation', deleteCategoryByIds: Response };
+
 export type DeleteCategoryMutationVariables = Exact<{
   deleteCategoryId: Scalars['ID']['input'];
 }>;
@@ -528,10 +535,24 @@ export type DeleteCategoryMutationVariables = Exact<{
 
 export type DeleteCategoryMutation = { __typename?: 'Mutation', deleteCategory: Response };
 
+export type EditCategoryByIdMutationVariables = Exact<{
+  input: EditCategoryByIdInput;
+}>;
+
+
+export type EditCategoryByIdMutation = { __typename?: 'Mutation', editCategoryById: Response };
+
 export type GetCategoriesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetCategoriesQuery = { __typename?: 'Query', getCategories: Array<{ __typename?: 'Category', id: string, name: string, assets?: Array<{ __typename?: 'Asset', id: string, assetTag: string, serialNumber?: string | null, status: AssetStatusEnum, purchaseDate?: string | null, purchaseCost?: number | null, currentBookValue?: number | null, locationId?: string | null, assignedTo?: string | null, deletedAt?: string | null, category?: { __typename?: 'Category', id: string, name: string } | null }> | null }> };
+export type GetCategoriesQuery = { __typename?: 'Query', getCategories: Array<{ __typename?: 'Category', id: string, name: string, description?: string | null, assets?: Array<{ __typename?: 'Asset', id: string, assetTag: string, serialNumber?: string | null, status: AssetStatusEnum, purchaseDate?: string | null, purchaseCost?: number | null, currentBookValue?: number | null, locationId?: string | null, assignedTo?: string | null, deletedAt?: string | null, category?: { __typename?: 'Category', id: string, name: string, description?: string | null } | null }> | null }> };
+
+export type CreateCensusEventMutationVariables = Exact<{
+  input: CreateCensusEventInput;
+}>;
+
+
+export type CreateCensusEventMutation = { __typename?: 'Mutation', createCensusEvent: Response };
 
 export type CreateAssignmentMutationVariables = Exact<{
   input: CreateAssignmentInput;
@@ -654,6 +675,19 @@ export function useCreateCategoryMutation(baseOptions?: Apollo.MutationHookOptio
 export type CreateCategoryMutationHookResult = ReturnType<typeof useCreateCategoryMutation>;
 export type CreateCategoryMutationResult = Apollo.MutationResult<CreateCategoryMutation>;
 export type CreateCategoryMutationOptions = Apollo.BaseMutationOptions<CreateCategoryMutation, CreateCategoryMutationVariables>;
+export const DeleteCategoryByIdsDocument = gql`
+    mutation DeleteCategoryByIds($ids: [String!]!) {
+  deleteCategoryByIds(ids: $ids)
+}
+    `;
+export type DeleteCategoryByIdsMutationFn = Apollo.MutationFunction<DeleteCategoryByIdsMutation, DeleteCategoryByIdsMutationVariables>;
+export function useDeleteCategoryByIdsMutation(baseOptions?: Apollo.MutationHookOptions<DeleteCategoryByIdsMutation, DeleteCategoryByIdsMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteCategoryByIdsMutation, DeleteCategoryByIdsMutationVariables>(DeleteCategoryByIdsDocument, options);
+      }
+export type DeleteCategoryByIdsMutationHookResult = ReturnType<typeof useDeleteCategoryByIdsMutation>;
+export type DeleteCategoryByIdsMutationResult = Apollo.MutationResult<DeleteCategoryByIdsMutation>;
+export type DeleteCategoryByIdsMutationOptions = Apollo.BaseMutationOptions<DeleteCategoryByIdsMutation, DeleteCategoryByIdsMutationVariables>;
 export const DeleteCategoryDocument = gql`
     mutation DeleteCategory($deleteCategoryId: ID!) {
   deleteCategory(id: $deleteCategoryId)
@@ -667,17 +701,32 @@ export function useDeleteCategoryMutation(baseOptions?: Apollo.MutationHookOptio
 export type DeleteCategoryMutationHookResult = ReturnType<typeof useDeleteCategoryMutation>;
 export type DeleteCategoryMutationResult = Apollo.MutationResult<DeleteCategoryMutation>;
 export type DeleteCategoryMutationOptions = Apollo.BaseMutationOptions<DeleteCategoryMutation, DeleteCategoryMutationVariables>;
+export const EditCategoryByIdDocument = gql`
+    mutation EditCategoryById($input: editCategoryByIdInput!) {
+  editCategoryById(input: $input)
+}
+    `;
+export type EditCategoryByIdMutationFn = Apollo.MutationFunction<EditCategoryByIdMutation, EditCategoryByIdMutationVariables>;
+export function useEditCategoryByIdMutation(baseOptions?: Apollo.MutationHookOptions<EditCategoryByIdMutation, EditCategoryByIdMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<EditCategoryByIdMutation, EditCategoryByIdMutationVariables>(EditCategoryByIdDocument, options);
+      }
+export type EditCategoryByIdMutationHookResult = ReturnType<typeof useEditCategoryByIdMutation>;
+export type EditCategoryByIdMutationResult = Apollo.MutationResult<EditCategoryByIdMutation>;
+export type EditCategoryByIdMutationOptions = Apollo.BaseMutationOptions<EditCategoryByIdMutation, EditCategoryByIdMutationVariables>;
 export const GetCategoriesDocument = gql`
     query GetCategories {
   getCategories {
     id
     name
+    description
     assets {
       id
       assetTag
       category {
         id
         name
+        description
       }
       serialNumber
       status
@@ -801,6 +850,19 @@ export function useUpdateEmployeeMutation(baseOptions?: Apollo.MutationHookOptio
 export type UpdateEmployeeMutationHookResult = ReturnType<typeof useUpdateEmployeeMutation>;
 export type UpdateEmployeeMutationResult = Apollo.MutationResult<UpdateEmployeeMutation>;
 export type UpdateEmployeeMutationOptions = Apollo.BaseMutationOptions<UpdateEmployeeMutation, UpdateEmployeeMutationVariables>;
+export const CreateCensusEventDocument = gql`
+    mutation CreateCensusEvent($input: CreateCensusEventInput!) {
+  createCensusEvent(input: $input)
+}
+    `;
+export type CreateCensusEventMutationFn = Apollo.MutationFunction<CreateCensusEventMutation, CreateCensusEventMutationVariables>;
+export function useCreateCensusEventMutation(baseOptions?: Apollo.MutationHookOptions<CreateCensusEventMutation, CreateCensusEventMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateCensusEventMutation, CreateCensusEventMutationVariables>(CreateCensusEventDocument, options);
+      }
+export type CreateCensusEventMutationHookResult = ReturnType<typeof useCreateCensusEventMutation>;
+export type CreateCensusEventMutationResult = Apollo.MutationResult<CreateCensusEventMutation>;
+export type CreateCensusEventMutationOptions = Apollo.BaseMutationOptions<CreateCensusEventMutation, CreateCensusEventMutationVariables>;
 export const GetAssetByIdDocument = gql`
     query getAssetById($getAssetByIdId: ID!) {
   getAssetById(id: $getAssetByIdId) {

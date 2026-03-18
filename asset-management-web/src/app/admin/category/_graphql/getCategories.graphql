@@ -2,14 +2,14 @@ query GetCategories {
   getCategories {
     id
     name
-    # description
+    description
     assets {
       id
       assetTag
       category {
         id
         name
-        # description
+        description
       }
       serialNumber
       status

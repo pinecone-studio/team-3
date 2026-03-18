@@ -10,6 +10,23 @@ export const getPendingAssignments: QueryResolvers['getPendingAssignments'] = as
 	const DB = drizzle(context.env.DB, { schema });
 	const secret = new TextEncoder().encode(context.env.JWT_SECRET);
 
+	let empId: string;
+
+	// 1. Determine if token is a JWT or a raw ID
+	try {
+		// Attempt to verify as JWT
+		const { payload } = await jwtVerify(token, secret);
+		empId = payload.employeeId as string;
+	} catch (error) {
+		// If JWT verification fails, assume the token IS the employeeId
+		// You might want to add a basic regex check here if your IDs follow a specific format
+		empId = token;
+	}
+
+	if (!empId) {
+		throw new Error('Invalid identifier provided.');
+	}
+
 	// Initialize S3 Client for R2
 	const s3 = new S3Client({
 		region: 'auto',
@@ -21,10 +38,7 @@ export const getPendingAssignments: QueryResolvers['getPendingAssignments'] = as
 	});
 
 	try {
-		const { payload } = await jwtVerify(token, secret);
-		const empId = payload.employeeId as string;
-
-		// 1. Get current pending assignments
+		// 2. Get current pending assignments using the extracted empId
 		const pendingResults = await DB.query.assignments.findMany({
 			where: (assignments, { eq, isNull, and }) => and(eq(assignments.employeeId, empId), isNull(assignments.signatureR2Key)),
 			with: {
@@ -32,30 +46,26 @@ export const getPendingAssignments: QueryResolvers['getPendingAssignments'] = as
 			},
 		});
 
-		// 2. Fetch the most recent signed assignment for this employee
+		// 3. Fetch the most recent signed assignment
 		const lastSigned = await DB.query.assignments.findFirst({
 			where: (assignments, { eq, isNotNull, and }) => and(eq(assignments.employeeId, empId), isNotNull(assignments.signatureR2Key)),
 			orderBy: [desc(schema.assignments.assignedAt)],
 		});
 
-		// 3. Generate a temporary Preview URL if a previous signature exists
+		// 4. Generate URL (Logic remains the same)
 		let previewUrl: string | null = null;
 		if (lastSigned?.signatureR2Key) {
 			const command = new GetObjectCommand({
 				Bucket: context.env.R2_BUCKET_NAME,
 				Key: lastSigned.signatureR2Key,
 			});
-			// URL expires in 15 minutes (900 seconds)
 			previewUrl = await getSignedUrl(s3, command, { expiresIn: 900 });
 		}
 
-		// 4. Return merged data
 		return pendingResults.map((res) => ({
 			...res,
-			// Pass the virtual fields to the frontend
 			recentSignatureUrl: previewUrl,
 			recentSignatureKey: lastSigned?.signatureR2Key ?? null,
-
 			accessoriesJson: res.accessoriesJson ? JSON.stringify(res.accessoriesJson) : null,
 			assignedAt: res.assignedAt.toISOString(),
 			returnedAt: res.returnedAt?.toISOString() ?? null,
@@ -67,6 +77,6 @@ export const getPendingAssignments: QueryResolvers['getPendingAssignments'] = as
 		}));
 	} catch (error) {
 		console.error('Pending Assignments Error:', error);
-		throw new Error('Link expired or invalid.');
+		throw new Error('Could not retrieve assignments.');
 	}
 };

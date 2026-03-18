@@ -20,7 +20,6 @@ import {
 
 import { GetAssetsQuery } from "@/gql/graphql";
 
-
 type AssetType = NonNullable<GetAssetsQuery["getAssets"]>[number];
 interface Props {
   assets: AssetType[];
@@ -37,13 +36,15 @@ export default function AssetManagement({ assets, onDelete, onUpdate }: Props) {
 
   const getStatusStyle = (status: string) => {
     switch (status) {
-      case "ASSIGNED":
+      case "AVAILABLE":
         return "text-[#0251CB] bg-[#EEF4FF] border-[#D1E0FF]";
-      case "Засварт":
+      case "ASSIGNED":
         return "text-[#F79009] bg-[#FFFAEB] border-[#FEDF89]";
-      case "Актлах":
+      case "IN_REPAIR":
         return "text-[#F04438] bg-[#FEF3F2] border-[#FEE4E2]";
-      case "Сул":
+      case "PENDING_DISPOSAL":
+        return "text-[#12B76A] bg-[#ECFDF3] border-[#ABEFC6]";
+      case "DISPOSED":
         return "text-[#12B76A] bg-[#ECFDF3] border-[#ABEFC6]";
       default:
         return "text-gray-600 bg-gray-50 border-gray-200";
@@ -261,10 +262,11 @@ export default function AssetManagement({ assets, onDelete, onUpdate }: Props) {
             <button
               onClick={() => setPage((p) => Math.max(1, p - 1))}
               disabled={page === 1}
-              className={`flex items-center gap-2 border border-gray-200 px-4 py-2 rounded-lg text-[14px] font-semibold transition-all ${page === 1
+              className={`flex items-center gap-2 border border-gray-200 px-4 py-2 rounded-lg text-[14px] font-semibold transition-all ${
+                page === 1
                   ? "text-gray-300 cursor-not-allowed opacity-50"
                   : "text-gray-900 hover:bg-gray-50 active:scale-95"
-                }`}
+              }`}
             >
               <ChevronLeft size={18} />
               Өмнөх
@@ -273,10 +275,11 @@ export default function AssetManagement({ assets, onDelete, onUpdate }: Props) {
             <button
               onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
               disabled={page === totalPages || totalPages === 0}
-              className={`flex items-center gap-2 border border-gray-200 px-4 py-2 rounded-lg text-[14px] font-bold transition-all ${page === totalPages || totalPages === 0
+              className={`flex items-center gap-2 border border-gray-200 px-4 py-2 rounded-lg text-[14px] font-bold transition-all ${
+                page === totalPages || totalPages === 0
                   ? "text-gray-300 cursor-not-allowed opacity-50"
                   : "text-gray-900 hover:bg-gray-50 active:scale-95"
-                }`}
+              }`}
             >
               Дараах
               <ChevronRight size={18} />
