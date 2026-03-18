@@ -33,8 +33,8 @@ export default function AssetReturnPage() {
 
   if (!employeeToShow) return <p>Буцаалтын мэдээлэл олдсонгүй.</p>;
   const userAssets =
-    assetData?.getAssets.filter(
-      (asset) => asset.assignedTo === storedEmployeeId,
+    assetData?.getAssets?.filter(
+      (asset) => asset?.assignedTo === storedEmployeeId,
     ) || [];
   const pageData = {
     deadline: "2026.03.20",

@@ -1,0 +1,28 @@
+query GetEmployeeData($employeeId: ID!, $token: String!) {
+  # For General/QR Tab
+  getAssignmentsByEmployee(employeeId: $employeeId) {
+    id
+    asset {
+      assetTag
+      serialNumber
+      category {
+        name
+        description
+      }
+    }
+    assignedAt
+    returnedAt
+  }
+  # For Signature/Gar Tab
+  getPendingAssignments(token: $token) {
+    id
+    asset {
+      assetTag
+      serialNumber
+    }
+  }
+  getEmployeeById(id: $employeeId) {
+    firstName
+    lastName
+  }
+}

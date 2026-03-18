@@ -1,266 +1,220 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { LayoutDashboard, QrCode, FileText, Bell } from "lucide-react"; // Optional: for visual flair
+import { useState, useMemo, useEffect, use } from "react";
+import { Bell } from "lucide-react";
+import { useUser } from "@clerk/nextjs";
+
+// Components
 import StatsCards from "./_components/StatsCards";
 import Tabs from "./_components/tabs";
-import { useUser } from "@clerk/nextjs";
 import QRScanModal from "./_components/QRScanModal";
-import GeneralTab from "./_components/GeneralTab";
+import GeneralTab, { AssetWithCategory } from "./_components/GeneralTab";
 import GarTab from "./_components/Signature";
 import QrTab from "./_components/QrTab";
+
+// Types & Mock Data
 import type { QrItem } from "./_components/mockData";
 import {
   mockStats,
   mockDevices,
   mockProgress,
   mockHistory,
-  mockGarItems,
 } from "./_components/mockData";
-
-// --- Types (Kept as requested) ---
-type Assignment = {
-  id: string;
-  assetId: string;
-  employeeId: string;
-  assignedAt: string;
-  returnedAt: string | null;
-  conditionAtAssign: string;
-  conditionAtReturn?: string | null;
-  asset?: {
-    id: string;
-    assetTag: string;
-    serialNumber?: string | null;
-    status: string;
-    category?: {
-      id: string;
-      name: string;
-      description?: string | null;
-    } | null;
-  } | null;
-};
-
-type Employee = {
-  id: string;
-  firstName: string;
-  lastName: string;
-};
-
-type GetAssignmentsResponse = {
-  data?: {
-    getAssignmentsByEmployee?: Assignment[];
-    getEmployeeById?: Employee | null;
-  };
-  errors?: {
-    message: string;
-  }[];
-};
-
-const EMPLOYEE_ID = "-H7_24M85L-FMHKpkv4gp";
+import {
+  useGetAssetsByEmployeeIdQuery,
+  useGetAssignmentsByEmployeeQuery,
+  useGetEmployeeDataQuery,
+} from "@/gql/graphql";
 
 export default function AssetsPage() {
+  const { user, isLoaded: isClerkLoaded } = useUser();
   const [activeTab, setActiveTab] = useState("qr");
-  const [qrItems, setQrItems] = useState<QrItem[]>([]);
-  const [loadingQr, setLoadingQr] = useState(false);
-  const [qrError, setQrError] = useState("");
-  const [employeeName, setEmployeeName] = useState("Булгантуяа");
-  const { user } = useUser();
   const [isScannerOpen, setIsScannerOpen] = useState(false);
+  const {
+    data: assignmentsData,
+    loading: assignmentsLoading,
+    error: assignmentsError,
+  } = useGetAssignmentsByEmployeeQuery({
+    variables: {
+      employeeId: localStorage.getItem("employeeId") || "",
+    },
+    skip: !user?.id,
+  });
 
-  const ACTIVE_CENSUS_ID = "ede88790-5b49-47fe-8c2a-e77dbc5f16f9"; //daraa ni solin
+  const {
+    data: assetsData,
+    loading: assetsLoading,
+    error: assetsError,
+  } = useGetAssetsByEmployeeIdQuery({
+    variables: {
+      employeeId: localStorage.getItem("employeeId") || "",
+    },
+    skip: !user?.id,
+  });
+  console.log("assetsData", assetsData);
+
+  const assetsHistory =
+    assignmentsData?.getAssignmentsByEmployee.filter(
+      (a) => a.signatureR2Key !== null,
+    ) || [];
+
+  const [employeeId, setEmployeeId] = useState<string>("");
+
   useEffect(() => {
-    const fetchQrItems = async () => {
-      try {
-        setLoadingQr(true);
-        setQrError("");
-
-        const res = await fetch("http://localhost:8787/graphql", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            query: `
-              query GetEmployeeAssignments($employeeId: ID!) {
-                getAssignmentsByEmployee(employeeId: $employeeId) {
-                  id
-                  assetId
-                  employeeId
-                  assignedAt
-                  returnedAt
-                  conditionAtAssign
-                  conditionAtReturn
-                  asset {
-                    id
-                    assetTag
-                    serialNumber
-                    status
-                    category {
-                      id
-                      name
-                      description
-                    }
-                  }
-                }
-                getEmployeeById(id: $employeeId) {
-                  id
-                  firstName
-                  lastName
-                }
-              }
-            `,
-            variables: { employeeId: EMPLOYEE_ID },
-          }),
-        });
-
-        const json: GetAssignmentsResponse = await res.json();
-
-        if (json.errors?.length) {
-          setQrError(json.errors[0].message || "GraphQL алдаа гарлаа");
-          return;
-        }
-
-        const employee = json.data?.getEmployeeById;
-        if (employee) {
-          setEmployeeName(`${employee.lastName} ${employee.firstName}`.trim());
-        }
-
-        const assignments = json.data?.getAssignmentsByEmployee || [];
-        const activeAssignments = assignments.filter(
-          (item) => !item.returnedAt,
-        );
-
-        const mapped: QrItem[] = activeAssignments.map((item) => ({
-          name:
-            item.asset?.assetTag ||
-            item.asset?.category?.name ||
-            `Asset ${item.assetId}`,
-          code:
-            item.asset?.serialNumber || item.asset?.assetTag || item.assetId,
-          description:
-            item.asset?.category?.description ||
-            item.asset?.category?.name ||
-            "Asset мэдээлэл дутуу",
-          location: item.conditionAtAssign || "Тодорхойгүй",
-          date: item.assignedAt
-            ? new Date(item.assignedAt).toLocaleDateString("en-CA")
-            : "",
-          owner: employee
-            ? `${employee.lastName} ${employee.firstName}`.trim()
-            : item.employeeId,
-          type: mapAssetTypeToIconType(item.asset?.category?.name),
-        }));
-
-        setQrItems(mapped);
-      } catch (error) {
-        setQrError("QR data авах үед алдаа гарлаа");
-      } finally {
-        setLoadingQr(false);
-      }
-    };
-
-    fetchQrItems();
+    const id = localStorage.getItem("employeeId");
+    if (id) setEmployeeId(id);
   }, []);
 
+  /**
+   * 1. Execute the GraphQL Hook
+   */
+  const {
+    data: employeeData,
+    loading: employeeLoading,
+    error: employeeError,
+  } = useGetEmployeeDataQuery({
+    variables: {
+      employeeId: employeeId,
+      token: employeeId,
+    },
+    skip: !employeeId, // Don't run the query until we have the ID
+  });
+
+  /**
+   * 2. Transform the Data
+   * Resolves the 'QrItem' assignment error by providing missing properties.
+   */
+  const { employeeName, qrItems, pendingAssignments } = useMemo(() => {
+    if (!employeeData)
+      return { employeeName: "Хэрэглэгч", qrItems: [], pendingAssignments: [] };
+
+    // Format Name
+    const name = employeeData.getEmployeeById
+      ? `${employeeData.getEmployeeById.lastName} ${employeeData.getEmployeeById.firstName}`
+      : "Хэрэглэгч";
+
+    // Format QR Items (Active Assignments)
+    const active = (employeeData.getAssignmentsByEmployee || []).filter(
+      (a: any) => !a.returnedAt,
+    );
+
+    const formattedQrItems: QrItem[] = active.map((item: any) => ({
+      name: item.asset?.assetTag || "Asset",
+      code: item.asset?.serialNumber || item.asset?.assetTag,
+      description: item.asset?.category?.name || "Тоног төхөөрөмж",
+      date: item.assignedAt
+        ? new Date(item.assignedAt).toLocaleDateString("en-CA")
+        : "",
+      type: "laptop",
+      // Adding missing properties required by the QrItem type definition
+      location: "Төв оффис",
+      owner: name,
+    }));
+
+    return {
+      employeeName: name,
+      qrItems: formattedQrItems,
+      pendingAssignments: employeeData.getPendingAssignments || [],
+    };
+  }, [employeeData]);
+
+  // Handler for GarTab (Signature)
+  const handleSignatureConfirm = async (signature: string) => {
+    console.log("Signature captured:", signature);
+    // You would typically call a mutation here to save the signature
+    setActiveTab("qr");
+  };
+
+  // Loading State
+  if (!isClerkLoaded || (employeeLoading && !employeeData)) {
+    return (
+      <div className="flex h-screen items-center justify-center font-medium">
+        Уншиж байна...
+      </div>
+    );
+  }
+
+  // Error State
+  if (employeeError) {
+    return (
+      <div className="flex h-screen items-center justify-center text-red-500">
+        Алдаа гарлаа: {employeeError.message}
+      </div>
+    );
+  }
+
+  const ACTIVE_CENSUS_ID = "ede88790-5b49-47fe-8c2a-e77dbc5f16f9";
+
   return (
-    <div className="min-h-screen bg-[#F9FAFB] text-slate-900">
-      {/* Top Header Section */}
-      <header className=" z-10 border-b border-gray-200 bg-white px-8 py-5">
-        <div className="mx-auto max-w-7xl flex items-center justify-between">
+    <div className="min-h-screen bg-[#F9FAFB]">
+      {/* Header */}
+      <header className="border-b bg-white px-8 py-5">
+        <div className="mx-auto max-w-7xl flex justify-between items-center">
           <div>
-            <h1 className="text-2xl font-bold  tracking-tight text-gray-900">
+            <h1 className="text-2xl font-bold">
               Сайн байна уу, {employeeName} 👋
             </h1>
-            <p className="mt-1 text-sm text-gray-500 font-medium">
-              Таны эзэмшиж буй хөрөнгө болон мэдээллийн нэгдсэн тойм
-            </p>
+            <p className="text-sm text-gray-500">Таны хөрөнгийн нэгдсэн тойм</p>
           </div>
-          <button className="p-2 text-gray-400 hover:text-blue-600 transition-colors">
-            <Bell size={22} />
-          </button>
+          <div className="relative">
+            <Bell className="text-gray-400 cursor-pointer hover:text-gray-600 transition-colors" />
+            {pendingAssignments.length > 0 && (
+              <span className="absolute -top-1 -right-1 flex h-3 w-3 rounded-full bg-red-500 border-2 border-white" />
+            )}
+          </div>
         </div>
       </header>
 
+      {/* Main Content */}
       <main className="mx-auto max-w-7xl px-8 py-8">
-        {/* Statistics Grid */}
-        <section className="mb-8">
-          <StatsCards stats={mockStats} />
-        </section>
+        <StatsCards stats={mockStats} />
 
-        {/* Navigation Tabs */}
-        <div className="mb-6">
+        <div className="my-6">
           <Tabs activeTab={activeTab} setActiveTab={setActiveTab} />
         </div>
 
-        {/* Dynamic Content Area */}
-        <div className="min-h-[400px]">
+        <div className="min-h-100">
           {activeTab === "general" && (
-            <div className="animate-in fade-in slide-in-from-bottom-2 duration-300">
-              <GeneralTab
-                devices={mockDevices}
-                progress={mockProgress}
-                history={mockHistory}
-              />
-            </div>
+            <GeneralTab
+              // 1. Use optional chaining ?.
+              // 2. Filter out null/undefined items
+              // 3. Fallback to an empty array []
+              assets={
+                (assetsData?.getAssetsByEmployeeId?.filter(
+                  Boolean,
+                ) as AssetWithCategory[]) || []
+              }
+              history={(assetsHistory as any) || []}
+            />
           )}
 
           {activeTab === "gar" && (
-            <div className="animate-in fade-in slide-in-from-bottom-2 duration-300">
-              <GarTab items={mockGarItems} />
-            </div>
+            <GarTab
+              // GarTab already knows how to fetch its own data or use props,
+              // but it needs to tell the parent when it's totally done.
+              onSuccess={() => {
+                // Optional: Refresh your GQL queries here if needed
+                setActiveTab("qr");
+              }}
+            />
           )}
 
           {activeTab === "qr" && (
-            <div className="animate-in fade-in slide-in-from-bottom-2 duration-300">
-              {loadingQr ? (
-                <div className="flex h-64 items-center justify-center space-x-2">
-                  <div className="h-2 w-2 animate-bounce rounded-full bg-blue-600 [animation-delay:-0.3s]"></div>
-                  <div className="h-2 w-2 animate-bounce rounded-full bg-blue-600 [animation-delay:-0.15s]"></div>
-                  <div className="h-2 w-2 animate-bounce rounded-full bg-blue-600"></div>
-                  <span className="ml-2 text-sm text-gray-500">
-                    Мэдээлэл шинэчилж байна...
-                  </span>
-                </div>
-              ) : qrError ? (
-                <div className="rounded-xl border border-red-100 bg-red-50 p-6 text-center">
-                  <p className="text-sm font-medium text-red-600">{qrError}</p>
-                </div>
-              )}
-
-              {!loadingQr && !qrError && qrItems.length > 0 && (
-                <QrTab
-                  items={qrItems}
-                  onOpenScanner={() => setIsScannerOpen(true)}
-                />
-              )}
-            </div>
+            <QrTab
+              items={qrItems}
+              onOpenScanner={() => setIsScannerOpen(true)}
+            />
           )}
         </div>
-      </div>
+      </main>
+
+      {/* Modals */}
       <QRScanModal
         isOpen={isScannerOpen}
         onClose={() => setIsScannerOpen(false)}
         censusId={ACTIVE_CENSUS_ID}
-        verifierId={user?.id || EMPLOYEE_ID}
+        verifierId={user?.id || employeeId}
       />
     </div>
   );
-}
-
-// --- Helpers ---
-function mapAssetTypeToIconType(categoryName?: string | null) {
-  const value = categoryName?.toLowerCase() || "";
-  if (
-    value.includes("mac") ||
-    value.includes("laptop") ||
-    value.includes("notebook")
-  )
-    return "laptop";
-  if (value.includes("monitor") || value.includes("display")) return "monitor";
-  if (value.includes("phone") || value.includes("mobile")) return "phone";
-  if (
-    value.includes("keyboard") ||
-    value.includes("peripheral") ||
-    value.includes("per")
-  )
-    return "keyboard";
-  return "laptop";
 }

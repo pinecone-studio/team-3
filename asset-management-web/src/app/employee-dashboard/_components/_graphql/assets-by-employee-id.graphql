@@ -1,0 +1,9 @@
+query GetAssetsByEmployeeId($employeeId: ID!) {
+  getAssetsByEmployeeId(employeeId: $employeeId) {
+    category {
+      name
+    }
+    assetTag
+    serialNumber
+  }
+}
