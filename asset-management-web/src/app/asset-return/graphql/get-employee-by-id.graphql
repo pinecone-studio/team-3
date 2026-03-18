@@ -1,0 +1,10 @@
+query GetEmployeeById($getEmployeeByIdId: ID!) {
+  getEmployeeById(id: $getEmployeeByIdId) {
+    id
+    firstName
+    lastName
+    terminationDate
+    department
+    branch
+  }
+}
