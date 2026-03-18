@@ -1,0 +1,11 @@
+query GetAdminEmployees {
+  getEmployees {
+    id
+    entraId
+    firstName
+    lastName
+    terminationDate
+    department
+    branch
+  }
+}
