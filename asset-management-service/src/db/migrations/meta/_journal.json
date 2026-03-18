@@ -71,6 +71,13 @@
       "when": 1773708574901,
       "tag": "0009_past_the_hand",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "6",
+      "when": 1773757077105,
+      "tag": "0010_wild_slapstick",
+      "breakpoints": true
     }
   ]
 }
