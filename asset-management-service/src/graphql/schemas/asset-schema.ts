@@ -47,8 +47,9 @@ export const assetTypeDefs = gql`
 	}
 
 	type Query {
-		getAssets: [Asset!]!
+		getAssets: [Asset]
 		getAssetById(id: ID!): Asset
+		getAssetsByEmployeeId(employeeId: ID!): [Asset]
 	}
 
 	type Mutation {
