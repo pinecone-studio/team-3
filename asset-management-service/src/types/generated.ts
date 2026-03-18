@@ -141,6 +141,7 @@ export type CreateEmployeeInput = {
   github?: InputMaybe<Scalars['String']['input']>;
   hireDate: Scalars['String']['input'];
   imageUrl?: InputMaybe<Scalars['String']['input']>;
+  isAdmin?: InputMaybe<Scalars['Boolean']['input']>;
   isKpi?: InputMaybe<Scalars['Boolean']['input']>;
   isSalaryCompany?: InputMaybe<Scalars['Boolean']['input']>;
   lastName: Scalars['String']['input'];
@@ -168,6 +169,7 @@ export type Employee = {
   hireDate: Scalars['String']['output'];
   id: Scalars['ID']['output'];
   imageUrl?: Maybe<Scalars['String']['output']>;
+  isAdmin?: Maybe<Scalars['Boolean']['output']>;
   isKpi: Scalars['Boolean']['output'];
   isSalaryCompany: Scalars['Boolean']['output'];
   lastName: Scalars['String']['output'];
@@ -660,6 +662,7 @@ export type EmployeeResolvers<ContextType = Context, ParentType extends Resolver
   hireDate?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   imageUrl?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  isAdmin?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   isKpi?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   isSalaryCompany?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   lastName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;

@@ -22,6 +22,7 @@ export const employees = sqliteTable('employees', {
 	employeeCode: text('employee_code').notNull().unique(),
 	level: text('level').notNull(),
 	isKpi: integer('is_kpi', { mode: 'boolean' }).notNull().default(false),
+	isAdmin: integer('is_admin', { mode: 'boolean' }).notNull().default(false), // New Field
 	isSalaryCompany: integer('is_salary_company', { mode: 'boolean' }).notNull().default(true),
 	github: text('github'),
 	birthDayAndMonth: text('birthday_day_month'),
