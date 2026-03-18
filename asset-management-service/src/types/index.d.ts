@@ -1,5 +1,6 @@
 type Context = {
 	env: Env;
+	waitUntil: ExecutionContext['waitUntil'];
 };
 
 type Env = {

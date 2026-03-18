@@ -8,10 +8,13 @@ const server = new ApolloServer<Context>({
 	introspection: true,
 });
 
+// services/handler.ts
 export const handler = startServerAndCreateCloudflareWorkersHandler<Env, Context>(server, {
-	context: async ({ env, request }) => {
+	context: async ({ env, request, ctx }) => {
 		return {
 			env,
+			// Map the function directly
+			waitUntil: ctx.waitUntil.bind(ctx),
 		};
 	},
 });

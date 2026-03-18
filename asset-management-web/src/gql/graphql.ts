@@ -142,6 +142,7 @@ export type CreateEmployeeInput = {
   github?: InputMaybe<Scalars['String']['input']>;
   hireDate: Scalars['String']['input'];
   imageUrl?: InputMaybe<Scalars['String']['input']>;
+  isAdmin?: InputMaybe<Scalars['Boolean']['input']>;
   isKpi?: InputMaybe<Scalars['Boolean']['input']>;
   isSalaryCompany?: InputMaybe<Scalars['Boolean']['input']>;
   lastName: Scalars['String']['input'];
@@ -169,6 +170,7 @@ export type Employee = {
   hireDate: Scalars['String']['output'];
   id: Scalars['ID']['output'];
   imageUrl?: Maybe<Scalars['String']['output']>;
+  isAdmin?: Maybe<Scalars['Boolean']['output']>;
   isKpi: Scalars['Boolean']['output'];
   isSalaryCompany: Scalars['Boolean']['output'];
   lastName: Scalars['String']['output'];
@@ -192,15 +194,12 @@ export type Mutation = {
   createCategory: Response;
   createCensusEvent: Response;
   createEmployee: Response;
-  createSubCategory: Response;
   deleteAsset: Response;
   deleteAssignment: Response;
   deleteCategory: Response;
   deleteCategoryByIds: Response;
   deleteEmployee: Response;
-  deleteSubCategoryById: Response;
   editCategoryById: Response;
-  editSubCategoryById: Response;
   finalizeCensusEvent: Response;
   updateAsset: Response;
   updateAssignment: Response;
@@ -234,11 +233,6 @@ export type MutationCreateEmployeeArgs = {
 };
 
 
-export type MutationCreateSubCategoryArgs = {
-  input: CreateSubCategoryInput;
-};
-
-
 export type MutationDeleteAssetArgs = {
   id: Scalars['ID']['input'];
 };
@@ -265,18 +259,8 @@ export type MutationDeleteEmployeeArgs = {
 };
 
 
-export type MutationDeleteSubCategoryByIdArgs = {
-  id: Scalars['ID']['input'];
-};
-
-
 export type MutationEditCategoryByIdArgs = {
   input: EditCategoryByIdInput;
-};
-
-
-export type MutationEditSubCategoryByIdArgs = {
-  input: EditSubCategoryInput;
 };
 
 
@@ -335,8 +319,6 @@ export type Query = {
   getEmployees: Array<Employee>;
   getEmployeesByStatus: Array<Employee>;
   getPendingAssignments: Array<Assignment>;
-  getSubCategories: Array<SubCategory>;
-  getSubCategoriesWithCategory: Array<GetSubCategoriesProps>;
 };
 
 
@@ -410,13 +392,6 @@ export enum Response {
   Success = 'SUCCESS'
 }
 
-export type SubCategory = {
-  __typename?: 'SubCategory';
-  categoryId?: Maybe<Scalars['String']['output']>;
-  id: Scalars['String']['output'];
-  name: Scalars['String']['output'];
-};
-
 export enum TicketStatusEnum {
   Cancelled = 'CANCELLED',
   InProgress = 'IN_PROGRESS',
@@ -472,26 +447,10 @@ export type UpdateEmployeeInput = {
   terminationDate?: InputMaybe<Scalars['String']['input']>;
 };
 
-export type CreateSubCategoryInput = {
-  categoryId: Scalars['String']['input'];
-  name: Scalars['String']['input'];
-};
-
 export type EditCategoryByIdInput = {
   description?: InputMaybe<Scalars['String']['input']>;
   id: Scalars['String']['input'];
   name?: InputMaybe<Scalars['String']['input']>;
-};
-
-export type EditSubCategoryInput = {
-  id: Scalars['String']['input'];
-  name: Scalars['String']['input'];
-};
-
-export type GetSubCategoriesProps = {
-  __typename?: 'getSubCategoriesProps';
-  categories?: Maybe<Category>;
-  sub_categories: SubCategory;
 };
 
 export type DeleteAssetMutationVariables = Exact<{
@@ -547,13 +506,6 @@ export type GetCategoriesQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetCategoriesQuery = { __typename?: 'Query', getCategories: Array<{ __typename?: 'Category', id: string, name: string, description?: string | null, assets?: Array<{ __typename?: 'Asset', id: string, assetTag: string, serialNumber?: string | null, status: AssetStatusEnum, purchaseDate?: string | null, purchaseCost?: number | null, currentBookValue?: number | null, locationId?: string | null, assignedTo?: string | null, deletedAt?: string | null, category?: { __typename?: 'Category', id: string, name: string, description?: string | null } | null }> | null }> };
 
-export type CreateCensusEventMutationVariables = Exact<{
-  input: CreateCensusEventInput;
-}>;
-
-
-export type CreateCensusEventMutation = { __typename?: 'Mutation', createCensusEvent: Response };
-
 export type CreateAssignmentMutationVariables = Exact<{
   input: CreateAssignmentInput;
 }>;
@@ -578,6 +530,13 @@ export type UpdateEmployeeMutationVariables = Exact<{
 
 
 export type UpdateEmployeeMutation = { __typename?: 'Mutation', updateEmployee: Response };
+
+export type CreateCensusEventMutationVariables = Exact<{
+  input: CreateCensusEventInput;
+}>;
+
+
+export type CreateCensusEventMutation = { __typename?: 'Mutation', createCensusEvent: Response };
 
 export type GetAssetByIdQueryVariables = Exact<{
   getAssetByIdId: Scalars['ID']['input'];
