@@ -40,7 +40,7 @@ export const createAssignment: MutationResolvers['createAssignment'] = async (_,
 				.setExpirationTime('72h')
 				.sign(secret);
 			const frontendUrl = context.env.FRONTEND_URL || 'http://localhost:3000';
-			const magicLink = `${frontendUrl}/test-sign?token=${token}`;
+			const magicLink = `${frontendUrl}/employee-dashboard?token=${token}`;
 			await fetch('https://api.resend.com/emails', {
 				method: 'POST',
 				headers: {
