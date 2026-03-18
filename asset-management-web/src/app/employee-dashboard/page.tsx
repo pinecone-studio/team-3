@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import StatsCards from "./_components/StatsCards";
 import Tabs from "./_components/tabs";
+import { useUser } from "@clerk/nextjs";
+import QRScanModal from "./_components/QRScanModal";
 import GeneralTab from "./_components/GeneralTab";
 import GarTab from "./_components/Signature";
 import QrTab from "./_components/QrTab";
@@ -58,7 +60,10 @@ export default function AssetsPage() {
   const [loadingQr, setLoadingQr] = useState(false);
   const [qrError, setQrError] = useState("");
   const [employeeName, setEmployeeName] = useState("Булгантуяа");
+  const { user } = useUser();
+  const [isScannerOpen, setIsScannerOpen] = useState(false);
 
+  const ACTIVE_CENSUS_ID = "ede88790-5b49-47fe-8c2a-e77dbc5f16f9"; //daraa ni solin
   useEffect(() => {
     const fetchQrItems = async () => {
       try {
@@ -208,12 +213,21 @@ export default function AssetsPage() {
               )}
 
               {!loadingQr && !qrError && qrItems.length > 0 && (
-                <QrTab items={qrItems} />
+                <QrTab
+                  items={qrItems}
+                  onOpenScanner={() => setIsScannerOpen(true)}
+                />
               )}
             </>
           )}
         </div>
       </div>
+      <QRScanModal
+        isOpen={isScannerOpen}
+        onClose={() => setIsScannerOpen(false)}
+        censusId={ACTIVE_CENSUS_ID}
+        verifierId={user?.id || EMPLOYEE_ID}
+      />
     </div>
   );
 }

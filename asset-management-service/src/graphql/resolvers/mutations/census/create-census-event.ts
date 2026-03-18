@@ -40,25 +40,50 @@ export const createCensusEvent: MutationResolvers['createCensusEvent'] = async (
 		}
 
 		const uniqueAssets = Array.from(new Map(filteredAssets.map((item) => [item.assetId, item])).values());
-
 		if (uniqueAssets.length > 0) {
-			await DB.insert(censusTasks).values(
-				uniqueAssets.map((item) => ({
-					id: crypto.randomUUID(),
-					censusId,
-					assetId: item.assetId,
-					verifierId: undefined,
-					verifiedAt: undefined,
-					conditionReported: undefined,
-					locationConfirmed: false,
-					discrepancyFlag: false,
-				})),
-			);
+			for (const item of uniqueAssets) {
+				try {
+					console.log('INSERTING CENSUS TASK:', {
+						censusId,
+						assetId: item.assetId,
+						employeeId: item.employeeId,
+						department: item.department,
+						category: item.category,
+					});
+
+					await DB.insert(censusTasks).values({
+						id: crypto.randomUUID(),
+						censusId,
+						assetId: item.assetId,
+						verifierId: undefined,
+						verifiedAt: undefined,
+						conditionReported: undefined,
+						locationConfirmed: false,
+						discrepancyFlag: false,
+					});
+				} catch (taskError) {
+					console.error('FAILED TASK INSERT:', {
+						censusId,
+						assetId: item.assetId,
+						employeeId: item.employeeId,
+						department: item.department,
+						category: item.category,
+					});
+					console.error('TASK INSERT ERROR:', taskError);
+					throw taskError;
+				}
+			}
 		}
 
 		return Response.Success;
 	} catch (error) {
 		console.error('Create Census Event failed:', error);
+		console.error('Create Census Event input:', input);
+		console.error('Create Census Event createdBy:', input.createdBy);
+		console.error('Create Census Event scope:', input.scope);
+		console.error('Create Census Event scopeFilter:', input.scopeFilter);
+		console.error('Create Census Event startedAt:', input.startedAt);
+		console.error('Create Census Event closedAt:', input.closedAt);
 
 		try {
 			await DB.delete(censusEvents).where(eq(censusEvents.id, censusId));

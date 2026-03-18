@@ -25,3 +25,4 @@ export const getCensusTaskByAssetId: QueryResolvers['getCensusTaskByAssetId'] = 
 		discrepancyFlag: task.discrepancyFlag ?? undefined,
 	};
 };
+

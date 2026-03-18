@@ -17,3 +17,4 @@ export const getCensusEvents: QueryResolvers['getCensusEvents'] = async (_, __, 
 		createdBy: event.createdBy ?? '',
 	}));
 };
+
