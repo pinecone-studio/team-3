@@ -1,7 +1,6 @@
 import AlertDeadline from "./AlertDeadline";
-import ReturnInfoSection from "./ReturnInfo";
-import StepsSection from "./Stepsection";
 import AssetItem from "./Assetitem";
+import ReturnInfoSection from "./ReturnInfo";
 
 export default function AssetReturnPageContent({ data }: any) {
   return (
@@ -17,24 +16,26 @@ export default function AssetReturnPageContent({ data }: any) {
       </div>
 
       <AlertDeadline deadline={data.deadline} daysLeft={data.daysLeft} />
-      <ReturnInfoSection
-        lastWorkingDay={data.lastWorkingDay}
-        deadline={data.deadline}
-        progress={{ done: 0, total: data.assets.length }}
-        location={data.location}
-      />
-      <StepsSection steps={data.steps} />
-      <div className="mt-2 space-y-4 border p-5 rounded-2xl">
-        <h3 className="font-medium text-[16px] text-gray-900">
-          Буцаах хөрөнгүүд
-        </h3>
-        <p className="text-[14px] font-medium text-[#555555] -mt-3">
-          Эдгээр төхөөрөмжүүдийг бүгдийг буцааж өгөх шаардлагатай
-        </p>
+      <div className="flex gap-3">
+        <ReturnInfoSection
+          lastWorkingDay={data.lastWorkingDay}
+          deadline={data.deadline}
+          progress={{ done: 0, total: data.assets.length }}
+          location={data.location}
+        />
 
-        {data.assets?.map((asset: any) => (
-          <AssetItem key={asset.id} asset={asset} />
-        ))}
+        <div className="mt-2 space-y-4 border p-5 rounded-2xl">
+          <h3 className="font-medium text-[16px] text-gray-900">
+            Буцаах хөрөнгүүд
+          </h3>
+          <p className="text-[14px] font-medium text-[#555555] -mt-3">
+            Эдгээр төхөөрөмжүүдийг бүгдийг буцааж өгөх шаардлагатай
+          </p>
+
+          {data.assets?.map((asset: any) => (
+            <AssetItem key={asset.id} asset={asset} />
+          ))}
+        </div>
       </div>
     </div>
   );

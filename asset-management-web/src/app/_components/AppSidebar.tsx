@@ -1,5 +1,6 @@
 "use client";
 
+import { useGetAdminEmployeesQuery } from "@/gql/graphql";
 import {
   Sidebar,
   SidebarContent,
@@ -11,22 +12,35 @@ import {
 import { LayoutDashboard, AlertTriangle, Boxes, Settings } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 
-const menuItems = [
-  {
-    title: "Хянах самбар",
-    icon: LayoutDashboard,
-    path: "/employee-dashboard",
-    badge: 1,
-  },
-
-  { title: "Асуудал мэдээлэх", icon: AlertTriangle, path: "/report" },
-  { title: "Буцаалт", icon: Boxes, path: "/asset-return" },
-  { title: "admin asset ", icon: Settings, path: "/admin/asset-page" },
-  { title: "employee ", icon: Settings, path: "/admin/employee" },
-];
 export function AppSidebar() {
   const router = useRouter();
   const pathname = usePathname();
+  const { data, loading } = useGetAdminEmployeesQuery();
+
+  const employees = data?.getEmployees || [];
+
+  const storedEmployeeId =
+    typeof window !== "undefined" ? localStorage.getItem("employeeId") : null;
+
+  const currentEmployee = employees.find((emp) => emp.id === storedEmployeeId);
+  const hasTerminationEmployee =
+    !loading && currentEmployee?.terminationDate !== null;
+
+  const menuItems = [
+    {
+      title: "Хянах самбар",
+      icon: LayoutDashboard,
+      path: "/employee-dashboard",
+      badge: 1,
+    },
+
+    { title: "Асуудал мэдээлэх", icon: AlertTriangle, path: "/report" },
+    ...(hasTerminationEmployee
+      ? [{ title: "Буцаалт", icon: Boxes, path: "/asset-return" }]
+      : []),
+    { title: "admin asset ", icon: Settings, path: "/admin/asset-page" },
+    { title: "employee ", icon: Settings, path: "/admin/employee" },
+  ];
   return (
     <Sidebar className="border-r border-slate-200 ">
       <SidebarHeader className="p-6 bg-[#17203F]">

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { LayoutDashboard, QrCode, FileText, Bell } from "lucide-react"; // Optional: for visual flair
 import StatsCards from "./_components/StatsCards";
 import Tabs from "./_components/tabs";
 import { useUser } from "@clerk/nextjs";
@@ -16,6 +17,8 @@ import {
   mockHistory,
   mockGarItems,
 } from "./_components/mockData";
+
+// --- Types (Kept as requested) ---
 type Assignment = {
   id: string;
   assetId: string;
@@ -36,6 +39,7 @@ type Assignment = {
     } | null;
   } | null;
 };
+
 type Employee = {
   id: string;
   firstName: string;
@@ -72,32 +76,30 @@ export default function AssetsPage() {
 
         const res = await fetch("http://localhost:8787/graphql", {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             query: `
               query GetEmployeeAssignments($employeeId: ID!) {
-           getAssignmentsByEmployee(employeeId: $employeeId) {
-  id
-  assetId
-  employeeId
-  assignedAt
-  returnedAt
-  conditionAtAssign
-  conditionAtReturn
-  asset {
-    id
-    assetTag
-    serialNumber
-    status
-    category {
-      id
-      name
-      description
-    }
-  }
-}
+                getAssignmentsByEmployee(employeeId: $employeeId) {
+                  id
+                  assetId
+                  employeeId
+                  assignedAt
+                  returnedAt
+                  conditionAtAssign
+                  conditionAtReturn
+                  asset {
+                    id
+                    assetTag
+                    serialNumber
+                    status
+                    category {
+                      id
+                      name
+                      description
+                    }
+                  }
+                }
                 getEmployeeById(id: $employeeId) {
                   id
                   firstName
@@ -105,18 +107,14 @@ export default function AssetsPage() {
                 }
               }
             `,
-            variables: {
-              employeeId: EMPLOYEE_ID,
-            },
+            variables: { employeeId: EMPLOYEE_ID },
           }),
         });
 
         const json: GetAssignmentsResponse = await res.json();
-        console.log("RAW JSON:", json);
 
         if (json.errors?.length) {
           setQrError(json.errors[0].message || "GraphQL алдаа гарлаа");
-          setQrItems([]);
           return;
         }
 
@@ -126,12 +124,9 @@ export default function AssetsPage() {
         }
 
         const assignments = json.data?.getAssignmentsByEmployee || [];
-        console.log("ASSIGNMENTS:", assignments);
-
         const activeAssignments = assignments.filter(
           (item) => !item.returnedAt,
         );
-        console.log("ACTIVE ASSIGNMENTS:", activeAssignments);
 
         const mapped: QrItem[] = activeAssignments.map((item) => ({
           name:
@@ -153,16 +148,9 @@ export default function AssetsPage() {
             : item.employeeId,
           type: mapAssetTypeToIconType(item.asset?.category?.name),
         }));
-        console.log("MAPPED QR ITEMS:", mapped);
-        console.log(
-          "ACTIVE ASSIGNMENTS FULL:",
-          JSON.stringify(activeAssignments, null, 2),
-        );
-        console.log("ACTIVE ASSIGNMENTS:", activeAssignments);
-        console.log("MAPPED QR ITEMS:", mapped);
+
         setQrItems(mapped);
       } catch (error) {
-        console.error("Failed to fetch qr items:", error);
         setQrError("QR data авах үед алдаа гарлаа");
       } finally {
         setLoadingQr(false);
@@ -173,42 +161,67 @@ export default function AssetsPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="w-full px-6 py-6">
+    <div className="min-h-screen bg-[#F9FAFB] text-slate-900">
+      {/* Top Header Section */}
+      <header className=" z-10 border-b border-gray-200 bg-white px-8 py-5">
+        <div className="mx-auto max-w-7xl flex items-center justify-between">
+          <div>
+            <h1 className="text-2xl font-bold  tracking-tight text-gray-900">
+              Сайн байна уу, {employeeName} 👋
+            </h1>
+            <p className="mt-1 text-sm text-gray-500 font-medium">
+              Таны эзэмшиж буй хөрөнгө болон мэдээллийн нэгдсэн тойм
+            </p>
+          </div>
+          <button className="p-2 text-gray-400 hover:text-blue-600 transition-colors">
+            <Bell size={22} />
+          </button>
+        </div>
+      </header>
+
+      <main className="mx-auto max-w-7xl px-8 py-8">
+        {/* Statistics Grid */}
+        <section className="mb-8">
+          <StatsCards stats={mockStats} />
+        </section>
+
+        {/* Navigation Tabs */}
         <div className="mb-6">
-          <h1 className="mb-1 text-2xl font-semibold text-gray-900">
-            Сайн байна уу, {employeeName}
-          </h1>
-          <p className="text-sm text-gray-500">Таны хөрөнгийн порталын тойм</p>
+          <Tabs activeTab={activeTab} setActiveTab={setActiveTab} />
         </div>
 
-        <StatsCards stats={mockStats} />
-        <Tabs activeTab={activeTab} setActiveTab={setActiveTab} />
-
-        <div className="mt-6">
+        {/* Dynamic Content Area */}
+        <div className="min-h-[400px]">
           {activeTab === "general" && (
-            <GeneralTab
-              devices={mockDevices}
-              progress={mockProgress}
-              history={mockHistory}
-            />
+            <div className="animate-in fade-in slide-in-from-bottom-2 duration-300">
+              <GeneralTab
+                devices={mockDevices}
+                progress={mockProgress}
+                history={mockHistory}
+              />
+            </div>
           )}
 
-          {activeTab === "gar" && <GarTab items={mockGarItems} />}
+          {activeTab === "gar" && (
+            <div className="animate-in fade-in slide-in-from-bottom-2 duration-300">
+              <GarTab items={mockGarItems} />
+            </div>
+          )}
 
           {activeTab === "qr" && (
-            <>
-              {loadingQr && <div>Уншиж байна...</div>}
-
-              {!loadingQr && qrError && (
-                <div className="rounded-2xl border border-red-200 bg-red-50 p-4 text-sm text-red-600">
-                  {qrError}
+            <div className="animate-in fade-in slide-in-from-bottom-2 duration-300">
+              {loadingQr ? (
+                <div className="flex h-64 items-center justify-center space-x-2">
+                  <div className="h-2 w-2 animate-bounce rounded-full bg-blue-600 [animation-delay:-0.3s]"></div>
+                  <div className="h-2 w-2 animate-bounce rounded-full bg-blue-600 [animation-delay:-0.15s]"></div>
+                  <div className="h-2 w-2 animate-bounce rounded-full bg-blue-600"></div>
+                  <span className="ml-2 text-sm text-gray-500">
+                    Мэдээлэл шинэчилж байна...
+                  </span>
                 </div>
-              )}
-
-              {!loadingQr && !qrError && qrItems.length === 0 && (
-                <div className="rounded-2xl border border-gray-200 bg-white p-4 text-sm text-gray-500">
-                  QR баталгаажуулах идэвхтэй хөрөнгө олдсонгүй
+              ) : qrError ? (
+                <div className="rounded-xl border border-red-100 bg-red-50 p-6 text-center">
+                  <p className="text-sm font-medium text-red-600">{qrError}</p>
                 </div>
               )}
 
@@ -218,7 +231,7 @@ export default function AssetsPage() {
                   onOpenScanner={() => setIsScannerOpen(true)}
                 />
               )}
-            </>
+            </div>
           )}
         </div>
       </div>
@@ -232,32 +245,22 @@ export default function AssetsPage() {
   );
 }
 
+// --- Helpers ---
 function mapAssetTypeToIconType(categoryName?: string | null) {
   const value = categoryName?.toLowerCase() || "";
-
   if (
     value.includes("mac") ||
     value.includes("laptop") ||
     value.includes("notebook")
-  ) {
+  )
     return "laptop";
-  }
-
-  if (value.includes("monitor") || value.includes("display")) {
-    return "monitor";
-  }
-
-  if (value.includes("phone") || value.includes("mobile")) {
-    return "phone";
-  }
-
+  if (value.includes("monitor") || value.includes("display")) return "monitor";
+  if (value.includes("phone") || value.includes("mobile")) return "phone";
   if (
     value.includes("keyboard") ||
     value.includes("peripheral") ||
     value.includes("per")
-  ) {
+  )
     return "keyboard";
-  }
-
   return "laptop";
 }
