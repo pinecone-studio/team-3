@@ -547,13 +547,6 @@ export type GetCategoriesQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetCategoriesQuery = { __typename?: 'Query', getCategories: Array<{ __typename?: 'Category', id: string, name: string, description?: string | null, assets?: Array<{ __typename?: 'Asset', id: string, assetTag: string, serialNumber?: string | null, status: AssetStatusEnum, purchaseDate?: string | null, purchaseCost?: number | null, currentBookValue?: number | null, locationId?: string | null, assignedTo?: string | null, deletedAt?: string | null, category?: { __typename?: 'Category', id: string, name: string, description?: string | null } | null }> | null }> };
 
-export type CreateCensusEventMutationVariables = Exact<{
-  input: CreateCensusEventInput;
-}>;
-
-
-export type CreateCensusEventMutation = { __typename?: 'Mutation', createCensusEvent: Response };
-
 export type CreateAssignmentMutationVariables = Exact<{
   input: CreateAssignmentInput;
 }>;
@@ -578,6 +571,13 @@ export type UpdateEmployeeMutationVariables = Exact<{
 
 
 export type UpdateEmployeeMutation = { __typename?: 'Mutation', updateEmployee: Response };
+
+export type CreateCensusEventMutationVariables = Exact<{
+  input: CreateCensusEventInput;
+}>;
+
+
+export type CreateCensusEventMutation = { __typename?: 'Mutation', createCensusEvent: Response };
 
 export type GetAssetByIdQueryVariables = Exact<{
   getAssetByIdId: Scalars['ID']['input'];
