@@ -16,6 +16,7 @@ export const createEmployee: MutationResolvers['createEmployee'] = async (_, { i
 			imageUrl: input.imageUrl ?? undefined,
 			isKpi: input.isKpi ?? false,
 			isSalaryCompany: input.isSalaryCompany ?? false,
+			isAdmin: input.isAdmin ?? false, // or true, depending on your logic
 		});
 
 		return Response.Success;

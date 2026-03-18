@@ -1,22 +1,7 @@
 "use client";
 
-import { useQuery, gql } from "@apollo/client";
 import { Clock, Keyboard, Monitor, Phone } from "lucide-react";
 import { MacBook } from "@/app/_components/icons/icons";
-
-const GET_ASSETS = gql`
-  query GetAssets {
-    getAssets {
-      id
-      assetTag
-      category {
-        name
-      }
-      assignedTo
-      status
-    }
-  }
-`;
 
 interface Asset {
   id: string;
