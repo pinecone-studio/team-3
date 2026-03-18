@@ -1,0 +1,3 @@
+mutation CreateAssignment($input: CreateAssignmentInput!) {
+  createAssignment(input: $input)
+}

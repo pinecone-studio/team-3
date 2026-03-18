@@ -8,12 +8,7 @@ import {
   SidebarMenuItem,
   cn,
 } from "@/libs";
-import {
-  LayoutDashboard,
-  AlertTriangle,
-  Boxes,
-  Settings,
-} from "lucide-react";
+import { LayoutDashboard, AlertTriangle, Boxes, Settings } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 
 const menuItems = [
@@ -27,6 +22,7 @@ const menuItems = [
   { title: "Асуудал мэдээлэх", icon: AlertTriangle, path: "/report" },
   { title: "Буцаалт", icon: Boxes, path: "/asset-return" },
   { title: "admin asset ", icon: Settings, path: "/admin/asset-page" },
+  { title: "employee ", icon: Settings, path: "/admin/employee" },
 ];
 export function AppSidebar() {
   const router = useRouter();
