@@ -777,6 +777,11 @@ export type GetAssignmentsByEmployeeQueryVariables = Exact<{
 
 export type GetAssignmentsByEmployeeQuery = { __typename?: 'Query', getAssignmentsByEmployee: Array<{ __typename?: 'Assignment', id: string, employeeId: string, assetId: string, assignedAt: string, conditionAtAssign: string, signatureR2Key?: string | null, asset?: { __typename?: 'Asset', id: string, assetTag: string, serialNumber?: string | null, category?: { __typename?: 'Category', name: string } | null } | null }> };
 
+export type GetActiveCensusIdQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetActiveCensusIdQuery = { __typename?: 'Query', getCensusEvents: Array<{ __typename?: 'CensusEvent', id: string }> };
+
 export type GetEmployeeDataQueryVariables = Exact<{
   employeeId: Scalars['ID']['input'];
   token: Scalars['String']['input'];
@@ -799,6 +804,13 @@ export type UpdateAssignmentMutationVariables = Exact<{
 
 
 export type UpdateAssignmentMutation = { __typename?: 'Mutation', updateAssignment: Response };
+
+export type UpdateCensusTaskMutationVariables = Exact<{
+  input: UpdateCensusTaskInput;
+}>;
+
+
+export type UpdateCensusTaskMutation = { __typename?: 'Mutation', updateCensusTask: Response };
 
 
 export const CreateAssetDocument = gql`
@@ -1512,6 +1524,32 @@ export type GetAssignmentsByEmployeeQueryHookResult = ReturnType<typeof useGetAs
 export type GetAssignmentsByEmployeeLazyQueryHookResult = ReturnType<typeof useGetAssignmentsByEmployeeLazyQuery>;
 export type GetAssignmentsByEmployeeSuspenseQueryHookResult = ReturnType<typeof useGetAssignmentsByEmployeeSuspenseQuery>;
 export type GetAssignmentsByEmployeeQueryResult = Apollo.QueryResult<GetAssignmentsByEmployeeQuery, GetAssignmentsByEmployeeQueryVariables>;
+export const GetActiveCensusIdDocument = gql`
+    query GetActiveCensusId {
+  getCensusEvents {
+    id
+  }
+}
+    `;
+export function useGetActiveCensusIdQuery(baseOptions?: Apollo.QueryHookOptions<GetActiveCensusIdQuery, GetActiveCensusIdQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetActiveCensusIdQuery, GetActiveCensusIdQueryVariables>(GetActiveCensusIdDocument, options);
+      }
+export function useGetActiveCensusIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetActiveCensusIdQuery, GetActiveCensusIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetActiveCensusIdQuery, GetActiveCensusIdQueryVariables>(GetActiveCensusIdDocument, options);
+        }
+// @ts-ignore
+export function useGetActiveCensusIdSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetActiveCensusIdQuery, GetActiveCensusIdQueryVariables>): Apollo.UseSuspenseQueryResult<GetActiveCensusIdQuery, GetActiveCensusIdQueryVariables>;
+export function useGetActiveCensusIdSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetActiveCensusIdQuery, GetActiveCensusIdQueryVariables>): Apollo.UseSuspenseQueryResult<GetActiveCensusIdQuery | undefined, GetActiveCensusIdQueryVariables>;
+export function useGetActiveCensusIdSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetActiveCensusIdQuery, GetActiveCensusIdQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetActiveCensusIdQuery, GetActiveCensusIdQueryVariables>(GetActiveCensusIdDocument, options);
+        }
+export type GetActiveCensusIdQueryHookResult = ReturnType<typeof useGetActiveCensusIdQuery>;
+export type GetActiveCensusIdLazyQueryHookResult = ReturnType<typeof useGetActiveCensusIdLazyQuery>;
+export type GetActiveCensusIdSuspenseQueryHookResult = ReturnType<typeof useGetActiveCensusIdSuspenseQuery>;
+export type GetActiveCensusIdQueryResult = Apollo.QueryResult<GetActiveCensusIdQuery, GetActiveCensusIdQueryVariables>;
 export const GetEmployeeDataDocument = gql`
     query GetEmployeeData($employeeId: ID!, $token: String!) {
   getAssignmentsByEmployee(employeeId: $employeeId) {
@@ -1609,3 +1647,16 @@ export function useUpdateAssignmentMutation(baseOptions?: Apollo.MutationHookOpt
 export type UpdateAssignmentMutationHookResult = ReturnType<typeof useUpdateAssignmentMutation>;
 export type UpdateAssignmentMutationResult = Apollo.MutationResult<UpdateAssignmentMutation>;
 export type UpdateAssignmentMutationOptions = Apollo.BaseMutationOptions<UpdateAssignmentMutation, UpdateAssignmentMutationVariables>;
+export const UpdateCensusTaskDocument = gql`
+    mutation UpdateCensusTask($input: UpdateCensusTaskInput!) {
+  updateCensusTask(input: $input)
+}
+    `;
+export type UpdateCensusTaskMutationFn = Apollo.MutationFunction<UpdateCensusTaskMutation, UpdateCensusTaskMutationVariables>;
+export function useUpdateCensusTaskMutation(baseOptions?: Apollo.MutationHookOptions<UpdateCensusTaskMutation, UpdateCensusTaskMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateCensusTaskMutation, UpdateCensusTaskMutationVariables>(UpdateCensusTaskDocument, options);
+      }
+export type UpdateCensusTaskMutationHookResult = ReturnType<typeof useUpdateCensusTaskMutation>;
+export type UpdateCensusTaskMutationResult = Apollo.MutationResult<UpdateCensusTaskMutation>;
+export type UpdateCensusTaskMutationOptions = Apollo.BaseMutationOptions<UpdateCensusTaskMutation, UpdateCensusTaskMutationVariables>;

@@ -75,7 +75,7 @@ export default function QrTab({ items = [], onOpenScanner }: QrTabProps) {
               className="rounded-3xl border border-gray-200 bg-white p-6"
             >
               <div className="flex items-start gap-5">
-                <div className="flex h-[92px] w-[190px] items-center justify-center overflow-hidden rounded-2xl bg-[#F8FAFC]">
+                <div className="flex h-23 w-47.5 items-center justify-center overflow-hidden rounded-2xl bg-[#F8FAFC]">
                   <DeviceIcon type={item.type} size={56} />
                 </div>
 

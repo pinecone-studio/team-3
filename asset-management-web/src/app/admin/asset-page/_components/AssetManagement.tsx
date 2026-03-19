@@ -215,7 +215,7 @@ export default function AssetManagement({ assets, onDelete, onUpdate }: Props) {
                         </button>
                       </DropdownMenuTrigger>
 
-                      <DropdownMenuContent align="end" className="w-[140px]">
+                      <DropdownMenuContent align="end" className="w-35">
                         <DropdownMenuItem
                           onClick={() => {
                             const newName = prompt(

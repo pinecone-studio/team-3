@@ -5,6 +5,7 @@ import { censusTasks } from '../../../../db';
 
 export const getCensusTaskByAssetId: QueryResolvers['getCensusTaskByAssetId'] = async (_, { censusId, assetId }, context) => {
 	const DB = drizzle(context.env.DB);
+	console.log('working');
 
 	const results = await DB.select()
 		.from(censusTasks)
@@ -25,4 +26,3 @@ export const getCensusTaskByAssetId: QueryResolvers['getCensusTaskByAssetId'] = 
 		discrepancyFlag: task.discrepancyFlag ?? undefined,
 	};
 };
-
