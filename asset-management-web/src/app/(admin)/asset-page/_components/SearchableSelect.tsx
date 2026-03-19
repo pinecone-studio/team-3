@@ -2,23 +2,33 @@
 
 import * as React from "react"
 import { Check, ChevronDown, Plus, Search } from "lucide-react"
-import { Button, cn, Popover, PopoverContent, PopoverTrigger } from "@/libs"
-
+import { Button, cn, Input, Popover, PopoverContent, PopoverTrigger } from "@/libs"
 
 export type SelectOption = {
   value: string
   label: string
 }
 
-type SearchableSelectProps =  {
+type CreateFormField = {
+  key: string
+  label: string
+  placeholder: string
+  required?: boolean
+}
+
+type SearchableSelectProps = {
   options: SelectOption[]
   value?: string
   onValueChange?: (value: string) => void
   placeholder?: string
   searchPlaceholder?: string
-  onCreate?: (name: string) => void
   createLabel?: string
   className?: string
+  /** Create form fields definition */
+  createFields?: CreateFormField[]
+  /** Called when user submits create form. Returns field values by key. */
+  onCreateNew?: (values: Record<string, string>) => Promise<void>
+  createLoading?: boolean
 }
 
 export function SearchableSelect({
@@ -26,12 +36,17 @@ export function SearchableSelect({
   value,
   onValueChange,
   placeholder = "Сонгох",
-  searchPlaceholder = "Search Categories",
-  createLabel = "Create new category",
+  searchPlaceholder = "Хайх",
+  createLabel = "Шинэ нэмэх",
   className,
+  createFields = [],
+  onCreateNew,
+  createLoading = false,
 }: SearchableSelectProps) {
   const [open, setOpen] = React.useState(false)
   const [searchQuery, setSearchQuery] = React.useState("")
+  const [openCreateForm, setOpenCreateForm] = React.useState(false)
+  const [formValues, setFormValues] = React.useState<Record<string, string>>({})
 
   const filteredOptions = React.useMemo(() => {
     if (!searchQuery) return options
@@ -48,9 +63,22 @@ export function SearchableSelect({
     setSearchQuery("")
   }
 
-  const handleCreate = () => {
-
+  const handleFieldChange = (key: string, val: string) => {
+    setFormValues((prev) => ({ ...prev, [key]: val }))
   }
+
+  const handleCreate = async () => {
+    if (!onCreateNew) return
+    await onCreateNew(formValues)
+    setFormValues({})
+    setOpenCreateForm(false)
+  }
+
+  const isCreateDisabled =
+    createLoading ||
+    createFields
+      .filter((f) => f.required)
+      .some((f) => !formValues[f.key]?.trim())
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -69,10 +97,14 @@ export function SearchableSelect({
           <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0" align="start">
-        <div className="flex flex-col">
+
+      <PopoverContent
+        className="w-[var(--radix-popover-trigger-width)] p-0"
+        align="start"
+      >
+        <div className="flex flex-col max-h-[350px] overflow-y-auto">
           {/* Search Input */}
-          <div className="p-2 border-b">
+          <div className="p-2 border-b flex-shrink-0">
             <div className="flex items-center border border-blue-400 rounded-md px-3 py-2 focus-within:ring-1 focus-within:ring-blue-400">
               <Search className="h-4 w-4 text-muted-foreground mr-2" />
               <input
@@ -84,7 +116,9 @@ export function SearchableSelect({
               />
             </div>
           </div>
-          <div className="max-h-[200px] overflow-y-auto">
+
+          {/* Options List */}
+          <div className="flex flex-col max-h-[200px] overflow-y-auto">
             {filteredOptions.length > 0 ? (
               filteredOptions.map((option) => (
                 <div
@@ -107,18 +141,52 @@ export function SearchableSelect({
               </div>
             )}
           </div>
-          <div className="border-t px-4 py-2">
-            <p className="text-xs text-muted-foreground mb-2">
-              Showing {filteredOptions.length} out of {options.length}, type to search for more
-            </p>
+
+          {/* Create New — зөвхөн onCreateNew prop өгөгдсөн үед харуулна */}
+          {onCreateNew && (
+            <div className="border-t p-4 flex-shrink-0">
               <button
-                onClick={handleCreate}
+                onClick={() => setOpenCreateForm((prev) => !prev)}
                 className="flex items-center gap-2 text-blue-500 hover:text-blue-600 text-sm font-medium w-full py-1"
               >
                 <Plus className="h-4 w-4" />
                 {createLabel}
               </button>
-          </div>
+
+              {openCreateForm && (
+                <div className="border px-4 py-4 rounded-md flex flex-col gap-4 mt-2 bg-gray-50">
+                  {createFields.map((field) => (
+                    <div key={field.key} className="flex flex-col gap-1">
+                      <label className="text-sm font-medium text-gray-700">
+                        {field.label}
+                        {field.required && <span className="text-red-500 ml-1">*</span>}
+                      </label>
+                      <Input
+                        placeholder={field.placeholder}
+                        value={formValues[field.key] ?? ""}
+                        onChange={(e) => handleFieldChange(field.key, e.target.value)}
+                      />
+                    </div>
+                  ))}
+
+                  <div className="flex justify-end gap-2">
+                    <Button
+                      variant="outline"
+                      onClick={() => {
+                        setOpenCreateForm(false)
+                        setFormValues({})
+                      }}
+                    >
+                      Цуцлах
+                    </Button>
+                    <Button onClick={handleCreate} disabled={isCreateDisabled}>
+                      {createLoading ? "Нэмж байна" : "Нэмэх"}
+                    </Button>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </PopoverContent>
     </Popover>

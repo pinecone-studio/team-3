@@ -662,7 +662,14 @@ export type EditCategoryByIdMutation = { __typename?: 'Mutation', editCategoryBy
 export type GetCategoriesWithAssetsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetCategoriesWithAssetsQuery = { __typename?: 'Query', getCategories: Array<{ __typename?: 'Category', id: string, name: string, description?: string | null, assets?: Array<{ __typename?: 'Asset', id: string, assetTag: string, serialNumber?: string | null, status: AssetStatusEnum, purchaseDate?: string | null, purchaseCost?: number | null, currentBookValue?: number | null, locationId?: string | null, assignedTo?: string | null, deletedAt?: string | null, category?: { __typename?: 'Category', id: string, name: string, description?: string | null } | null }> | null }> };
+export type GetCategoriesWithAssetsQuery = { __typename?: 'Query', getCategories: Array<{ __typename?: 'Category', id: string, name: string, description?: string | null, assets?: Array<{ __typename?: 'Asset', id: string, assetTag: string, serialNumber?: string | null, status: AssetStatusEnum, purchaseDate?: string | null, purchaseCost?: number | null, currentBookValue?: number | null, locationId?: string | null, assignedTo?: string | null, deletedAt?: string | null, imageUrl: string, category?: { __typename?: 'Category', id: string, name: string, description?: string | null } | null }> | null }> };
+
+export type CreateSubCategoryMutationVariables = Exact<{
+  input: CreateSubCategoryInput;
+}>;
+
+
+export type CreateSubCategoryMutation = { __typename?: 'Mutation', createSubCategory: Response };
 
 export type DeleteSubCategoryByIdMutationVariables = Exact<{
   deleteSubCategoryByIdId: Scalars['ID']['input'];
@@ -997,6 +1004,7 @@ export const GetCategoriesWithAssetsDocument = gql`
       locationId
       assignedTo
       deletedAt
+      imageUrl
     }
   }
 }
@@ -1020,6 +1028,19 @@ export type GetCategoriesWithAssetsQueryHookResult = ReturnType<typeof useGetCat
 export type GetCategoriesWithAssetsLazyQueryHookResult = ReturnType<typeof useGetCategoriesWithAssetsLazyQuery>;
 export type GetCategoriesWithAssetsSuspenseQueryHookResult = ReturnType<typeof useGetCategoriesWithAssetsSuspenseQuery>;
 export type GetCategoriesWithAssetsQueryResult = Apollo.QueryResult<GetCategoriesWithAssetsQuery, GetCategoriesWithAssetsQueryVariables>;
+export const CreateSubCategoryDocument = gql`
+    mutation CreateSubCategory($input: createSubCategoryInput!) {
+  createSubCategory(input: $input)
+}
+    `;
+export type CreateSubCategoryMutationFn = Apollo.MutationFunction<CreateSubCategoryMutation, CreateSubCategoryMutationVariables>;
+export function useCreateSubCategoryMutation(baseOptions?: Apollo.MutationHookOptions<CreateSubCategoryMutation, CreateSubCategoryMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateSubCategoryMutation, CreateSubCategoryMutationVariables>(CreateSubCategoryDocument, options);
+      }
+export type CreateSubCategoryMutationHookResult = ReturnType<typeof useCreateSubCategoryMutation>;
+export type CreateSubCategoryMutationResult = Apollo.MutationResult<CreateSubCategoryMutation>;
+export type CreateSubCategoryMutationOptions = Apollo.BaseMutationOptions<CreateSubCategoryMutation, CreateSubCategoryMutationVariables>;
 export const DeleteSubCategoryByIdDocument = gql`
     mutation DeleteSubCategoryById($deleteSubCategoryByIdId: ID!) {
   deleteSubCategoryById(id: $deleteSubCategoryByIdId)

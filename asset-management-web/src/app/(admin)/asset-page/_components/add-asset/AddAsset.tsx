@@ -10,7 +10,7 @@ import { SingleAssetForm } from "./SingleAssetForm"
 import { CsvUploadTab } from "./CsvUploadTab"
 
 
-export const AddAsset = () => {
+export const AddAsset = ({refetch}:{refetch:()=>void}) => {
     const [open, setOpen] = useState(false)
 
     const handleOpenChange = (val: boolean) => {
@@ -42,7 +42,7 @@ export const AddAsset = () => {
                     </TabsList>
 
                     <TabsContent value="single" className="p-6 pt-4 mt-0 max-h-[80vh] overflow-y-auto">
-                        <SingleAssetForm onSuccess={() => setOpen(false)} />
+                        <SingleAssetForm refetch={refetch} onSuccess={() => setOpen(false)} />
                     </TabsContent>
 
                     <TabsContent value="csv" className="p-6 pt-4 mt-0">

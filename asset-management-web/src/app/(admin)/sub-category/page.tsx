@@ -9,20 +9,14 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-  Button,
-  Popover,
-  PopoverContent,
-  PopoverTrigger
 } from "@/libs"
 import {
-  GetSubCategoriesWithCategoryQuery,
-  useDeleteCategoryByIdsMutation,
+  useGetCategoriesQuery,
   useGetSubCategoriesWithCategoryQuery
 } from "@/gql/graphql"
-import { Trash } from "lucide-react"
-import { toast } from "sonner"
+
 import { SubCategoryPagination } from "./_components/SubCategoryPagination"
-import { AddCategoryAndSearch } from "./_components/AddSubCategoryAndSearch"
+import { AddSubCategoryAndSearch } from "./_components/AddSubCategoryAndSearch"
 import { DeleteAndEditCategory } from "./_components/DeleteAndEditSubCategory"
 import { SubCategoryHeader } from "./_components/SubCategoryHeader"
 
@@ -31,9 +25,10 @@ export default function CategoryPage() {
   const [selectedCategories, setSelectedCategories] = useState<string[]>([])
   const [currentPage, setCurrentPage] = useState(1)
   const [itemsPerPage, setItemsPerPage] = useState("10")
-
+  const { data: categoryData } = useGetCategoriesQuery()
   const { data, refetch, loading } = useGetSubCategoriesWithCategoryQuery()
   const subCategories = data?.getSubCategoriesWithCategory ?? []
+  const categories = categoryData?.getCategories
 
   const filteredCategories = subCategories.filter((category) =>
     category.sub_categories.name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -79,10 +74,11 @@ export default function CategoryPage() {
   return (
     <div className="p-6 space-y-6">
       <h1 className="font-bold text-[22px]">Дэд ангилал</h1>
-      <AddCategoryAndSearch
+      <AddSubCategoryAndSearch
         refetch={refetch}
         searchQuery={searchQuery}
         handleSearch={handleSearch}
+        categories={categories}
       />
       <div className="border rounded-lg">
         <SubCategoryHeader

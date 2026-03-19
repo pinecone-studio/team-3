@@ -3,7 +3,6 @@
 import { useState, useMemo } from "react";
 import {
   Search,
-  Plus,
   Download,
   MoreHorizontal,
   ChevronLeft,
@@ -26,8 +25,9 @@ type Props = {
   assets: AssetType[];
   onDelete: (id: string) => void;
   onUpdate?: (id: string, input: any) => void;
+  refetch:()=>void
 }
-export default function AssetManagement({ assets, onDelete, onUpdate }: Props) {
+export default function AssetManagement({ assets, onDelete, onUpdate,refetch }: Props) {
   const [category, setCategory] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
   const [search, setSearch] = useState("");
@@ -48,19 +48,20 @@ export default function AssetManagement({ assets, onDelete, onUpdate }: Props) {
         return "text-gray-600 bg-gray-50 border-gray-200";
     }
   };
+
   const filteredAssets = useMemo(() => {
     return assets.filter((asset) => {
       const searchLower = search.toLowerCase();
 
       const matchSearch =
-        asset.assetTag?.toLowerCase().includes(searchLower) ||
-        asset.serialNumber?.toLowerCase().includes(searchLower);
+        asset?.assetTag?.toLowerCase().includes(searchLower) ||
+        asset?.serialNumber?.toLowerCase().includes(searchLower);
 
       const matchCategory =
-        category === "all" || asset.category?.name === category;
+        category === "all" || asset?.category?.name === category;
 
       const matchStatus =
-        statusFilter === "all" || asset.status === statusFilter;
+        statusFilter === "all" || asset?.status === statusFilter;
 
       return matchSearch && matchCategory && matchStatus;
     });
@@ -89,7 +90,7 @@ export default function AssetManagement({ assets, onDelete, onUpdate }: Props) {
             <button className="p-2 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
               <Download size={20} className="text-gray-500" />
             </button>
-            <AddAsset />
+            <AddAsset refetch={refetch}/>
           </div>
         </div>
 
@@ -250,7 +251,7 @@ export default function AssetManagement({ assets, onDelete, onUpdate }: Props) {
 
         <div className="flex justify-between items-center pt-2 mt-auto">
           <span className="text-[14px] font-medium text-gray-500">
-            {filteredAssets.length}
+            {filteredAssets.length} asset
           </span>
 
           <div className="flex gap-2">
