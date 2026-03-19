@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  EmployeeRole,
   useGetAdminEmployeesQuery,
   useGetEmployeeByIdQuery,
 } from "@/gql/graphql";
@@ -24,7 +25,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEmployee } from "../_providers/user-provider";
 
 export function AppSidebar() {
-  const { user } = useUser();
+  const { employee } = useEmployee();
   const router = useRouter();
   const pathname = usePathname();
 
