@@ -227,7 +227,7 @@ console.log(paginatedAssets)
                     <td className="px-4 py-4 font-medium text-gray-900">
                       <div className="flex gap-2">
                         <div className="border p-2 w-12 rounded-sm">
-                          <Image src={item.imageUrl} width={30} height={20} alt="zurag" />
+                          <img src={item.imageUrl} width={30} height={20} alt="zurag" />
                         </div>
                         <div className="flex flex-col gap-2">
                           <p>{item.subCategory?.name}</p>

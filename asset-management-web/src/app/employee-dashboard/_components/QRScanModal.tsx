@@ -194,10 +194,10 @@ export default function QRScanModal({
         </div>
       ) : (
         /* Scanner / Info View */
-        <div className="w-full max-w-105 rounded-[28px] bg-white p-6 shadow-2xl">
+  <div className="w-full max-w-105 rounded-[28px] bg-white p-4 sm:p-6 shadow-2xl">
           <div className="mb-4 flex items-start justify-between">
             <div>
-              <h2 className="text-[28px] font-semibold text-gray-900">
+              <h2 className="text-xl sm:text-[28px] font-semibold text-gray-900">
                 QR баталгаажуулалт
               </h2>
               <p className="mt-2 text-sm text-gray-500">

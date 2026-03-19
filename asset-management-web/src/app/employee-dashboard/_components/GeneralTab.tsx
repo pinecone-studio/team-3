@@ -54,28 +54,29 @@ export default function GeneralTab({
 
       {/* History */}
       <div className="border border-[#E2E8F0] rounded-2xl">
-        <div className=" rounded-t-2xl px-5 py-4 ">
+        <div className="rounded-t-2xl px-3 sm:px-5 py-4">
         <h3 className="text-lg font-semibold text-[#000000] mb-1">Түүх</h3>
         <p className="text-sm text-[#666666] mb-4">
           Өмнө хэрэглэж байсан төхөөрөмжүүд
         </p>
         <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm">
-          <table className="w-full">
+           <div className="overflow-x-auto">
+           <table className="w-full min-w-[600px]">
             <thead className=" border-b border-[#E2E8F0]">
               <tr>
-                <th className="px-6 py-4 text-left text-sm font-semibold text-gray-500">
+                <th className="px-6 py-4 text-left text-sm font-semibold text-[#000000]">
                   Төхөөрөмж
                 </th>
-                <th className="px-6 py-4 text-left text-sm font-semibold text-gray-500">
+                <th className="px-6 py-4 text-left text-sm font-semibold text-[#000000]">
                   Код
                 </th>
-                <th className="px-6 py-4 text-left text-sm font-semibold text-gray-500">
+                <th className="px-6 py-4 text-left text-sm font-semibold text-[#000000]">
                   Хугацаа
                 </th>
-                <th className="px-6 py-4 text-left text-sm font-semibold text-gray-500">
+                <th className="px-6 py-4 text-left text-sm font-semibold text-[#000000]">
                   Ашиглах
                 </th>
-                <th className="px-6 py-4 text-left text-sm font-semibold text-gray-500">
+                <th className="px-6 py-4 text-left text-sm font-semibold text-[#000000]">
                   Буцаасан шалтгаан
                 </th>
               </tr>
@@ -112,6 +113,7 @@ export default function GeneralTab({
               ))}
             </tbody>
           </table>
+          </div>
         </div>
       </div>
       </div>
