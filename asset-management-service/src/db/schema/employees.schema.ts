@@ -1,5 +1,5 @@
 import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core';
-import { EmployeeStatus } from '../../types/generated';
+import { EmployeeRole, EmployeeStatus } from '../../types/generated';
 
 // --- 1. EMPLOYEES ---
 export const employees = sqliteTable('employees', {
@@ -27,4 +27,7 @@ export const employees = sqliteTable('employees', {
 	github: text('github'),
 	birthDayAndMonth: text('birthday_day_month'),
 	birthdayPoster: text('birthday_poster'),
+	role: text('role', { enum: [EmployeeRole.Admin, EmployeeRole.User] }).default(
+		EmployeeRole.User,
+	),
 });
