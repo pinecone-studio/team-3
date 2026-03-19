@@ -6,9 +6,9 @@ import {
   useGetPendingAssignmentsQuery,
   useUpdateAssignmentMutation,
 } from "@/gql/graphql";
-import { Inbox, CheckCircle2, RotateCcw, PenLine } from "lucide-react";
+import { Inbox, CheckCircle2 } from "lucide-react";
+import { useEmployee } from "@/app/_providers/user-provider";
 
-// 1. Define the Interface for the Signature Pad Props
 interface SignaturePadProps {
   onClose: () => void;
   onConfirm: (signatureData: string) => void;
@@ -17,7 +17,6 @@ interface SignaturePadProps {
   recentSignatureUrl?: string;
 }
 
-// 2. Dynamic Import to prevent SSR Canvas issues
 const SignaturePad = dynamic<SignaturePadProps>(
   () => import("./SignaturePad"),
   {
@@ -40,9 +39,9 @@ interface GarTabProps {
 }
 
 export default function GarTab({ onSuccess }: GarTabProps) {
-  // Identity Logic (Consistent with your AssetsPage)
-  const effectiveToken =
-    typeof window !== "undefined" ? localStorage.getItem("employeeId") : null;
+  // 1. Move Hook inside component to follow React Rules
+  const { employee } = useEmployee();
+  const effectiveToken = employee?.id;
 
   // State
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
@@ -50,7 +49,7 @@ export default function GarTab({ onSuccess }: GarTabProps) {
   const [showSignatureModal, setShowSignatureModal] = useState(false);
 
   // Data Fetching
-  const { data, loading, error, refetch } = useGetPendingAssignmentsQuery({
+  const { data, loading, refetch } = useGetPendingAssignmentsQuery({
     variables: { token: effectiveToken ?? "" },
     skip: !effectiveToken,
   });
@@ -58,6 +57,7 @@ export default function GarTab({ onSuccess }: GarTabProps) {
   const [updateAssignment, { loading: isUpdating }] =
     useUpdateAssignmentMutation();
 
+  // Memoized derived data
   const assignments = data?.getPendingAssignments ?? [];
   const history = assignments[0];
   const canReuse =
@@ -82,6 +82,7 @@ export default function GarTab({ onSuccess }: GarTabProps) {
     if (!effectiveToken || isUpdating || selectedIds.length === 0) return;
 
     try {
+      // Execute all mutations
       await Promise.all(
         selectedIds.map((id) =>
           updateAssignment({
@@ -93,10 +94,13 @@ export default function GarTab({ onSuccess }: GarTabProps) {
         ),
       );
 
+      // Ensure data is fresh before showing success screen
+      await refetch();
+
       setIsSuccess(true);
       setShowSignatureModal(false);
       setSelectedIds([]);
-      refetch();
+
       if (onSuccess) onSuccess();
     } catch (err) {
       console.error("Batch update error:", err);
@@ -104,7 +108,7 @@ export default function GarTab({ onSuccess }: GarTabProps) {
     }
   };
 
-  // --- Conditional Views ---
+  // --- Views ---
 
   if (loading && !data) {
     return (
@@ -155,15 +159,12 @@ export default function GarTab({ onSuccess }: GarTabProps) {
 
   return (
     <div className="relative pb-32">
-      {/* Selection Header */}
       <div className="flex justify-between items-center mb-6">
-        <div></div>
-
+        <div />
         <button
           onClick={handleSelectAll}
           className="flex items-center space-x-2 text-[13px] font-medium text-gray-900 hover:opacity-70 transition-opacity group"
         >
-          {/* Circular Checkbox Icon */}
           <div
             className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${
               selectedIds.length === assignments.length &&
@@ -174,13 +175,7 @@ export default function GarTab({ onSuccess }: GarTabProps) {
           >
             {selectedIds.length === assignments.length &&
               assignments.length > 0 && (
-                <svg
-                  width="12"
-                  height="12"
-                  viewBox="0 0 12 12"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
                   <path
                     d="M2.5 6L5 8.5L9.5 3.5"
                     stroke="white"
@@ -191,8 +186,6 @@ export default function GarTab({ onSuccess }: GarTabProps) {
                 </svg>
               )}
           </div>
-
-          {/* Text label */}
           <span className="tracking-tight">
             {selectedIds.length === assignments.length
               ? "Сонголтыг цуцлах"
@@ -201,7 +194,6 @@ export default function GarTab({ onSuccess }: GarTabProps) {
         </button>
       </div>
 
-      {/* Asset Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {assignments.map((item) => (
           <div
@@ -237,7 +229,6 @@ export default function GarTab({ onSuccess }: GarTabProps) {
         ))}
       </div>
 
-      {/* Floating Confirm Button */}
       <div className="flex justify-end px-4 z-40 pointer-events-none mt-10">
         <button
           disabled={selectedIds.length === 0 || isUpdating}
@@ -248,46 +239,10 @@ export default function GarTab({ onSuccess }: GarTabProps) {
               : "bg-[#888888] text-white cursor-not-allowed"
           }`}
         >
-          <span>
-            {isUpdating ? (
-              "Түр хүлээнэ үү..."
-            ) : (
-              <div className="flex gap-2 rounded-[1px]">
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 16 16"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M12.1507 3.48417L10.4707 1.80417C10.3216 1.65451 10.1444 1.53587 9.94915 1.45509C9.75395 1.37431 9.54468 1.33298 9.33341 1.3335H4.00008C3.64646 1.3335 3.30732 1.47398 3.05727 1.72403C2.80722 1.97407 2.66675 2.31321 2.66675 2.66683V13.3335C2.66675 13.6871 2.80722 14.0263 3.05727 14.2763C3.30732 14.5264 3.64646 14.6668 4.00008 14.6668H12.0001C12.3537 14.6668 12.6928 14.5264 12.9429 14.2763C13.1929 14.0263 13.3334 13.6871 13.3334 13.3335V13.0995"
-                    stroke="white"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                  <path
-                    d="M14.2519 8.41743C14.5175 8.15186 14.6667 7.79167 14.6667 7.4161C14.6667 7.04053 14.5175 6.68034 14.2519 6.41477C13.9863 6.1492 13.6261 6 13.2506 6C12.875 6 12.5148 6.1492 12.2492 6.41477L9.5759 9.08943C9.4174 9.24785 9.30138 9.44366 9.23857 9.65877L8.68057 11.5721C8.66384 11.6295 8.66283 11.6903 8.67767 11.7482C8.6925 11.806 8.72261 11.8589 8.76487 11.9011C8.80712 11.9434 8.85996 11.9735 8.91784 11.9883C8.97573 12.0032 9.03654 12.0022 9.0939 11.9854L11.0072 11.4274C11.2223 11.3646 11.4182 11.2486 11.5766 11.0901L14.2519 8.41743Z"
-                    stroke="white"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                  <path
-                    d="M5.33325 12H5.99992"
-                    stroke="white"
-                    strokeWidth="1.33333"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-                Гарын үсэг зурах
-              </div>
-            )}
-          </span>
+          {isUpdating ? "Түр хүлээнэ үү..." : "Гарын үсэг зурах"}
         </button>
       </div>
 
-      {/* Signature Modal Logic */}
       {showSignatureModal && (
         <SignaturePad
           onClose={() => setShowSignatureModal(false)}

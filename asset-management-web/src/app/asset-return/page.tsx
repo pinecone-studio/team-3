@@ -7,19 +7,20 @@ import {
 } from "@/gql/graphql";
 import AssetReturnPageContent from "./_components/PageContent";
 import { useUser } from "@clerk/nextjs";
+import { useEmployee } from "../_providers/user-provider";
 
 export default function AssetReturnPage() {
   // const { user } = useUser();
-
+  const { employee: emp } = useEmployee();
   // const employeeId = user?.id;
-  const employeeId = "-H7_24M85L-FMHKpkv4gp"; // test ID "tur"
+  const employeeId = emp?.id;
 
   const {
     data: empData,
     loading: empLoading,
     error: empError,
   } = useGetEmployeeByIdQuery({
-    variables: { getEmployeeByIdId: employeeId },
+    variables: { getEmployeeByIdId: employeeId! },
     skip: !employeeId,
   });
 

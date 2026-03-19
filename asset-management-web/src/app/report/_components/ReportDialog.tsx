@@ -17,22 +17,25 @@ import {
   Textarea,
   DialogFooter,
 } from "@/libs";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   useCreateMaintenanceTicketMutation,
   useGetAssetsByEmployeeIdForReportQuery,
 } from "@/gql/graphql";
+import { useEmployee } from "@/app/_providers/user-provider";
 
 export default function ReportDialog() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedAsset, setSelectedAsset] = useState("");
   const [description, setDescription] = useState("");
+  const { employee } = useEmployee();
 
-  const employeeId = "RvYcfrZBku8dDvPaUe09m";
+  const employeeId = employee?.id;
 
   const { data, loading: assetsLoading } =
     useGetAssetsByEmployeeIdForReportQuery({
-      variables: { employeeId },
+      variables: { employeeId: employeeId as string },
+      skip: !employeeId,
     });
 
   const assets =
@@ -43,7 +46,7 @@ export default function ReportDialog() {
   const [createTicket, { loading }] = useCreateMaintenanceTicketMutation();
 
   const handleSubmit = async () => {
-    if (!selectedAsset || !description.trim()) return;
+    if (!selectedAsset || !description.trim() || !employeeId) return;
 
     try {
       await createTicket({
@@ -64,7 +67,7 @@ export default function ReportDialog() {
       console.error("Create ticket error:", err);
     }
   };
-
+  if (!employeeId) return null;
   return (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
       <DialogTrigger asChild>
