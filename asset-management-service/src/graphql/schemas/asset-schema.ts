@@ -60,7 +60,7 @@ input DuplicateAssetInput {
 }
 	type Query {
 		getAssets: [Asset]
-		getAssetById(id: ID!): Asset
+		getAssetById(id: ID!): Asset!
 		getAssetsByEmployeeId(employeeId: ID!): [Asset]
 	}
 
