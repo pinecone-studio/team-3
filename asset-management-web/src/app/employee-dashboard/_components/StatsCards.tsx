@@ -21,22 +21,60 @@ const iconColors: Record<string, string> = {
 
 export default function StatsCards({ stats }: StatsCardsProps) {
   return (
- <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-8 w-full">
+    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 sm:gap-4 lg:gap-6 mb-6 sm:mb-8 w-full">
       {stats.map((stat, i) => (
-       <div key={i} className="bg-white border border-gray-200 rounded-2xl p-3 sm:p-6 shadow-sm min-w-0">
-         <div className="flex items-start justify-between mb-4 min-w-0 gap-1 ">
-       <p className="font-gip text-sm font-medium leading-[125%] text-black pr-2 break-words">
-  {stat.label}
-</p>
-          <div
- className="shrink-0 w-7 h-7 rounded-lg flex items-center justify-center"
-  style={{ backgroundColor: stat.iconBg }}
->
-              <StatIcon type={stat.type} color={iconColors[stat.type]} />
+        <div
+          key={i}
+          className={`
+            bg-white border border-gray-200 rounded-xl sm:rounded-2xl 
+            p-3 sm:p-4 lg:p-6 
+            shadow-sm hover:shadow transition-shadow duration-200
+            flex flex-col justify-between min-h-[120px] sm:min-h-[140px]
+          `}
+        >
+          {/* Header row: label + icon */}
+          <div className="flex items-start justify-between gap-2 sm:gap-3 mb-3 sm:mb-4">
+            <p
+              className="
+                font-gip text-xs sm:text-sm font-medium 
+                leading-tight text-gray-900 
+                line-clamp-2 flex-1
+              "
+            >
+              {stat.label}
+            </p>
+
+            <div
+              className="
+                shrink-0 w-8 h-8 sm:w-9 sm:h-9 lg:w-10 lg:h-10 
+                rounded-lg flex items-center justify-center
+              "
+              style={{ backgroundColor: stat.iconBg }}
+            >
+              <StatIcon
+                type={stat.type}
+                color={iconColors[stat.type]}
+                // Assuming StatIcon accepts size prop; otherwise adjust inside component
+                // className="w-5 h-5 sm:w-6 sm:h-6"
+              />
             </div>
           </div>
-          <p className="text-3xl sm:text-5xl font-semibold text-dark-900 mb-1">{stat.value}</p>
-          <p className="text-sm text-[#888888]">{stat.sublabel}</p>
+
+          {/* Value - responsive sizing */}
+          <p
+            className="
+              text-2xl sm:text-3xl md:text-4xl lg:text-5xl 
+              font-semibold text-gray-900 tracking-tight
+              mb-1 sm:mb-2
+            "
+          >
+            {stat.value.toLocaleString()} {/* nicer number formatting */}
+          </p>
+
+          {/* Sublabel */}
+          <p className="text-xs sm:text-sm text-gray-500">
+            {stat.sublabel}
+          </p>
         </div>
       ))}
     </div>
