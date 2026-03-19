@@ -8,6 +8,7 @@ import { censusTypeDefs } from './census.schema';
 import { categoryTypeDefs } from './category-schema';
 import { maintenanceTicketTypeDefs } from './maintenance-ticket-schema';
 import { subCategoryTypeDefs } from './sub-category.schema';
+import { departmentTypeDefs } from './department.schema';
 
 export const typeDefs = mergeTypeDefs([
 	commonTypeDefs,
@@ -18,5 +19,6 @@ export const typeDefs = mergeTypeDefs([
 	censusTypeDefs,
 	categoryTypeDefs,
 	maintenanceTicketTypeDefs,
-	subCategoryTypeDefs
+	subCategoryTypeDefs,
+	departmentTypeDefs
 ]);

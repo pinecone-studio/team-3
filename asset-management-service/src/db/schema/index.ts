@@ -10,3 +10,4 @@ export * from './purchase-orders';
 export * from './transfers.schema';
 export * from './categories.schema';
 export * from './sub-category.schema'
+export * from './department.schema'

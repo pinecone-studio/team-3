@@ -4,3 +4,4 @@ export * from './category/index';
 export * from './census/index';
 export * from './employee/index';
 export * from './sub-category/index'
+export * from './department'

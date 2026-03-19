@@ -255,16 +255,14 @@ console.log(paginatedAssets)
                     <td className="px-4 py-4">
                       {item.assignedTo ? (
                         <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-xs font-semibold text-gray-600 border border-gray-200">
                           <p>Хуваарилагдсан</p>
-                          </div>
                         </div>
                       ) : (
                         <span className="text-gray-400">Хуваарилагдаагүй</span>
                       )}
                     </td>
                     <td className="px-4 py-4 text-gray-600 text-sm">
-                      Гурван гол
+                      {item.department?.name}
                     </td>
                     <td className="px-4 py-4 text-right font-semibold text-gray-900 whitespace-nowrap">
                       {item.purchaseCost?.toLocaleString()} ₮

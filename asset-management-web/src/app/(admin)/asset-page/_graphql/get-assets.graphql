@@ -34,6 +34,10 @@ query GetAssets {
     locationId
     assignedTo
     deletedAt
+    department {
+      id
+      name
+    }
     imageUrl
     qrUrl
   }

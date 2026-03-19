@@ -43,6 +43,7 @@ export const createAsset: MutationResolvers['createAsset'] = async (_, { input }
             purchaseCost: assetInput.purchaseCost,
             imageUrl,
             qrUrl,
+            departmentId:assetInput.departmentId
         });
 
         return Response.Success;
