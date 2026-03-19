@@ -24,7 +24,6 @@ export function AppSidebar() {
     typeof window !== "undefined" ? localStorage.getItem("employeeId") : null;
 
   const currentEmployee = employees.find((emp) => emp.id === storedEmployeeId);
-
   const hasTerminationEmployee =
     !loading && currentEmployee?.terminationDate !== null;
 

@@ -15,15 +15,15 @@ export default function GeneralTab({
   history: Assignment[];
 }) {
   return (
-    <div className="space-y-8">
-      <div>
-        <h3 className="text-lg font-semibold text-gray-900 mb-1">
+    <div className="space-y-8 ">
+      <div className="bg-[#F8FAFC] border border-[#E2E8F0] rounded-2xl p-5">
+        <h3 className="text-lg  font-semibold text-[#000000] mb-1">
           Миний хөрөнгө
         </h3>
-        <p className="text-sm text-gray-400 mb-4">
+        <p className="text-sm text-[#666666] mb-4">
           Танд олгогдсон төхөөрөмжүүд
         </p>
-        <div className="bg-blue-50/60 border border-blue-100 rounded-2xl p-5">
+        <div className=" bg-white/100 border border-[#E2E8F0] rounded-2xl p-5">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             {assets.map((asset, i) => (
               <div
@@ -32,7 +32,7 @@ export default function GeneralTab({
               >
                 <div className="flex items-center gap-3 mb-4">
                   <div className="w-10 h-10 bg-gray-100 rounded-xl flex items-center justify-center shrink-0">
-                    {/* <DeviceIcon type={asset.type} size={20} /> */}
+                   
                   </div>
                   <div className="min-w-0">
                     <p className="text-base font-semibold text-gray-900 truncate">
@@ -53,17 +53,18 @@ export default function GeneralTab({
       </div>
 
       {/* History */}
-      <div>
-        <h3 className="text-lg font-semibold text-gray-900 mb-1">Түүх</h3>
-        <p className="text-sm text-gray-400 mb-4">
+      <div className="border border-[#E2E8F0] rounded-2xl">
+        <div className=" rounded-t-2xl px-5 py-4 ">
+        <h3 className="text-lg font-semibold text-[#000000] mb-1">Түүх</h3>
+        <p className="text-sm text-[#666666] mb-4">
           Өмнө хэрэглэж байсан төхөөрөмжүүд
         </p>
         <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm">
           <table className="w-full">
-            <thead className="bg-gray-50 border-b border-gray-200">
+            <thead className=" border-b border-[#E2E8F0]">
               <tr>
                 <th className="px-6 py-4 text-left text-sm font-semibold text-gray-500">
-                  Төхөөрмж
+                  Төхөөрөмж
                 </th>
                 <th className="px-6 py-4 text-left text-sm font-semibold text-gray-500">
                   Код
@@ -91,7 +92,7 @@ export default function GeneralTab({
                     <div className="flex items-center gap-3">
                       {/* <DeviceIcon type={item.type} size={18} /> */}
                       <span className="text-base text-gray-900 whitespace-nowrap">
-                        {item.asset?.category?.name || "Төхөөрмж"}
+                        {item.asset?.category?.name || "Төхөөрмөж"}
                       </span>
                     </div>
                   </td>
@@ -112,6 +113,7 @@ export default function GeneralTab({
             </tbody>
           </table>
         </div>
+      </div>
       </div>
     </div>
   );
