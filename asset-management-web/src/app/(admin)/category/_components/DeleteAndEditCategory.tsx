@@ -1,10 +1,35 @@
 import { useState } from "react";
-import { Category, useDeleteCategoryMutation, useEditCategoryByIdMutation } from '@/gql/graphql';
+import { AssetStatusEnum, useDeleteCategoryMutation, useEditCategoryByIdMutation } from '@/gql/graphql';
 import { Button, Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, Input, TableCell } from '@/libs';
 import { Pencil, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
-
-export const DeleteAndEditCategory = ({ categoryId, category, refetch }: { categoryId: string, category: Category, refetch: () => void }) => {
+type category = {
+    __typename?: "Category";
+    id: string;
+    name: string;
+    description?: string | null;
+    assets?: Array<{
+        __typename?: "Asset";
+        id: string;
+        assetTag: string;
+        serialNumber?: string | null;
+        status: AssetStatusEnum;
+        purchaseDate?: string | null;
+        purchaseCost?: number | null;
+        currentBookValue?: number | null;
+        locationId?: string | null;
+        assignedTo?: string | null;
+        deletedAt?: string | null;
+        imageUrl: string;
+        category?: {
+            __typename?: "Category";
+            id: string;
+            name: string;
+            description?: string | null;
+        } | null;
+    }> | null;
+}
+export const DeleteAndEditCategory = ({ categoryId, category, refetch }: { categoryId: string, category: category, refetch: () => void }) => {
     const [isOpen,setIsOpen] = useState(false)
     const [name, setName] = useState(category.name || "");
     const [description, setDescription] = useState(category.description || "");

@@ -1,10 +1,38 @@
-import { Category, useDeleteCategoryByIdsMutation } from '@/gql/graphql'
+import { AssetStatusEnum, useDeleteCategoryByIdsMutation } from '@/gql/graphql'
 import { Button, Popover, PopoverContent, PopoverTrigger } from '@/libs'
 import { Trash } from 'lucide-react'
 import React, { useState } from 'react'
 import { toast } from 'sonner'
+
+export type filteredCategories =  {
+    __typename?: "Category";
+    id: string;
+    name: string;
+    description?: string | null;
+    assets?: Array<{
+        __typename?: "Asset";
+        id: string;
+        assetTag: string;
+        serialNumber?: string | null;
+        status: AssetStatusEnum;
+        purchaseDate?: string | null;
+        purchaseCost?: number | null;
+        currentBookValue?: number | null;
+        locationId?: string | null;
+        assignedTo?: string | null;
+        deletedAt?: string | null;
+        imageUrl: string;
+        category?: {
+            __typename?: "Category";
+            id: string;
+            name: string;
+            description?: string | null;
+        } | null;
+    }> | null;
+}[]
+
 type CategoryHeaderProps = {
-    filteredCategories: Category[]
+    filteredCategories: filteredCategories
     selectedCategories: string[]
     refetch:()=> void
 }
