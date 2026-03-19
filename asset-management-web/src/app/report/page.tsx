@@ -7,55 +7,74 @@ import { useGetMaintenanceTicketsQuery } from "@/gql/graphql";
 
 export default function ReportPage() {
   const { data, loading, error } = useGetMaintenanceTicketsQuery();
-  console.log("data", data);
 
-  const allReports =
-    data?.getMaintenanceTickets?.filter(
-      (r): r is NonNullable<typeof r> => r !== null,
-    ) ?? [];
+  const allReports = (data?.getMaintenanceTickets ?? []).filter(
+    (r): r is NonNullable<typeof r> => r != null,
+  );
 
   const activeReports = allReports.filter((r) => r.status !== "RESOLVED");
-
   const resolvedReports = allReports.filter((r) => r.status === "RESOLVED");
 
   if (loading) {
-    return <div className="p-6 text-gray-500">Loading...</div>;
+    return (
+      <div className="p-8 text-gray-500 animate-pulse font-gilroy text-center mt-20">
+        Уншиж байна...
+      </div>
+    );
   }
 
   if (error) {
-    return <div className="p-6 text-red-500">Error loading reports</div>;
+    return (
+      <div className="p-8 text-red-500 font-gilroy text-center mt-20">
+        Алдаа гарлаа.
+      </div>
+    );
   }
+
   return (
-    <div className="p-6 flex flex-col w-full text-[#0F172A] gap-6 font-gilroy">
-      <div className="flex justify-between items-center ">
+    <div className="p-8 flex flex-col w-full bg-[#F8FAFC] min-h-screen font-gilroy">
+      {/* Header Section */}
+      <div className="flex justify-between items-start mb-8">
         <div>
-          <h1 className="text-[24px] font-semibold leading-[125%]">
-            Асуудал мэдэгдэх
+          <h1 className="text-[24px] font-bold text-[#0F172A] mb-1">
+            Асуудал мэдээлэх
           </h1>
-          <p className="text-[#666666] text-[14px] font-normal leading-[125%] mt-1">
+          <p className="text-[#64748B] text-[14px]">
             Төхөөрөмжтэй холбоотой асуудал мэдэгдэх, засвар хүсэх
           </p>
         </div>
         <ReportDialog />
       </div>
-      <div className="grid  grid-cols-1 lg:grid-cols-2 gap-[20px] p-3 6 items-start">
-        <div className="border  border-[#E2E8F0] rounded-2xl p-6 flex flex-col">
-          <div className="mb-8">
-            <h2 className="font-semibold text-[16px] leading-[125%]">
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
+        <div className="bg-white border border-[#E2E8F0] rounded-2xl p-8 flex flex-col h-[700px]">
+          <div className="mb-6">
+            <h2 className="font-bold text-[16px] text-[#0F172A]">
               Идэвхтэй мэдэгдлүүд
             </h2>
-            <p className="text-[#666666] font-normal text-[14px] leading-[125%] mt-1">
+            <p className="text-[#64748B] font-normal text-[14px] mt-1">
               Одоо шийдвэрлэгдэж буй асуудлууд
             </p>
           </div>
-          <div className="flex-1 flex flex-col items-center justify-center">
+          <div className="flex-1 overflow-y-auto pr-2 custom-scrollbar">
             {activeReports.length === 0 ? (
-              <div className="flex   flex-col items-center text-center gap-4">
-               <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M10.3511 31.6501C9.67539 31.6501 9.10626 31.417 8.64376 30.9507C8.18126 30.4845 7.95001 29.9137 7.95001 29.2385V6.76172C7.95001 6.08647 8.18314 5.51572 8.64939 5.04947C9.11564 4.58322 9.68639 4.3501 10.3616 4.3501H20.9655C21.2825 4.3501 21.5878 4.40785 21.8813 4.52335C22.1745 4.6386 22.4443 4.81935 22.6905 5.0656L27.3345 9.7096C27.5808 9.95585 27.7615 10.2256 27.8768 10.5188C27.9923 10.8123 28.05 11.1176 28.05 11.4346V29.2385C28.05 29.9137 27.8168 30.4845 27.3503 30.9507C26.8838 31.417 26.3126 31.6501 25.6369 31.6501H10.3511ZM20.55 10.6441V6.3001H10.3616C10.2461 6.3001 10.1404 6.34822 10.0444 6.44447C9.94814 6.54047 9.90001 6.64622 9.90001 6.76172V29.2385C9.90001 29.354 9.94814 29.4597 10.0444 29.5557C10.1404 29.652 10.2461 29.7001 10.3616 29.7001H25.6384C25.7539 29.7001 25.8596 29.652 25.9556 29.5557C26.0519 29.4597 26.1 29.354 26.1 29.2385V11.8501H21.756C21.4118 11.8501 21.1248 11.7351 20.895 11.5051C20.665 11.2753 20.55 10.9883 20.55 10.6441Z" fill="#888888"/>
-</svg>
-
-                <p className="text-[#94A3B8] text-[16px]">
+              <div className="h-full flex flex-col items-center justify-center text-center">
+                <div className="w-16 h-16 bg-[#F1F5F9] rounded-full flex items-center justify-center mb-4">
+                  <svg
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#94A3B8"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z" />
+                    <polyline points="14 2 14 8 20 8" />
+                  </svg>
+                </div>
+                <p className="text-[#94A3B8] text-[16px] font-medium">
                   Танд одоогоор идэвхтэй мэдэгдэл алга
                 </p>
               </div>
@@ -64,10 +83,22 @@ export default function ReportPage() {
                 {activeReports.map((report) => (
                   <div
                     key={report.id}
-                    className="border border-[#E2E8F0] p-4 rounded-xl bg-white"
+                    className="border border-[#E2E8F0] p-5 rounded-xl bg-[#F8FAFC] hover:border-blue-200 transition-all duration-200 shadow-sm"
                   >
-                    <h4 className="font-semibold">{report.assetId}</h4>
-                    <p className="text-sm text-[#666666] mt-1">
+                    <div className="flex items-center gap-3 mb-2">
+                      <div className="p-2 bg-white rounded-lg border border-[#E2E8F0]">
+                        <Monitor size={18} className="text-[#64748B]" />
+                      </div>
+                      <div>
+                        <h4 className="font-bold text-[#1E293B] leading-tight">
+                          {report.assetId}
+                        </h4>
+                        <span className="text-[12px] text-[#94A3B8]">
+                          ID: {report.id.slice(0, 8)}
+                        </span>
+                      </div>
+                    </div>
+                    <p className="text-sm text-[#64748B] bg-white p-3 rounded-lg border border-[#F1F5F9]">
                       {report.description}
                     </p>
                   </div>
@@ -77,8 +108,28 @@ export default function ReportPage() {
           </div>
         </div>
 
-        <PreviousReports reports={resolvedReports as any} />
+        {/* Previous Reports Card */}
+        <div className="h-[600px] overflow-hidden">
+          <PreviousReports reports={resolvedReports as any} />
+        </div>
       </div>
+
+      <style jsx global>{`
+        .custom-scrollbar::-webkit-scrollbar {
+          width: 5px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+          background: #f1f1f1;
+          border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+          background: #e2e8f0;
+          border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+          background: #cbd5e1;
+        }
+      `}</style>
     </div>
   );
 }

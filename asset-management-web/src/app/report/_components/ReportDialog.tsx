@@ -19,21 +19,30 @@ import {
 } from "@/libs";
 import { useState } from "react";
 import {
+  GetMaintenanceTicketsDocument,
   useCreateMaintenanceTicketMutation,
   useGetAssetsByEmployeeIdForReportQuery,
+
 } from "@/gql/graphql";
+import { useEmployee } from "@/app/_providers/user-provider";
 
 export default function ReportDialog() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedAsset, setSelectedAsset] = useState("");
   const [description, setDescription] = useState("");
+  const { employee } = useEmployee();
 
-  const employeeId = "RvYcfrZBku8dDvPaUe09m";
+  const employeeId = employee?.id;
 
   const { data, loading: assetsLoading } =
     useGetAssetsByEmployeeIdForReportQuery({
-      variables: { employeeId },
+      variables: {
+        employeeId: employeeId as string,
+      },
+      skip: !employeeId,
     });
+  console.log("asset data", data);
+  console.log("employee", employeeId);
 
   const assets =
     data?.getAssetsByEmployeeId?.filter(
@@ -43,7 +52,7 @@ export default function ReportDialog() {
   const [createTicket, { loading }] = useCreateMaintenanceTicketMutation();
 
   const handleSubmit = async () => {
-    if (!selectedAsset || !description.trim()) return;
+    if (!selectedAsset || !description.trim() || !employeeId) return;
 
     try {
       await createTicket({
@@ -54,7 +63,7 @@ export default function ReportDialog() {
             reporterId: employeeId,
           },
         },
-        refetchQueries: ["GetMaintenanceTickets"],
+        refetchQueries: [{ query: GetMaintenanceTicketsDocument }],
       });
 
       setDialogOpen(false);
@@ -74,7 +83,10 @@ export default function ReportDialog() {
         </Button>
       </DialogTrigger>
 
-      <DialogContent className="sm:max-w-[500px] flex flex-col p-6 rounded-xl">
+      <DialogContent
+        aria-describedby={undefined}
+        className="sm:max-w-[500px] flex flex-col p-6 rounded-xl"
+      >
         <DialogHeader>
           <DialogTitle className="text-[20px] font-semibold">
             Асуудал мэдэгдэх

@@ -24,13 +24,16 @@ export type Asset = {
   category?: Maybe<Category>;
   currentBookValue?: Maybe<Scalars['Float']['output']>;
   deletedAt?: Maybe<Scalars['String']['output']>;
+  department?: Maybe<Department>;
   id: Scalars['ID']['output'];
   imageUrl: Scalars['String']['output'];
   locationId?: Maybe<Scalars['String']['output']>;
   purchaseCost?: Maybe<Scalars['Float']['output']>;
   purchaseDate?: Maybe<Scalars['String']['output']>;
+  qrUrl: Scalars['String']['output'];
   serialNumber?: Maybe<Scalars['String']['output']>;
   status: AssetStatusEnum;
+  subCategory?: Maybe<SubCategory>;
 };
 
 export enum AssetStatusEnum {
@@ -102,13 +105,15 @@ export type CensusTask = {
 
 export type CreateAssetInput = {
   assetTag: Scalars['String']['input'];
-  categoryId?: InputMaybe<Scalars['String']['input']>;
+  categoryId: Scalars['String']['input'];
+  departmentId: Scalars['String']['input'];
   imageBase64: Scalars['String']['input'];
-  locationId?: InputMaybe<Scalars['String']['input']>;
-  purchaseCost?: InputMaybe<Scalars['Float']['input']>;
-  purchaseDate?: InputMaybe<Scalars['String']['input']>;
-  serialNumber?: InputMaybe<Scalars['String']['input']>;
+  locationId: Scalars['String']['input'];
+  purchaseCost: Scalars['Float']['input'];
+  purchaseDate: Scalars['String']['input'];
+  serialNumber: Scalars['String']['input'];
   status?: InputMaybe<AssetStatusEnum>;
+  subCategoryId: Scalars['String']['input'];
 };
 
 export type CreateAssignmentInput = {
@@ -166,6 +171,12 @@ export type CreateMaintenanceTicketInput = {
 
 export type DeleteEmployeeInput = {
   terminationDate: Scalars['String']['input'];
+};
+
+export type Department = {
+  __typename?: 'Department';
+  id: Scalars['ID']['output'];
+  name: Scalars['String']['output'];
 };
 
 export type Employee = {
@@ -394,6 +405,7 @@ export type Query = {
   getCensusTaskByAssetId?: Maybe<CensusTask>;
   getCensusTaskById?: Maybe<CensusTask>;
   getCensusTasks: Array<CensusTask>;
+  getDepartments: Array<Department>;
   getEmployeeByClerkID: Employee;
   getEmployeeByCode?: Maybe<Employee>;
   getEmployeeById?: Maybe<Employee>;
@@ -738,6 +750,14 @@ export type GetEmployeeByClerkIdQueryVariables = Exact<{
 
 
 export type GetEmployeeByClerkIdQuery = { __typename?: 'Query', getEmployeeByClerkID: { __typename?: 'Employee', id: string, clerkId: string, firstName: string, lastName: string, email: string, status: EmployeeStatus, hireDate: string, terminationDate?: string | null, role: string } };
+
+export type UpdateMaintenanceTicketMutationVariables = Exact<{
+  updateMaintenanceTicketId: Scalars['ID']['input'];
+  input: UpdateMaintenanceTicketInput;
+}>;
+
+
+export type UpdateMaintenanceTicketMutation = { __typename?: 'Mutation', updateMaintenanceTicket: Response };
 
 export type GetAssetsReturnQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1352,6 +1372,19 @@ export type GetEmployeeByClerkIdQueryHookResult = ReturnType<typeof useGetEmploy
 export type GetEmployeeByClerkIdLazyQueryHookResult = ReturnType<typeof useGetEmployeeByClerkIdLazyQuery>;
 export type GetEmployeeByClerkIdSuspenseQueryHookResult = ReturnType<typeof useGetEmployeeByClerkIdSuspenseQuery>;
 export type GetEmployeeByClerkIdQueryResult = Apollo.QueryResult<GetEmployeeByClerkIdQuery, GetEmployeeByClerkIdQueryVariables>;
+export const UpdateMaintenanceTicketDocument = gql`
+    mutation UpdateMaintenanceTicket($updateMaintenanceTicketId: ID!, $input: UpdateMaintenanceTicketInput!) {
+  updateMaintenanceTicket(id: $updateMaintenanceTicketId, input: $input)
+}
+    `;
+export type UpdateMaintenanceTicketMutationFn = Apollo.MutationFunction<UpdateMaintenanceTicketMutation, UpdateMaintenanceTicketMutationVariables>;
+export function useUpdateMaintenanceTicketMutation(baseOptions?: Apollo.MutationHookOptions<UpdateMaintenanceTicketMutation, UpdateMaintenanceTicketMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateMaintenanceTicketMutation, UpdateMaintenanceTicketMutationVariables>(UpdateMaintenanceTicketDocument, options);
+      }
+export type UpdateMaintenanceTicketMutationHookResult = ReturnType<typeof useUpdateMaintenanceTicketMutation>;
+export type UpdateMaintenanceTicketMutationResult = Apollo.MutationResult<UpdateMaintenanceTicketMutation>;
+export type UpdateMaintenanceTicketMutationOptions = Apollo.BaseMutationOptions<UpdateMaintenanceTicketMutation, UpdateMaintenanceTicketMutationVariables>;
 export const GetAssetsReturnDocument = gql`
     query GetAssetsReturn {
   getAssets {

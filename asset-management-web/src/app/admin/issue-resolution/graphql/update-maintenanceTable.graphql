@@ -1,0 +1,6 @@
+mutation UpdateMaintenanceTicket(
+  $updateMaintenanceTicketId: ID!
+  $input: UpdateMaintenanceTicketInput!
+) {
+  updateMaintenanceTicket(id: $updateMaintenanceTicketId, input: $input)
+}
