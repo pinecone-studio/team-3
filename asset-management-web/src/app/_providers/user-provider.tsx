@@ -21,14 +21,16 @@ const GET_EMPLOYEE_BY_CLERK_ID = gql`
   }
 `;
 
-type  UserContextType =  {
+type UserContextType = {
   employee: Employee | null;
   isLoading: boolean;
   isSignedIn: boolean;
   error: Error | undefined;
-}
+};
 
-export const UserContext = createContext<UserContextType | undefined>(undefined);
+export const UserContext = createContext<UserContextType | undefined>(
+  undefined,
+);
 
 type UserProviderProps = {
   children: ReactNode;
@@ -37,29 +39,26 @@ type UserProviderProps = {
 export function UserProvider({ children }: UserProviderProps) {
   const { user, isLoaded, isSignedIn } = useUser();
 
-  const { data, loading: queryLoading, error } = useQuery(
-    GET_EMPLOYEE_BY_CLERK_ID,
-    {
-      variables: { clerkId: user?.id ?? "" },
-      skip: !isLoaded || !isSignedIn || !user?.id,
-    }
-  );
+  const {
+    data,
+    loading: queryLoading,
+    error,
+  } = useQuery(GET_EMPLOYEE_BY_CLERK_ID, {
+    variables: { clerkId: user?.id ?? "" },
+    skip: !isLoaded || !isSignedIn || !user?.id,
+  });
 
   const isLoading = !isLoaded || queryLoading;
 
-  const employee: Employee | null =
-    data?.getEmployeeByClerkID ?? null;
+  const employee: Employee | null = data?.getEmployeeByClerkID ?? null;
 
-
-
-
-    return (
-      <UserContext.Provider
-        value={{ employee, isLoading, isSignedIn: !!isSignedIn, error }}
-      >
-        {children}
-      </UserContext.Provider>
-    );
+  return (
+    <UserContext.Provider
+      value={{ employee, isLoading, isSignedIn: !!isSignedIn, error }}
+    >
+      {children}
+    </UserContext.Provider>
+  );
 }
 
 export function useEmployee(): UserContextType {

@@ -67,9 +67,9 @@ type CensusProject = {
   createdBy: string;
   endDate: string;
 };
-const { employee } = useEmployee();
 export default function Page() {
   const [open, setOpen] = useState(false);
+  const { employee } = useEmployee();
 
   const {
     data: censusData,

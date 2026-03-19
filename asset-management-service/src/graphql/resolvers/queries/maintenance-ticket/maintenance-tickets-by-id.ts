@@ -11,24 +11,27 @@ export const getMaintenanceTicketById: QueryResolvers['getMaintenanceTicketById'
 
 		if (!ticket) return null;
 
-		// Transform the database row to match GraphQL types
 		return {
 			...ticket,
 			// 1. Cast DB strings to GraphQL Enums
 			severity: ticket.severity as MaintenanceSeverityEnum | null,
 			status: ticket.status as TicketStatusEnum,
 
-			// 2. Convert Date object to ISO String for GraphQL
-			resolvedAt: ticket.resolvedAt ? ticket.resolvedAt.toISOString() : null,
+			// 2. MANDATORY: Convert ALL Date objects to ISO Strings
+			// Based on your previous error, these MUST be strings
+			createdAt: new Date(ticket.createdAt).toISOString(),
+			updatedAt: new Date(ticket.updatedAt).toISOString(),
+			resolvedAt: ticket.resolvedAt ? new Date(ticket.resolvedAt).toISOString() : null,
 
-			// 3. Ensure optional fields match 'Maybe' types (null vs undefined)
+			// 3. Ensure null safety for Optional fields
 			vendorId: ticket.vendorId ?? null,
 			repairCost: ticket.repairCost ?? null,
+
+			// Note: If this query should also include the 'asset' join like the list query,
+			// you would need to add the .leftJoin() and the asset mapping here as well.
 		};
 	} catch (error) {
 		console.error('Failed to fetch maintenance ticket:', error);
-		// Returning null is usually safer for single-item queries in GraphQL
-		// than throwing a hard error, but you can keep the throw if preferred.
 		return null;
 	}
 };

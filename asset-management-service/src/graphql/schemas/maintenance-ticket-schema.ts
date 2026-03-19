@@ -18,7 +18,7 @@ export const maintenanceTicketTypeDefs = gql`
 
 	type MaintenanceTicket {
 		id: ID!
-		asset: Asset!
+		asset: Asset
 		reporterId: ID!
 		description: String!
 		severity: MaintenanceSeverityEnum
