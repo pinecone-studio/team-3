@@ -1,4 +1,4 @@
-query GetCategories {
+query GetCategoriesWithAssets {
   getCategories {
     id
     name

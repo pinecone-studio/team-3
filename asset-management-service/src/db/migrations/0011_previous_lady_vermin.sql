@@ -1,0 +1,1 @@
+ALTER TABLE `assets` ADD `image_url` text NOT NULL;
