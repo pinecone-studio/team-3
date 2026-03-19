@@ -19,8 +19,6 @@ export default function AssetReturnPage() {
     loading: empLoading,
     error: empError,
   } = useGetEmployeeByIdQuery({
-    // variables: { getEmployeeByIdId: employeeId || "" },
-    // skip: !employeeId,
     variables: { getEmployeeByIdId: employeeId },
     skip: !employeeId,
   });
