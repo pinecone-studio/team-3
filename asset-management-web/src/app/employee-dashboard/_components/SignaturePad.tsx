@@ -32,11 +32,11 @@ export default function SignaturePad({
 
   return (
     <div className="fixed inset-0 bg-black/40 backdrop-blur-[2px] z-[100] flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl p-8 w-full max-w-[540px] shadow-2xl animate-in fade-in zoom-in-95 duration-200">
+      <div className="bg-white rounded-2xl p-4 sm:p-8 w-full max-w-[540px] shadow-2xl animate-in fade-in zoom-in-95 duration-200">
         {/* Header Section */}
         <div className="flex justify-between items-start mb-6">
           <div>
-            <h2 className="text-[24px] font-bold text-gray-900 tracking-tight">
+           <h2 className="text-lg sm:text-[24px] font-bold text-gray-900 tracking-tight">
               Гарын үсэг зурах
             </h2>
             <p className="text-gray-500 text-sm mt-1 font-medium">
@@ -70,7 +70,7 @@ export default function SignaturePad({
 
           {showRecent && recentSignatureUrl ? (
             <div className="space-y-6">
-              <div className="h-[280px] w-full bg-[#F8FAFF] border-[3px] border-[#4A85F6] rounded-xl flex items-center justify-center p-6">
+              <div className="h-[200px] sm:h-[280px] w-full bg-[#F8FAFF] border-[3px] border-[#4A85F6] rounded-xl flex items-center justify-center p-6">
                 <img
                   src={recentSignatureUrl}
                   alt="Recent Signature"
@@ -92,7 +92,7 @@ export default function SignaturePad({
                   ref={sigRef}
                   penColor="black"
                   canvasProps={{
-                    className: "w-full h-[280px] cursor-crosshair",
+                    className: "w-full h-[200px] sm:h-[280px] cursor-crosshair",
                   }}
                 />
               </div>

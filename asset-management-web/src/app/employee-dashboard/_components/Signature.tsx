@@ -194,7 +194,7 @@ export default function GarTab({ onSuccess }: GarTabProps) {
         </button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {assignments.map((item) => (
           <div
             key={item.id}
@@ -229,11 +229,11 @@ export default function GarTab({ onSuccess }: GarTabProps) {
         ))}
       </div>
 
-      <div className="flex justify-end px-4 z-40 pointer-events-none mt-10">
+     <div className="flex justify-end px-0 sm:px-4 z-40 pointer-events-none mt-10">
         <button
           disabled={selectedIds.length === 0 || isUpdating}
           onClick={() => setShowSignatureModal(true)}
-          className={`pointer-events-auto flex items-center space-x-4 px-10 py-5 rounded-[6px] font-black text-[11px] uppercase tracking-[0.2em] shadow-2xl transition-all active:scale-95 ${
+          className={`pointer-events-auto w-full sm:w-auto flex items-center justify-center space-x-4 px-10 py-5 rounded-[6px] font-black text-[11px] uppercase tracking-[0.2em] shadow-2xl transition-all active:scale-95 ${
             selectedIds.length > 0
               ? "bg-[#2F6FED] text-white hover:bg-blue-700"
               : "bg-[#888888] text-white cursor-not-allowed"

@@ -38,7 +38,7 @@ export default function QrTab({ items = [], onOpenScanner }: QrTabProps) {
       </div>
 
       <div className="rounded-3xl border border-gray-200 bg-[#F8FAFC] p-6">
-        <div className="mb-6 flex items-start justify-between gap-4">
+        <div className="mb-6 flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
           <div className="flex items-start gap-3">
             <div className="pt-0.5">
               <WarningTriangle size={22} />
@@ -56,7 +56,7 @@ export default function QrTab({ items = [], onOpenScanner }: QrTabProps) {
 
           <button
             onClick={onOpenScanner}
-            className="flex shrink-0 items-center gap-2 rounded-xl bg-[#2563EB] px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-700"
+           className="flex w-full sm:w-auto justify-center shrink-0 items-center gap-2 rounded-xl bg-[#2563EB] px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-700"
           >
             <svg width="16" height="16" viewBox="0 0 14 14" fill="none">
               <path

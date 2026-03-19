@@ -11,12 +11,12 @@ export default function Tabs({ activeTab, setActiveTab }: TabsProps) {
   ];
 
   return (
-    <div className="flex border-b  border-gray-200">
+   <div className="flex border-b border-gray-200 overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
       {tabs.map((tab) => (
         <button
           key={tab.id}
           onClick={() => setActiveTab(tab.id)}
-          className={`flex items-center gap-2 px-5 py-3.5 text-base relative whitespace-nowrap transition-colors ${
+          className={`flex items-center gap-2 px-3 sm:px-5 py-3 sm:py-3.5 text-xs sm:text-base relative whitespace-nowrap transition-colors ${
             activeTab === tab.id
               ? 'text-blue-600 font-medium'
               : 'text-gray-500 hover:text-gray-800'

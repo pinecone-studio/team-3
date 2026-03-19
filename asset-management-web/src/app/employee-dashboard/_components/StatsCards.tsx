@@ -21,21 +21,21 @@ const iconColors: Record<string, string> = {
 
 export default function StatsCards({ stats }: StatsCardsProps) {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+ <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-8 w-full">
       {stats.map((stat, i) => (
-        <div key={i} className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
-          <div className="flex items-start justify-between mb-4">
-       <p className="font-gip text-base font-medium leading-[125%] text-black pr-2">
+       <div key={i} className="bg-white border border-gray-200 rounded-2xl p-3 sm:p-6 shadow-sm min-w-0">
+         <div className="flex items-start justify-between mb-4 min-w-0 gap-1 ">
+       <p className="font-gip text-sm font-medium leading-[125%] text-black pr-2 break-words">
   {stat.label}
 </p>
-            <div
-              className="flex-shrink-0 w-[40px] h-[40px] rounded-xl flex items-center justify-center"
-              style={{ backgroundColor: stat.iconBg }}
-            >
+          <div
+ className="shrink-0 w-7 h-7 rounded-lg flex items-center justify-center"
+  style={{ backgroundColor: stat.iconBg }}
+>
               <StatIcon type={stat.type} color={iconColors[stat.type]} />
             </div>
           </div>
-          <p className="text-5xl font-semibold text-dark-900 mb-1">{stat.value}</p>
+          <p className="text-3xl sm:text-5xl font-semibold text-dark-900 mb-1">{stat.value}</p>
           <p className="text-sm text-[#888888]">{stat.sublabel}</p>
         </div>
       ))}

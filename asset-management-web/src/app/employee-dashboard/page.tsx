@@ -165,9 +165,9 @@ export default function AssetsPage() {
     return null;
   }
   return (
-    <div className="min-h-screen ">
+    <div className="min-h-screen w-full overflow-hidden">
       {/* Header */}
-      <header className=" bg-white px-8 py-5">
+     <header className="bg-white px-4 sm:px-8 py-5">
         <div className="w-full flex justify-between items-center">
           <div>
             <h1 className="text-2xl font-bold">
@@ -181,7 +181,7 @@ export default function AssetsPage() {
       </header>
 
       {/* Main Content */}
-      <main className="w-full px-8 py-8">
+  <main className="w-full px-3 sm:px-8 py-6 sm:py-8 ">
         <StatsCards stats={mockStats} />
 
         <div className="my-6">
