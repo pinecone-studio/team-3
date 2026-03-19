@@ -402,7 +402,7 @@ export enum PosStatusEnum {
 
 export type Query = {
   __typename?: 'Query';
-  getAssetById?: Maybe<Asset>;
+  getAssetById: Asset;
   getAssets?: Maybe<Array<Maybe<Asset>>>;
   getAssetsByEmployeeId?: Maybe<Array<Maybe<Asset>>>;
   getAssignmentById?: Maybe<Assignment>;
@@ -914,7 +914,7 @@ export type MutationResolvers<ContextType = Context, ParentType extends Resolver
 };
 
 export type QueryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
-  getAssetById?: Resolver<Maybe<ResolversTypes['Asset']>, ParentType, ContextType, RequireFields<QueryGetAssetByIdArgs, 'id'>>;
+  getAssetById?: Resolver<ResolversTypes['Asset'], ParentType, ContextType, RequireFields<QueryGetAssetByIdArgs, 'id'>>;
   getAssets?: Resolver<Maybe<Array<Maybe<ResolversTypes['Asset']>>>, ParentType, ContextType>;
   getAssetsByEmployeeId?: Resolver<Maybe<Array<Maybe<ResolversTypes['Asset']>>>, ParentType, ContextType, RequireFields<QueryGetAssetsByEmployeeIdArgs, 'employeeId'>>;
   getAssignmentById?: Resolver<Maybe<ResolversTypes['Assignment']>, ParentType, ContextType, RequireFields<QueryGetAssignmentByIdArgs, 'id'>>;
