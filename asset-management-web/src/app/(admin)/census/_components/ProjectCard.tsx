@@ -1,16 +1,12 @@
-import { Project } from '@/app/census/_components/mockdata';
+import { Project } from "./mockdata";
 
 export default function ProjectCard({ project }: { project: Project }) {
   return (
     <div className="bg-white border rounded-xl p-5 hover:shadow-sm transition">
-      
       {/* TOP */}
       <div className="flex justify-between items-start">
-        
         <div>
-          <h3 className="font-semibold text-gray-900">
-            {project.title}
-          </h3>
+          <h3 className="font-semibold text-gray-900">{project.title}</h3>
 
           {/* TAGS */}
           <div className="flex gap-2 mt-2">
@@ -25,18 +21,14 @@ export default function ProjectCard({ project }: { project: Project }) {
 
           {/* DESCRIPTION */}
           <p className="text-xs text-gray-500 mt-2">
-            Эцсийн хугацаа: {project.endDate} · 
-            Хүлээгдэж буй: {project.pending} · 
-            Зөрүү: {project.error} · 
-            Үүсгэсэн: {project.createdBy}
+            Эцсийн хугацаа: {project.endDate} · Хүлээгдэж буй: {project.pending}{" "}
+            · Зөрүү: {project.error} · Үүсгэсэн: {project.createdBy}
           </p>
         </div>
 
         {/* RIGHT */}
         <div className="text-right">
-          <p className="font-semibold text-gray-900">
-            {project.progress}%
-          </p>
+          <p className="font-semibold text-gray-900">{project.progress}%</p>
 
           <button className="text-gray-400 hover:text-gray-600 mt-1">
             •••

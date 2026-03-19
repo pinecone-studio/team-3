@@ -29,7 +29,7 @@ export function AppSidebar() {
   const router = useRouter();
   const pathname = usePathname();
 
-  const employeeId = "-H7_24M85L-FMHKpkv4gp";
+  const employeeId = employee?.id;
 
   const { data, loading } = useGetEmployeeByIdQuery({
     variables: {
@@ -41,9 +41,10 @@ export function AppSidebar() {
   const currentEmployee = data?.getEmployeeById;
 
   const hasTerminationEmployee = Boolean(currentEmployee?.terminationDate);
+  console.log("Current Employee", currentEmployee);
 
   const isAdmin = employee?.role === EmployeeRole.Admin;
-
+  // const isTerminationEmployee = Boolean(employee?.terminationDate);
   const menuItems = [
     {
       title: "Хянах самбар",
@@ -54,10 +55,10 @@ export function AppSidebar() {
     ...(hasTerminationEmployee
       ? [{ title: "Буцаалт", icon: Boxes, path: "/asset-return" }]
       : []),
-    { title: "Ажилтан", icon: Settings, path: "/admin/employee" },
   ];
 
   const adminItems = [
+    { title: "Ажилтан", icon: Settings, path: "/employee" },
     { title: "Бүх хөрөнгүүд", icon: Settings, path: "/asset-page" },
     { title: "Ангилал", icon: Settings, path: "/category" },
     { title: "дэд ангилал", icon: Settings, path: "/sub-category" },
