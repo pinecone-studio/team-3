@@ -1,14 +1,17 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { Plus, Loader2 } from "lucide-react";
+import { Plus, Loader2, QrCode, AlertCircle } from "lucide-react";
 import { gql, useMutation, useQuery } from "@apollo/client";
-import StatCard from "./_components/Statcard";
 
-import CreateModal from "./_components/CreateModal";
-import ProjectCard from "./_components/ProjectCard";
 import { useEmployee } from "@/app/_providers/user-provider";
+import CreateModal from "./_components/CreateModal";
 
+import Lottie from "lottie-react";
+import loaderAnimation from "../../../libs/lottie/animation.json";
+import { useGetCensusTasksQuery } from "@/gql/graphql";
+
+/** * GQL Definitions */
 const GET_CENSUS_EVENTS = gql`
   query GetCensusEvents {
     getCensusEvents {
@@ -29,7 +32,7 @@ const CREATE_CENSUS_EVENT = gql`
   }
 `;
 
-type CensusEventItem = {
+interface CensusEvent {
   id: string;
   name: string;
   scope: string;
@@ -37,203 +40,254 @@ type CensusEventItem = {
   startedAt: string;
   closedAt?: string | null;
   createdBy: string;
-};
+}
 
-type GetCensusEventsResponse = {
-  getCensusEvents: CensusEventItem[];
-};
+interface GetCensusEventsResponse {
+  getCensusEvents: CensusEvent[];
+}
 
-type CreateCensusEventResponse = {
-  createCensusEvent: string;
-};
-
-type CreateCensusEventInput = {
-  name: string;
-  scope: string;
-  scopeFilter?: string;
-  createdBy: string;
-  startedAt?: string;
-  closedAt?: string;
-};
-
-type CensusProject = {
-  id: string | number;
-  title: string;
-  status: "Идэвхтэй" | "Дууссан";
-  tag: string;
-  progress: number;
-  pending: number;
-  error: number;
-  createdBy: string;
-  endDate: string;
-};
-export default function Page() {
-  const [open, setOpen] = useState(false);
+export default function CensusPage() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const { employee } = useEmployee();
 
   const {
-    data: censusData,
-    loading: listLoading,
-    error: listError,
+    data: eventData,
+    loading: eventsLoading,
+    error: eventError,
     refetch,
   } = useQuery<GetCensusEventsResponse>(GET_CENSUS_EVENTS, {
     fetchPolicy: "network-only",
   });
+  console.log("eventData", eventData);
 
-  const [createCensusEvent, { loading: createLoading, error: createError }] =
-    useMutation<CreateCensusEventResponse>(CREATE_CENSUS_EVENT);
+  const { data: tasksData, loading: tasksLoading } = useGetCensusTasksQuery();
 
-  const projects: CensusProject[] = useMemo(() => {
-    const events = censusData?.getCensusEvents || [];
+  const [createEvent, { loading: createLoading, error: createError }] =
+    useMutation(CREATE_CENSUS_EVENT);
 
-    return events.map((event) => ({
-      id: event.id,
-      title: event.name,
-      status: event.closedAt ? "Дууссан" : "Идэвхтэй",
-      tag: event.scopeFilter || event.scope || "company",
-      progress: 0,
-      pending: 0,
-      error: 0,
-      createdBy: event.createdBy || "-",
-      endDate: event.closedAt
-        ? new Date(event.closedAt).toLocaleDateString("en-CA")
-        : "-",
-    }));
-  }, [censusData]);
+  const censusView = useMemo(() => {
+    const events = eventData?.getCensusEvents || [];
+    if (events.length === 0) return null;
+    console.log("events", events);
 
-  const stats = useMemo(() => {
-    const total = projects.length;
-    const active = projects.filter((p) => p.status === "Идэвхтэй").length;
-    const done = projects.filter((p) => p.status === "Дууссан").length;
+    const lastCensus = events[events.length - 1];
+    const allTasks = tasksData?.getCensusTasks || [];
+    const censusTasks = allTasks.filter((t) => t.censusId === lastCensus.id);
+    const pendingTasks = censusTasks.filter(
+      (t) => t.verifiedAt === null || t.verifiedAt === undefined,
+    );
 
-    return [
-      {
-        label: "Идэвхтэй тооллого",
-        value: active,
-        subtext: "Одоо явагдаж байгаа",
-        type: "active" as const,
+    const totalCount = censusTasks.length;
+    const pendingCount = pendingTasks.length;
+    const confirmedCount = totalCount - pendingCount;
+    const progressPercent =
+      totalCount > 0 ? Math.round((confirmedCount / totalCount) * 100) : 0;
+
+    return {
+      event: lastCensus,
+      stats: {
+        total: totalCount,
+        confirmed: confirmedCount,
+        pending: pendingCount,
+        progress: progressPercent,
       },
-      {
-        label: "Нийт тооллого",
-        value: total,
-        subtext: "Бүртгэлтэй census",
-        type: "success" as const,
-      },
-      {
-        label: "Дууссан",
-        value: done,
-        subtext: "Хаагдсан census",
-        type: "warning" as const,
-      },
-      {
-        label: "Хүлээгдэж буй",
-        value: active,
-        subtext: "Үргэлжилж байна",
-        type: "pending" as const,
-      },
-    ];
-  }, [projects]);
+    };
+  }, [eventData, tasksData]);
+  console.log("censusView", censusView);
 
-  const handleCreate = async (formData: {
-    name: string;
-    scope: string;
-    location: string;
-    startDate: string;
-    closedAt: string;
-  }) => {
+  const handleCreate = async (formData: any) => {
     try {
-      const input: CreateCensusEventInput = {
+      const input = {
         name: formData.name,
         scope: formData.scope || "company",
         scopeFilter: formData.location || undefined,
-        createdBy: employee?.id as string,
-        startedAt: formData.startDate
-          ? new Date(formData.startDate).toISOString()
-          : new Date().toISOString(),
-        closedAt: formData.closedAt
-          ? new Date(formData.closedAt).toISOString()
-          : undefined,
+        createdBy: employee?.id || "anonymous",
+        startedAt: new Date().toISOString(),
       };
-
-      console.log("CREATE INPUT:", input);
-
-      const result = await createCensusEvent({
-        variables: { input },
-      });
-
-      const status = result.data?.createCensusEvent;
-
-      console.log("CREATE RESULT:", status);
-
-      if (status && status.toUpperCase() === "SUCCESS") {
+      const { data } = await createEvent({ variables: { input } });
+      if (data?.createCensusEvent?.toUpperCase() === "SUCCESS") {
         await refetch();
-        setOpen(false);
-        return;
+        setIsModalOpen(false);
       }
-
-      alert(`Тооллого үүсгэж чадсангүй: ${status}`);
     } catch (err) {
-      console.error("Create census failed:", err);
-      alert("Тооллого үүсгэх үед алдаа гарлаа");
+      console.error(err);
     }
   };
-  return (
-    <div className="min-h-screen bg-gray-50 p-6">
-      <div className="mb-6 flex justify-between">
-        <div>
-          <h1 className="text-2xl font-bold">Тооллого</h1>
-          {listError && (
-            <p className="text-sm text-red-500">Алдаа: {listError.message}</p>
-          )}
-          {createError && (
-            <p className="text-sm text-red-500">Алдаа: {createError.message}</p>
-          )}
-        </div>
 
+  const isLoading = eventsLoading || tasksLoading;
+  if (isLoading) {
+    return (
+      <div className="flex h-screen items-center justify-center bg-white">
+        {/* Controlled size container */}
+        <div className="w-32 h-32 md:w-48 md:h-48">
+          <Lottie
+            animationData={loaderAnimation}
+            loop
+            autoplay
+            onError={(error) => console.error("Lottie Error:", error)}
+          />
+        </div>
+      </div>
+    );
+  }
+  if (
+    (censusView?.event.closedAt as unknown as string) < new Date().toISOString()
+  ) {
+    return (
+      <div className="flex h-screen items-center justify-center bg-white">
+        <div className="bg-yellow-50 p-6 rounded-2xl border border-yellow-100 flex items-center gap-4">
+          <AlertCircle className="w-6 h-6 text-yellow-400" />
+          <p className="text-yellow-700 font-medium">
+            Сүүлийн тооллого хаагдсан байна.
+          </p>
+        </div>
+      </div>
+    );
+  }
+  return (
+    <div className="min-h-screen bg-white p-8 font-sans text-[#2D3748]">
+      {/* Header */}
+      <header className="flex justify-between items-center mb-8">
+        <div>
+          <h1 className="text-2xl font-bold mb-1">Тооллого</h1>
+          <p className="text-gray-400 text-sm">
+            Хөрөнгийн баталгаажуулалт, аудитын мөчлөгийг удирдах
+          </p>
+        </div>
         <button
-          onClick={() => setOpen(true)}
-          disabled={createLoading}
-          className="flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-white transition-colors hover:bg-blue-700 disabled:bg-blue-300"
+          onClick={() => setIsModalOpen(true)}
+          className="flex items-center gap-2 bg-[#4C6EF5] hover:bg-[#3b5bdb] text-white px-4 py-2 rounded-lg text-sm font-medium transition-all"
         >
           {createLoading ? (
-            <Loader2 size={18} className="animate-spin" />
+            <Loader2 className="w-4 h-4 animate-spin" />
           ) : (
-            <Plus size={18} />
+            <Plus size={16} />
           )}
           Тооллого үүсгэх
         </button>
-      </div>
+      </header>
 
-      <div className="mb-6 grid grid-cols-1 gap-4 md:grid-cols-4">
-        {stats.map((stat, i) => (
-          <StatCard key={i} stat={stat} />
-        ))}
-      </div>
+      {/* Main Card */}
+      <div className="  flex flex-col mb-6">
+        {isLoading ? (
+          <div className="p-12 text-center text-gray-400">Ачаалж байна...</div>
+        ) : censusView ? (
+          <div className="flex flex-col  gap-6">
+            {/* Top Stats Row */}
+            <div className="flex border border-gray-200 rounded- flex-wrap md:flex-nowrap divide-x rounded-2xl divide-gray-50 border-b">
+              <div className="flex-1 p-6 min-w-62.5 flex items-center justify-center">
+                <div className="flex items-center gap-3">
+                  <span className="font-semibold text-sm">
+                    {censusView.event.name}
+                  </span>
+                  <span className="bg-[#E6FCF5] text-[#20C997] text-[10px] px-2 py-0.5 rounded-md font-bold">
+                    Идэвхтэй
+                  </span>
+                </div>
+              </div>
 
-      <div className="space-y-4">
-        {listLoading && (
-          <div className="rounded-xl border bg-white p-4 text-sm text-gray-500">
-            Census list ачаалж байна...
+              <StatDisplay
+                value={censusView.stats.total}
+                label="Нийт хөрөнгө"
+                color="text-[#4C6EF5]"
+              />
+              <StatDisplay
+                value={censusView.stats.confirmed}
+                label="Баталгаажсан"
+                color="text-[#20C997]"
+              />
+              <StatDisplay
+                value={censusView.stats.pending}
+                label="Хүлээгдэж буй"
+                color="text-[#FAB005]"
+              />
+            </div>
+
+            {/* Progress Section */}
+            <div className=" p-4.25 rounded-lg border ">
+              <div className="flex justify-between items-end mb-2">
+                <span className="text-[11px] text-gray-400 font-medium">
+                  {censusView.stats.confirmed}/{censusView.stats.total}{" "}
+                  баталгаажсан
+                </span>
+                <span className="text-[11px] text-gray-400 font-medium">
+                  {censusView.stats.progress}%
+                </span>
+              </div>
+
+              {/* The Blue Progress Bar */}
+              <div className="w-full bg-[#E9ECEF] h-[7px] rounded-full overflow-hidden mb-4">
+                <div
+                  className="bg-[#4C6EF5] h-full rounded-full transition-all duration-700"
+                  style={{ width: `${censusView.stats.progress}%` }}
+                />
+              </div>
+
+              {/* Bottom Meta */}
+              <div className="flex flex-wrap gap-8 text-[11px] text-gray-400">
+                <p>
+                  Эцсийн хугацаа:{" "}
+                  <span className="text-gray-600 ml-1">2026.03.15</span>
+                </p>
+                <p>
+                  Хүлээгдэж буй:{" "}
+                  <span className="text-gray-600 ml-1 font-semibold">
+                    {censusView.stats.pending}
+                  </span>
+                </p>
+
+                <p>
+                  Үүсгэсэн:{" "}
+                  <span className="text-gray-600 ml-1">
+                    {censusView.event.createdBy || "Бат-Эрдэнэ А."}
+                  </span>
+                </p>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div className="p-12 text-center text-gray-300">
+            Тооллого олдсонгүй.
           </div>
         )}
-
-        {!listLoading && projects.length === 0 && (
-          <div className="rounded-xl border bg-white p-4 text-sm text-gray-500">
-            Census байхгүй байна
-          </div>
-        )}
-
-        {!listLoading &&
-          projects.map((p) => <ProjectCard key={p.id} project={p} />)}
       </div>
 
-      {open && (
+      {/* QR Footer */}
+      <div className="flex justify-end">
+        <button className="flex items-center gap-2 border border-gray-100 hover:bg-gray-50 px-4 py-2 rounded-[6px] text-[11px] font-bold text-gray-700 shadow-sm transition-all">
+          <QrCode size={14} />
+          QR УНШУУЛАХ
+        </button>
+      </div>
+
+      {isModalOpen && (
         <CreateModal
-          onClose={() => setOpen(false)}
+          onClose={() => setIsModalOpen(false)}
           onCreate={handleCreate}
           loading={createLoading}
         />
       )}
+    </div>
+  );
+}
+
+function StatDisplay({
+  value,
+  label,
+  color,
+}: {
+  value: number;
+  label: string;
+  color: string;
+}) {
+  return (
+    <div className="flex-1 p-6 flex flex-col items-center justify-center">
+      <div className="flex items-baseline gap-2">
+        <span className={`text-4xl font-bold tracking-tight ${color}`}>
+          {value}
+        </span>
+        <span className="text-gray-700 text-sm font-medium">{label}</span>
+      </div>
     </div>
   );
 }
