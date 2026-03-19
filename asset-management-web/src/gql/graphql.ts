@@ -24,6 +24,7 @@ export type Asset = {
   category?: Maybe<Category>;
   currentBookValue?: Maybe<Scalars['Float']['output']>;
   deletedAt?: Maybe<Scalars['String']['output']>;
+  department?: Maybe<Department>;
   id: Scalars['ID']['output'];
   imageUrl: Scalars['String']['output'];
   locationId?: Maybe<Scalars['String']['output']>;
@@ -105,6 +106,7 @@ export type CensusTask = {
 export type CreateAssetInput = {
   assetTag: Scalars['String']['input'];
   categoryId: Scalars['String']['input'];
+  departmentId: Scalars['String']['input'];
   imageBase64: Scalars['String']['input'];
   locationId: Scalars['String']['input'];
   purchaseCost: Scalars['Float']['input'];
@@ -169,6 +171,12 @@ export type CreateMaintenanceTicketInput = {
 
 export type DeleteEmployeeInput = {
   terminationDate: Scalars['String']['input'];
+};
+
+export type Department = {
+  __typename?: 'Department';
+  id: Scalars['ID']['output'];
+  name: Scalars['String']['output'];
 };
 
 export type Employee = {
@@ -397,6 +405,7 @@ export type Query = {
   getCensusTaskByAssetId?: Maybe<CensusTask>;
   getCensusTaskById?: Maybe<CensusTask>;
   getCensusTasks: Array<CensusTask>;
+  getDepartments: Array<Department>;
   getEmployeeByClerkID: Employee;
   getEmployeeByCode?: Maybe<Employee>;
   getEmployeeById?: Maybe<Employee>;

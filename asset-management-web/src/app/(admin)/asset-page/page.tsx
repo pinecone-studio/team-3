@@ -6,7 +6,8 @@ import {
   useUpdateAssetMutation,
 } from "@/gql/graphql";
 import AssetManagement from "./_components/AssetManagement";
-import { DotLottieReact } from "@lottiefiles/dotlottie-react";
+import Lottie from "lottie-react";
+import loaderAnimation from "../../../libs/lottie/animation.json";
 
 export default function AdminAssetPage() {
   const { data, loading, error, refetch } = useGetAssetsQuery();
@@ -50,8 +51,8 @@ export default function AdminAssetPage() {
       <div className="flex h-screen items-center justify-center bg-white">
         {/* Controlled size container */}
         <div className="w-32 h-32 md:w-48 md:h-48">
-          <DotLottieReact
-            src="/loader.lottie"
+          <Lottie
+            animationData={loaderAnimation}
             loop
             autoplay
             onError={(error) => console.error("Lottie Error:", error)}
@@ -63,10 +64,9 @@ export default function AdminAssetPage() {
 
   const rawAssets = data?.getAssets || [];
 
-
-const cleanAssets: Asset[] = rawAssets
-  .filter((item): item is Asset => item !== null)
-  .map((item) => item)
+  const cleanAssets: Asset[] = rawAssets
+    .filter((item): item is Asset => item !== null)
+    .map((item) => item);
   return (
     <AssetManagement
       refetch={refetch}

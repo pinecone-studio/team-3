@@ -4,7 +4,8 @@ import { FileText, Monitor, XCircle } from "lucide-react";
 import ReportDialog from "./_components/ReportDialog";
 import PreviousReports from "./_components/PreviousReports";
 import { useGetMaintenanceTicketsQuery } from "@/gql/graphql";
-import { DotLottieReact } from "@lottiefiles/dotlottie-react";
+import Lottie from "lottie-react";
+import loaderAnimation from "../../libs/lottie/animation.json";
 
 export default function ReportPage() {
   const { data, loading, error } = useGetMaintenanceTicketsQuery();
@@ -23,9 +24,9 @@ export default function ReportPage() {
     return (
       <div className="flex h-screen items-center justify-center bg-white">
         {/* Controlled size container */}
-        <div className="w-32 h-32 md:w-48 md:h-48">
-          <DotLottieReact
-            src="/loader.lottie"
+        <div className="w-12 md:w-48 md:h-48">
+          <Lottie
+            animationData={loaderAnimation}
             loop
             autoplay
             onError={(error) => console.error("Lottie Error:", error)}

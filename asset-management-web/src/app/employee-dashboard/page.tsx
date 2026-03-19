@@ -3,7 +3,6 @@
 import { useState, useMemo, useEffect, use } from "react";
 import { Bell } from "lucide-react";
 import { useUser } from "@clerk/nextjs";
-import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 
 // Components
 import StatsCards from "./_components/StatsCards";
@@ -12,6 +11,7 @@ import QRScanModal from "./_components/QRScanModal";
 import GeneralTab, { AssetWithCategory } from "./_components/GeneralTab";
 import GarTab from "./_components/Signature";
 import QrTab from "./_components/QrTab";
+import loaderAnimation from "../../libs/lottie/animation.json";
 
 // Types & Mock Data
 import type { QrItem } from "./_components/mockData";
@@ -29,6 +29,7 @@ import {
 } from "@/gql/graphql";
 import { useEmployee } from "../_providers/user-provider";
 import dynamic from "next/dynamic";
+import Lottie from "lottie-react";
 
 export default function AssetsPage() {
   const { user, isLoaded: isClerkLoaded } = useUser();
@@ -142,8 +143,8 @@ export default function AssetsPage() {
       <div className="flex h-screen items-center justify-center bg-white">
         {/* Controlled size container */}
         <div className="w-32 h-32 md:w-48 md:h-48">
-          <DotLottieReact
-            src="/loader.lottie"
+          <Lottie
+            animationData={loaderAnimation}
             loop
             autoplay
             onError={(error) => console.error("Lottie Error:", error)}

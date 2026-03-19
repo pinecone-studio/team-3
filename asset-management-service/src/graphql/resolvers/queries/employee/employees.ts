@@ -17,6 +17,11 @@ export const getEmployees: QueryResolvers['getEmployees'] = async (_, __, contex
 			birthDayAndMonth: emp.birthDayAndMonth ?? undefined,
 			birthdayPoster: emp.birthdayPoster ?? undefined,
 			github: emp.github ?? undefined,
+			clerkId: emp.clerkId ?? '',
+			role: emp.role ?? 'Employee',
+			isAdmin: emp.isAdmin ?? false,
+			isSalaryCompany: emp.isSalaryCompany ?? true,
+			isKpi: emp.isKpi ?? false,
 		};
 	});
 };
