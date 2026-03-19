@@ -37,7 +37,7 @@ export default function RootLayout({
           <ClerkProvider publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}>
           <UserProvider>
             <Show when={"signed-out"}>
-              <div className="flex flex-col flex-1 min-h-screen bg-slate-50/30 min-w-0 overflow-hidden">
+              <div className="flex justify-center items-center w-full mt-10">
                 <SignInButton>
                   <Button>Sign in</Button>
                 </SignInButton>
@@ -48,10 +48,12 @@ export default function RootLayout({
             <Show when={"signed-in"}>
               <Providers>
                 <SidebarProvider>
-                  <AppSidebar />
-                  <div className="flex flex-col flex-1 min-h-screen bg-slate-50/30">
+                  <div className="hidden lg:block">
+  <AppSidebar />
+</div>
+                  <div className="flex flex-col flex-1 min-h-screen bg-slate-50/30 min-w-0">
                     <Navbar />
-                    <main className="p-0 overflow-hidden">{children}</main>
+                    <main className="w-full px-3 sm:px-8 py-6 sm:py-8">{children}</main>
                   </div>
                 </SidebarProvider>
               </Providers>

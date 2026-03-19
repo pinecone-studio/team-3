@@ -13,8 +13,9 @@ export default function QrTab({ items = [], onOpenScanner }: QrTabProps) {
 
   return (
     <div className="space-y-8">
-      <div className="rounded-3xl border border-gray-200 bg-white p-6">
-        <div className="mb-6 flex items-start justify-between">
+      {/* Top progress card */}
+      <div className="rounded-3xl border border-gray-200 bg-white p-4 sm:p-6">
+        <div className="mb-6 flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 sm:gap-0">
           <div>
             <p className="text-[18px] font-semibold text-gray-900">
               Тооллогын баталгаажуулалт
@@ -37,7 +38,8 @@ export default function QrTab({ items = [], onOpenScanner }: QrTabProps) {
         </div>
       </div>
 
-      <div className="rounded-3xl border border-gray-200 bg-[#F8FAFC] p-6">
+      {/* Pending QR verification card */}
+      <div className="rounded-3xl border border-gray-200 bg-[#F8FAFC] p-4 sm:p-6">
         <div className="mb-6 flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
           <div className="flex items-start gap-3">
             <div className="pt-0.5">
@@ -56,7 +58,7 @@ export default function QrTab({ items = [], onOpenScanner }: QrTabProps) {
 
           <button
             onClick={onOpenScanner}
-           className="flex w-full sm:w-auto justify-center shrink-0 items-center gap-2 rounded-xl bg-[#2563EB] px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-700"
+            className="flex w-full sm:w-auto justify-center items-center gap-2 rounded-xl bg-[#2563EB] px-4 py-2 sm:px-5 sm:py-3 text-sm font-semibold text-white transition hover:bg-blue-700"
           >
             <svg width="16" height="16" viewBox="0 0 14 14" fill="none">
               <path
@@ -68,18 +70,21 @@ export default function QrTab({ items = [], onOpenScanner }: QrTabProps) {
           </button>
         </div>
 
-        <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
+        {/* QR items grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-2 gap-4 sm:gap-6">
           {items.map((item, i) => (
             <div
               key={i}
-              className="rounded-3xl border border-gray-200 bg-white p-6"
+              className="rounded-3xl border border-gray-200 bg-white p-4 sm:p-6"
             >
-              <div className="flex items-start gap-5">
-                <div className="flex h-23 w-47.5 items-center justify-center overflow-hidden rounded-2xl bg-[#F8FAFC]">
-                  <DeviceIcon type={item.type} size={56} />
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-5">
+                {/* Device icon */}
+                <div className="flex h-20 w-20 sm:h-24 sm:w-24 items-center justify-center overflow-hidden rounded-2xl bg-[#F8FAFC]">
+                  <DeviceIcon type={item.type} size={40} />
                 </div>
 
-                <div className="min-w-0 flex-1">
+                {/* Text content */}
+                <div className="min-w-0 flex-1 flex flex-col gap-2">
                   <div className="mb-2 flex flex-wrap items-center gap-2">
                     <h3 className="text-[18px] font-semibold text-gray-900">
                       {item.name}
@@ -88,15 +93,15 @@ export default function QrTab({ items = [], onOpenScanner }: QrTabProps) {
                   </div>
 
                   <p className="text-sm text-gray-500">{item.code}</p>
-                  <p className="mt-1 text-sm text-gray-400">
-                    {item.description}
-                  </p>
+                  <p className="mt-1 text-sm text-gray-400">{item.description}</p>
                 </div>
               </div>
 
+              {/* Divider */}
               <div className="my-5 h-px w-full bg-gray-200" />
 
-              <div className="grid grid-cols-3 gap-6">
+              {/* Info grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
                 <div>
                   <p className="mb-1 text-sm text-gray-400">Нөхцөл</p>
                   <p className="text-[15px] font-semibold text-gray-900">
@@ -106,16 +111,12 @@ export default function QrTab({ items = [], onOpenScanner }: QrTabProps) {
 
                 <div>
                   <p className="mb-1 text-sm text-gray-400">Олгосон огноо</p>
-                  <p className="text-[15px] font-semibold text-gray-900">
-                    {item.date}
-                  </p>
+                  <p className="text-[15px] font-semibold text-gray-900">{item.date}</p>
                 </div>
 
                 <div>
                   <p className="mb-1 text-sm text-gray-400">Олгосон</p>
-                  <p className="text-[15px] font-semibold text-gray-900">
-                    {item.owner}
-                  </p>
+                  <p className="text-[15px] font-semibold text-gray-900">{item.owner}</p>
                 </div>
               </div>
             </div>
