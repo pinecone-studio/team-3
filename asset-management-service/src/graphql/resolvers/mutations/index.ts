@@ -5,3 +5,4 @@ export * from './category/index';
 export * from './census/index';
 export * from './employee/index';
 export * from './maintenance-ticket/index';
+export * from './sub-category'

@@ -35,3 +35,5 @@ export * from "./shadcn/ui/tooltip"
 export * from './utils'
 export * from './shadcn/ui/table'
 export * from './shadcn/ui/field'
+export * from './shadcn/ui/tabs'
+export * from './shadcn/ui/switch'

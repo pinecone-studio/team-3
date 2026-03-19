@@ -97,7 +97,7 @@ export default function ReportDialog() {
             <div className="border border-dashed border-[#E2E8F0] rounded-xl p-8 text-center bg-[#F8FAFC] hover:bg-[#F1F5F9] transition-colors cursor-pointer">
               <Upload className="h-6 w-6 mx-auto text-[#94A3B8] mb-2" />
               <p className="text-[13px] text-[#64748B]">
-                Зураг чирж оруулах эсвэл{" "}
+                Зураг чирж оруулах эсвэл
                 <span className="text-[#0251CB] font-medium">Файл сонгох</span>
               </p>
             </div>
