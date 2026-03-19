@@ -23,6 +23,7 @@ export type Asset = {
   category?: Maybe<Category>;
   currentBookValue?: Maybe<Scalars['Float']['output']>;
   deletedAt?: Maybe<Scalars['String']['output']>;
+  department?: Maybe<Department>;
   id: Scalars['ID']['output'];
   imageUrl: Scalars['String']['output'];
   locationId?: Maybe<Scalars['String']['output']>;
@@ -104,6 +105,7 @@ export type CensusTask = {
 export type CreateAssetInput = {
   assetTag: Scalars['String']['input'];
   categoryId: Scalars['String']['input'];
+  departmentId: Scalars['String']['input'];
   imageBase64: Scalars['String']['input'];
   locationId: Scalars['String']['input'];
   purchaseCost: Scalars['Float']['input'];
@@ -168,6 +170,12 @@ export type CreateMaintenanceTicketInput = {
 
 export type DeleteEmployeeInput = {
   terminationDate: Scalars['String']['input'];
+};
+
+export type Department = {
+  __typename?: 'Department';
+  id: Scalars['ID']['output'];
+  name: Scalars['String']['output'];
 };
 
 export type Employee = {
@@ -396,6 +404,7 @@ export type Query = {
   getCensusTaskByAssetId?: Maybe<CensusTask>;
   getCensusTaskById?: Maybe<CensusTask>;
   getCensusTasks: Array<CensusTask>;
+  getDepartments: Array<Department>;
   getEmployeeByClerkID: Employee;
   getEmployeeByCode?: Maybe<Employee>;
   getEmployeeById?: Maybe<Employee>;
@@ -680,6 +689,7 @@ export type ResolversTypes = {
   CreateEmployeeInput: CreateEmployeeInput;
   CreateMaintenanceTicketInput: CreateMaintenanceTicketInput;
   DeleteEmployeeInput: DeleteEmployeeInput;
+  Department: ResolverTypeWrapper<Department>;
   Employee: ResolverTypeWrapper<Employee>;
   EmployeeRole: EmployeeRole;
   EmployeeStatus: EmployeeStatus;
@@ -722,6 +732,7 @@ export type ResolversParentTypes = {
   CreateEmployeeInput: CreateEmployeeInput;
   CreateMaintenanceTicketInput: CreateMaintenanceTicketInput;
   DeleteEmployeeInput: DeleteEmployeeInput;
+  Department: Department;
   Employee: Employee;
   Float: Scalars['Float']['output'];
   ID: Scalars['ID']['output'];
@@ -748,6 +759,7 @@ export type AssetResolvers<ContextType = Context, ParentType extends ResolversPa
   category?: Resolver<Maybe<ResolversTypes['Category']>, ParentType, ContextType>;
   currentBookValue?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
   deletedAt?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  department?: Resolver<Maybe<ResolversTypes['Department']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   imageUrl?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   locationId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -810,6 +822,11 @@ export type CensusTaskResolvers<ContextType = Context, ParentType extends Resolv
   locationConfirmed?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   verifiedAt?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   verifierId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+};
+
+export type DepartmentResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Department'] = ResolversParentTypes['Department']> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
 };
 
 export type EmployeeResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Employee'] = ResolversParentTypes['Employee']> = {
@@ -894,6 +911,7 @@ export type QueryResolvers<ContextType = Context, ParentType extends ResolversPa
   getCensusTaskByAssetId?: Resolver<Maybe<ResolversTypes['CensusTask']>, ParentType, ContextType, RequireFields<QueryGetCensusTaskByAssetIdArgs, 'assetId' | 'censusId'>>;
   getCensusTaskById?: Resolver<Maybe<ResolversTypes['CensusTask']>, ParentType, ContextType, RequireFields<QueryGetCensusTaskByIdArgs, 'id'>>;
   getCensusTasks?: Resolver<Array<ResolversTypes['CensusTask']>, ParentType, ContextType>;
+  getDepartments?: Resolver<Array<ResolversTypes['Department']>, ParentType, ContextType>;
   getEmployeeByClerkID?: Resolver<ResolversTypes['Employee'], ParentType, ContextType, RequireFields<QueryGetEmployeeByClerkIdArgs, 'clerkId'>>;
   getEmployeeByCode?: Resolver<Maybe<ResolversTypes['Employee']>, ParentType, ContextType, RequireFields<QueryGetEmployeeByCodeArgs, 'employeeCode'>>;
   getEmployeeById?: Resolver<Maybe<ResolversTypes['Employee']>, ParentType, ContextType, RequireFields<QueryGetEmployeeByIdArgs, 'id'>>;
@@ -925,6 +943,7 @@ export type Resolvers<ContextType = Context> = {
   CensusEvent?: CensusEventResolvers<ContextType>;
   CensusReport?: CensusReportResolvers<ContextType>;
   CensusTask?: CensusTaskResolvers<ContextType>;
+  Department?: DepartmentResolvers<ContextType>;
   Employee?: EmployeeResolvers<ContextType>;
   MaintenanceTicket?: MaintenanceTicketResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;

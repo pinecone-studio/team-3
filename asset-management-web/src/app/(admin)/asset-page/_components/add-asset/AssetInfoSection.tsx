@@ -4,7 +4,7 @@ import { UseFormRegister, Controller, Control, FieldErrors, UseFormSetValue } fr
 import { Input, Field, FieldLabel, FieldError, FieldGroup } from "@/libs"
 import { SearchableSelect } from "../../../asset-page/_components/SearchableSelect"
 import { AssetFormValues } from "../../_utils/type"
-import { useCreateCategoryMutation, useCreateSubCategoryMutation } from "@/gql/graphql"
+import { useCreateCategoryMutation, useCreateSubCategoryMutation, useGetDepartmentsQuery } from "@/gql/graphql"
 import { toast } from "sonner"
 
 type Option = { value: string; label: string }
@@ -34,7 +34,12 @@ export const AssetInfoSection = ({
 }: Props) => {
   const [createCategory, { loading: categoryCreating }] = useCreateCategoryMutation()
   const [createSubCategory, { loading: subCategoryCreating }] = useCreateSubCategoryMutation()
-
+  const { data: departmentData } = useGetDepartmentsQuery()
+  const departments = departmentData?.getDepartments
+  const departmentOptions = departments?.map((d) => ({
+    value: d.id,
+    label: d.name,
+  })) ?? []
   const handleCreateCategory = async (values: Record<string, string>) => {
     try {
       await createCategory({
@@ -136,7 +141,25 @@ export const AssetInfoSection = ({
             {errors.subCategoryId && <FieldError>{errors.subCategoryId.message}</FieldError>}
           </Field>
         </div>
-
+        < Field>
+          <FieldLabel>
+            Хэлтэс <span className="text-red-500">*</span>
+          </FieldLabel>
+          <Controller
+            control={control}
+            name="department"
+            render={({ field }) => (
+              <SearchableSelect
+                options={departmentOptions}
+                value={field.value}
+                onValueChange={field.onChange}
+                placeholder="Хэлтэс сонгох"
+                searchPlaceholder="Хэлтэс хайх"
+              />
+            )}
+          />
+          {errors.department && <FieldError>{errors.department.message}</FieldError>}
+        </Field>
         <div className="grid grid-cols-2 gap-4">
           <Field>
             <FieldLabel>

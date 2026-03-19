@@ -23,6 +23,7 @@ export const assetTypeDefs = gql`
         locationId: String
         assignedTo: String
         deletedAt: String
+        department:Department
         imageUrl: String!
         qrUrl:String!
     }
@@ -35,6 +36,7 @@ export const assetTypeDefs = gql`
     status: AssetStatusEnum   
     locationId: String!       
     purchaseDate: String!     
+    departmentId:String!
     purchaseCost: Float!      
     imageBase64: String!      
 }
