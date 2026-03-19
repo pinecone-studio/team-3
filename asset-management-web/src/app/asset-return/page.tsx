@@ -39,9 +39,8 @@ export default function AssetReturnPage() {
     return <p>Буцаалтын мэдээлэл олдсонгүй.</p>;
 
   const userAssets =
-    assetData?.getAssets?.filter(
-      (asset) => asset?.assignedTo === storedEmployeeId,
-    ) || [];
+    assetData?.getAssets?.filter((asset) => asset?.assignedTo === employeeId) ||
+    [];
   const pageData = {
     deadline: "2026.03.20",
     lastWorkingDay: employee.terminationDate,
