@@ -8,6 +8,7 @@ import { AddAsset } from "./add-asset/AddAsset";
 import Image from "next/image";
 import { AssetActions } from "./AssetActions";
 import { exportAssetsToExcel } from "../_utils/exportAssetsToExcel";
+import { useRouter } from "next/navigation";
 
 
 type AssetManagementProps = {
@@ -18,7 +19,7 @@ type AssetManagementProps = {
 
 }
 export default function AssetManagement({ assets, refetch }: AssetManagementProps) {
-
+const router = useRouter()
   const [category, setCategory] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
   const [search, setSearch] = useState("");
@@ -79,6 +80,10 @@ export default function AssetManagement({ assets, refetch }: AssetManagementProp
     } else {
       setSelectedItems(paginatedAssets.map((item) => item.id));
     }
+  };
+
+  const handleRowClick = (assetId: string) => {
+    router.push(`/asset-page/detail?assetId=${assetId}`);
   };
 
   return (
@@ -217,7 +222,8 @@ export default function AssetManagement({ assets, refetch }: AssetManagementProp
                 {paginatedAssets.map((item) => (
                   <tr
                     key={item.id}
-                    className="hover:bg-gray-50/50 transition-colors group"
+                    onClick={() => handleRowClick(item.id)}
+                    className="hover:bg-gray-50/50 transition-colors group cursor-pointer"
                   >
                     <td className="px-4 py-4">
                       <input
