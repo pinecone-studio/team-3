@@ -1,23 +1,36 @@
 import { drizzle } from 'drizzle-orm/d1';
-import { maintenanceTickets } from '../../../../db';
+import { eq } from 'drizzle-orm'; // Need eq for the join condition
+import { maintenanceTickets, assets } from '../../../../db'; // Import assets table
 import { QueryResolvers, MaintenanceSeverityEnum, TicketStatusEnum } from '../../../../types/generated';
 
 export const getMaintenanceTickets: QueryResolvers['getMaintenanceTickets'] = async (_, __, context) => {
 	const DB = drizzle(context.env.DB);
 
 	try {
-		const allTickets = await DB.select().from(maintenanceTickets).all();
+		// Perform the left join
+		const results = await DB.select().from(maintenanceTickets).leftJoin(assets, eq(maintenanceTickets.assetId, assets.id)).all();
 
-		return allTickets.map((ticket) => ({
+		return results.map(({ maintenance_tickets: ticket, assets: asset }) => ({
 			...ticket,
-			// 1. Cast string from DB to GraphQL Enums
+			// 1. Map Joined Asset Data (assuming your GraphQL schema expects an 'asset' field)
+			asset: asset
+				? {
+						id: asset.id,
+
+						// name: asset.name,
+						// ...other asset fields
+					}
+				: null,
+
+			// 2. Cast string from DB to GraphQL Enums
 			severity: ticket.severity as MaintenanceSeverityEnum | null,
 			status: ticket.status as TicketStatusEnum,
 
-			// 2. Convert Date object to ISO String
-			resolvedAt: ticket.resolvedAt ? ticket.resolvedAt.toISOString() : null,
+			// 3. Convert Date objects/strings
+			resolvedAt: ticket.resolvedAt ? new Date(ticket.resolvedAt).toISOString() : null,
+			createdAt: ticket.createdAt ? new Date(ticket.createdAt).toISOString() : null,
 
-			// 3. Ensure any other nulls match 'Maybe' types (usually handled by Drizzle)
+			// 4. Null safety
 			vendorId: ticket.vendorId ?? null,
 			repairCost: ticket.repairCost ?? null,
 		}));

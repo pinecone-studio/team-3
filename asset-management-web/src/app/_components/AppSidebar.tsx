@@ -64,7 +64,7 @@ export function AppSidebar() {
     {
       title: "Асуудал шийдвэрлэх",
       icon: Settings,
-      path: "/admin/issue-resolution",
+      path: "/issue-resolution",
     },
   ];
 

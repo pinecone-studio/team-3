@@ -1,4 +1,5 @@
 import { sqliteTable, text, integer, real } from 'drizzle-orm/sqlite-core';
+import { sql } from 'drizzle-orm'; // Added sql helper
 import { assets, employees } from './index';
 import { TicketStatusEnum } from '../../types/generated';
 
@@ -21,4 +22,13 @@ export const maintenanceTickets = sqliteTable('maintenance_tickets', {
 	vendorId: text('vendor_id'),
 	repairCost: real('repair_cost'),
 	resolvedAt: integer('resolved_at', { mode: 'timestamp' }),
+
+	// --- New Fields ---
+	createdAt: integer('created_at', { mode: 'timestamp' })
+		.notNull()
+		.default(sql`(unixepoch())`), // Sets current time on insert
+	updatedAt: integer('updated_at', { mode: 'timestamp' })
+		.notNull()
+		.default(sql`(unixepoch())`)
+		.$onUpdate(() => new Date()), // Automatically updates on every change
 });

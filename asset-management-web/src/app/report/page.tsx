@@ -9,6 +9,7 @@ import loaderAnimation from "../../libs/lottie/animation.json";
 
 export default function ReportPage() {
   const { data, loading, error } = useGetMaintenanceTicketsQuery();
+  console.log("data", data);
 
   const allReports = (data?.getMaintenanceTickets ?? []).filter(
     (r): r is NonNullable<typeof r> => r != null,
