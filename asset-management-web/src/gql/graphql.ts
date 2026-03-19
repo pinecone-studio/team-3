@@ -28,6 +28,7 @@ export type Asset = {
   id: Scalars['ID']['output'];
   imageUrl: Scalars['String']['output'];
   locationId?: Maybe<Scalars['String']['output']>;
+  name: Scalars['String']['output'];
   purchaseCost?: Maybe<Scalars['Float']['output']>;
   purchaseDate?: Maybe<Scalars['String']['output']>;
   qrUrl: Scalars['String']['output'];
@@ -179,6 +180,11 @@ export type Department = {
   name: Scalars['String']['output'];
 };
 
+export type DuplicateAssetInput = {
+  assetId: Scalars['String']['input'];
+  count: Scalars['Int']['input'];
+};
+
 export type Employee = {
   __typename?: 'Employee';
   birthDayAndMonth?: Maybe<Scalars['String']['output']>;
@@ -256,6 +262,7 @@ export type Mutation = {
   deleteEmployee: Response;
   deleteMaintenanceTicket: Response;
   deleteSubCategoryById: Response;
+  duplicateAsset: Response;
   editCategoryById: Response;
   editSubCategoryById: Response;
   finalizeCensusEvent: Response;
@@ -335,6 +342,11 @@ export type MutationDeleteMaintenanceTicketArgs = {
 
 export type MutationDeleteSubCategoryByIdArgs = {
   id: Scalars['ID']['input'];
+};
+
+
+export type MutationDuplicateAssetArgs = {
+  input: DuplicateAssetInput;
 };
 
 
@@ -620,10 +632,17 @@ export type DeleteAssetMutationVariables = Exact<{
 
 export type DeleteAssetMutation = { __typename?: 'Mutation', deleteAsset: Response };
 
+export type DuplicateAssetMutationVariables = Exact<{
+  input: DuplicateAssetInput;
+}>;
+
+
+export type DuplicateAssetMutation = { __typename?: 'Mutation', duplicateAsset: Response };
+
 export type GetAssetsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetAssetsQuery = { __typename?: 'Query', getAssets?: Array<{ __typename?: 'Asset', id: string, assetTag: string, serialNumber?: string | null, status: AssetStatusEnum, purchaseDate?: string | null, purchaseCost?: number | null, currentBookValue?: number | null, locationId?: string | null, assignedTo?: string | null, deletedAt?: string | null, imageUrl: string, qrUrl: string, category?: { __typename?: 'Category', id: string, name: string, description?: string | null, assets?: Array<{ __typename?: 'Asset', id: string, assetTag: string, serialNumber?: string | null, status: AssetStatusEnum, purchaseDate?: string | null, purchaseCost?: number | null, currentBookValue?: number | null, locationId?: string | null, assignedTo?: string | null, deletedAt?: string | null, imageUrl: string, qrUrl: string }> | null } | null, subCategory?: { __typename?: 'SubCategory', id: string, name: string, categoryId?: string | null } | null, department?: { __typename?: 'Department', id: string, name: string } | null } | null> | null };
+export type GetAssetsQuery = { __typename?: 'Query', getAssets?: Array<{ __typename?: 'Asset', id: string, assetTag: string, serialNumber?: string | null, status: AssetStatusEnum, purchaseDate?: string | null, purchaseCost?: number | null, currentBookValue?: number | null, locationId?: string | null, assignedTo?: string | null, deletedAt?: string | null, imageUrl: string, qrUrl: string, name: string, category?: { __typename?: 'Category', id: string, name: string, description?: string | null, assets?: Array<{ __typename?: 'Asset', id: string, assetTag: string, serialNumber?: string | null, status: AssetStatusEnum, purchaseDate?: string | null, purchaseCost?: number | null, currentBookValue?: number | null, locationId?: string | null, assignedTo?: string | null, deletedAt?: string | null, imageUrl: string, qrUrl: string }> | null } | null, subCategory?: { __typename?: 'SubCategory', id: string, name: string, categoryId?: string | null } | null, department?: { __typename?: 'Department', id: string, name: string } | null } | null> | null };
 
 export type GetCategoriesQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -883,6 +902,19 @@ export function useDeleteAssetMutation(baseOptions?: Apollo.MutationHookOptions<
 export type DeleteAssetMutationHookResult = ReturnType<typeof useDeleteAssetMutation>;
 export type DeleteAssetMutationResult = Apollo.MutationResult<DeleteAssetMutation>;
 export type DeleteAssetMutationOptions = Apollo.BaseMutationOptions<DeleteAssetMutation, DeleteAssetMutationVariables>;
+export const DuplicateAssetDocument = gql`
+    mutation DuplicateAsset($input: DuplicateAssetInput!) {
+  duplicateAsset(input: $input)
+}
+    `;
+export type DuplicateAssetMutationFn = Apollo.MutationFunction<DuplicateAssetMutation, DuplicateAssetMutationVariables>;
+export function useDuplicateAssetMutation(baseOptions?: Apollo.MutationHookOptions<DuplicateAssetMutation, DuplicateAssetMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DuplicateAssetMutation, DuplicateAssetMutationVariables>(DuplicateAssetDocument, options);
+      }
+export type DuplicateAssetMutationHookResult = ReturnType<typeof useDuplicateAssetMutation>;
+export type DuplicateAssetMutationResult = Apollo.MutationResult<DuplicateAssetMutation>;
+export type DuplicateAssetMutationOptions = Apollo.BaseMutationOptions<DuplicateAssetMutation, DuplicateAssetMutationVariables>;
 export const GetAssetsDocument = gql`
     query GetAssets {
   getAssets {
@@ -926,6 +958,7 @@ export const GetAssetsDocument = gql`
     }
     imageUrl
     qrUrl
+    name
   }
 }
     `;

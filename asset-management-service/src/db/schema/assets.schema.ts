@@ -32,6 +32,7 @@ export const assets = sqliteTable('assets', {
 	imageUrl: text('image_url').notNull(),
 	qrUrl:text('qr_url').notNull(),
 	departmentId: text('department_id').references(() => department.id),
+	name:text('name').notNull()
 });
 
 export const assetsRelations = relations(assets, ({ one }) => ({

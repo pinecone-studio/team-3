@@ -26,6 +26,7 @@ export const assetTypeDefs = gql`
         department:Department
         imageUrl: String!
         qrUrl:String!
+        name:String!
     }
 
 	input CreateAssetInput {
@@ -53,7 +54,10 @@ export const assetTypeDefs = gql`
         purchaseCost: Float
         imageBase64: String
     }
-
+input DuplicateAssetInput {
+    assetId:String!
+    count:Int!
+}
 	type Query {
 		getAssets: [Asset]
 		getAssetById(id: ID!): Asset
@@ -64,5 +68,6 @@ export const assetTypeDefs = gql`
         createAsset(input: CreateAssetInput!): Response!
         updateAsset(id: ID!, input: UpdateAssetInput!): Response!
         deleteAsset(id: ID!): Response!
+        duplicateAsset(input:DuplicateAssetInput!):Response!
     }
 `;

@@ -1,0 +1,3 @@
+mutation DuplicateAsset($input: DuplicateAssetInput!) {
+  duplicateAsset(input: $input)
+}
