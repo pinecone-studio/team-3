@@ -151,6 +151,16 @@ export type CreateEmployeeInput = {
   status: EmployeeStatus;
 };
 
+export type CreateMaintenanceTicketInput = {
+  assetId: Scalars['ID']['input'];
+  description: Scalars['String']['input'];
+  repairCost?: InputMaybe<Scalars['Float']['input']>;
+  reporterId: Scalars['ID']['input'];
+  severity?: InputMaybe<MaintenanceSeverityEnum>;
+  status?: InputMaybe<TicketStatusEnum>;
+  vendorId?: InputMaybe<Scalars['String']['input']>;
+};
+
 export type DeleteEmployeeInput = {
   terminationDate: Scalars['String']['input'];
 };
@@ -187,6 +197,28 @@ export enum EmployeeStatus {
   Terminated = 'TERMINATED'
 }
 
+export enum MaintenanceSeverityEnum {
+  Critical = 'CRITICAL',
+  High = 'HIGH',
+  Low = 'LOW',
+  Medium = 'MEDIUM'
+}
+
+export type MaintenanceTicket = {
+  __typename?: 'MaintenanceTicket';
+  assetId: Scalars['ID']['output'];
+  createdAt?: Maybe<Scalars['String']['output']>;
+  description: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  repairCost?: Maybe<Scalars['Float']['output']>;
+  reporterId: Scalars['ID']['output'];
+  resolvedAt?: Maybe<Scalars['String']['output']>;
+  severity?: Maybe<MaintenanceSeverityEnum>;
+  status: TicketStatusEnum;
+  updatedAt?: Maybe<Scalars['String']['output']>;
+  vendorId?: Maybe<Scalars['String']['output']>;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   createAsset: Response;
@@ -194,17 +226,20 @@ export type Mutation = {
   createCategory: Response;
   createCensusEvent: Response;
   createEmployee: Response;
+  createMaintenanceTicket: Response;
   deleteAsset: Response;
   deleteAssignment: Response;
   deleteCategory: Response;
   deleteCategoryByIds: Response;
   deleteEmployee: Response;
+  deleteMaintenanceTicket: Response;
   editCategoryById: Response;
   finalizeCensusEvent: Response;
   updateAsset: Response;
   updateAssignment: Response;
   updateCensusTask: Response;
   updateEmployee: Response;
+  updateMaintenanceTicket: Response;
 };
 
 
@@ -233,6 +268,11 @@ export type MutationCreateEmployeeArgs = {
 };
 
 
+export type MutationCreateMaintenanceTicketArgs = {
+  input: CreateMaintenanceTicketInput;
+};
+
+
 export type MutationDeleteAssetArgs = {
   id: Scalars['ID']['input'];
 };
@@ -256,6 +296,11 @@ export type MutationDeleteCategoryByIdsArgs = {
 export type MutationDeleteEmployeeArgs = {
   id: Scalars['ID']['input'];
   input: DeleteEmployeeInput;
+};
+
+
+export type MutationDeleteMaintenanceTicketArgs = {
+  id: Scalars['ID']['input'];
 };
 
 
@@ -291,6 +336,12 @@ export type MutationUpdateEmployeeArgs = {
   input: UpdateEmployeeInput;
 };
 
+
+export type MutationUpdateMaintenanceTicketArgs = {
+  id: Scalars['ID']['input'];
+  input: UpdateMaintenanceTicketInput;
+};
+
 export enum PosStatusEnum {
   Approved = 'APPROVED',
   Cancelled = 'CANCELLED',
@@ -319,7 +370,10 @@ export type Query = {
   getEmployeeById?: Maybe<Employee>;
   getEmployees: Array<Employee>;
   getEmployeesByStatus: Array<Employee>;
+  getMaintenanceTicketById?: Maybe<MaintenanceTicket>;
+  getMaintenanceTickets?: Maybe<Array<Maybe<MaintenanceTicket>>>;
   getPendingAssignments: Array<Assignment>;
+  getTicketsByAssetId?: Maybe<Array<Maybe<MaintenanceTicket>>>;
 };
 
 
@@ -389,8 +443,18 @@ export type QueryGetEmployeesByStatusArgs = {
 };
 
 
+export type QueryGetMaintenanceTicketByIdArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
 export type QueryGetPendingAssignmentsArgs = {
   token: Scalars['String']['input'];
+};
+
+
+export type QueryGetTicketsByAssetIdArgs = {
+  assetId: Scalars['ID']['input'];
 };
 
 export enum Response {
@@ -451,6 +515,17 @@ export type UpdateEmployeeInput = {
   numberOfVacationDays?: InputMaybe<Scalars['Int']['input']>;
   status?: InputMaybe<EmployeeStatus>;
   terminationDate?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type UpdateMaintenanceTicketInput = {
+  assetId?: InputMaybe<Scalars['ID']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  repairCost?: InputMaybe<Scalars['Float']['input']>;
+  reporterId?: InputMaybe<Scalars['ID']['input']>;
+  resolvedAt?: InputMaybe<Scalars['String']['input']>;
+  severity?: InputMaybe<MaintenanceSeverityEnum>;
+  status?: InputMaybe<TicketStatusEnum>;
+  vendorId?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type EditCategoryByIdInput = {
@@ -541,12 +616,15 @@ export type ResolversTypes = {
   CreateCategoryInput: CreateCategoryInput;
   CreateCensusEventInput: CreateCensusEventInput;
   CreateEmployeeInput: CreateEmployeeInput;
+  CreateMaintenanceTicketInput: CreateMaintenanceTicketInput;
   DeleteEmployeeInput: DeleteEmployeeInput;
   Employee: ResolverTypeWrapper<Employee>;
   EmployeeStatus: EmployeeStatus;
   Float: ResolverTypeWrapper<Scalars['Float']['output']>;
   ID: ResolverTypeWrapper<Scalars['ID']['output']>;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
+  MaintenanceSeverityEnum: MaintenanceSeverityEnum;
+  MaintenanceTicket: ResolverTypeWrapper<MaintenanceTicket>;
   Mutation: ResolverTypeWrapper<Record<PropertyKey, never>>;
   PosStatusEnum: PosStatusEnum;
   Query: ResolverTypeWrapper<Record<PropertyKey, never>>;
@@ -557,6 +635,7 @@ export type ResolversTypes = {
   UpdateAssignmentInput: UpdateAssignmentInput;
   UpdateCensusTaskInput: UpdateCensusTaskInput;
   UpdateEmployeeInput: UpdateEmployeeInput;
+  UpdateMaintenanceTicketInput: UpdateMaintenanceTicketInput;
   editCategoryByIdInput: EditCategoryByIdInput;
 };
 
@@ -574,11 +653,13 @@ export type ResolversParentTypes = {
   CreateCategoryInput: CreateCategoryInput;
   CreateCensusEventInput: CreateCensusEventInput;
   CreateEmployeeInput: CreateEmployeeInput;
+  CreateMaintenanceTicketInput: CreateMaintenanceTicketInput;
   DeleteEmployeeInput: DeleteEmployeeInput;
   Employee: Employee;
   Float: Scalars['Float']['output'];
   ID: Scalars['ID']['output'];
   Int: Scalars['Int']['output'];
+  MaintenanceTicket: MaintenanceTicket;
   Mutation: Record<PropertyKey, never>;
   Query: Record<PropertyKey, never>;
   String: Scalars['String']['output'];
@@ -586,6 +667,7 @@ export type ResolversParentTypes = {
   UpdateAssignmentInput: UpdateAssignmentInput;
   UpdateCensusTaskInput: UpdateCensusTaskInput;
   UpdateEmployeeInput: UpdateEmployeeInput;
+  UpdateMaintenanceTicketInput: UpdateMaintenanceTicketInput;
   editCategoryByIdInput: EditCategoryByIdInput;
 };
 
@@ -681,23 +763,40 @@ export type EmployeeResolvers<ContextType = Context, ParentType extends Resolver
   terminationDate?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
 };
 
+export type MaintenanceTicketResolvers<ContextType = Context, ParentType extends ResolversParentTypes['MaintenanceTicket'] = ResolversParentTypes['MaintenanceTicket']> = {
+  assetId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  createdAt?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  description?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  repairCost?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
+  reporterId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  resolvedAt?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  severity?: Resolver<Maybe<ResolversTypes['MaintenanceSeverityEnum']>, ParentType, ContextType>;
+  status?: Resolver<ResolversTypes['TicketStatusEnum'], ParentType, ContextType>;
+  updatedAt?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  vendorId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+};
+
 export type MutationResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   createAsset?: Resolver<ResolversTypes['Response'], ParentType, ContextType, RequireFields<MutationCreateAssetArgs, 'input'>>;
   createAssignment?: Resolver<ResolversTypes['Response'], ParentType, ContextType, RequireFields<MutationCreateAssignmentArgs, 'input'>>;
   createCategory?: Resolver<ResolversTypes['Response'], ParentType, ContextType, RequireFields<MutationCreateCategoryArgs, 'input'>>;
   createCensusEvent?: Resolver<ResolversTypes['Response'], ParentType, ContextType, RequireFields<MutationCreateCensusEventArgs, 'input'>>;
   createEmployee?: Resolver<ResolversTypes['Response'], ParentType, ContextType, RequireFields<MutationCreateEmployeeArgs, 'input'>>;
+  createMaintenanceTicket?: Resolver<ResolversTypes['Response'], ParentType, ContextType, RequireFields<MutationCreateMaintenanceTicketArgs, 'input'>>;
   deleteAsset?: Resolver<ResolversTypes['Response'], ParentType, ContextType, RequireFields<MutationDeleteAssetArgs, 'id'>>;
   deleteAssignment?: Resolver<ResolversTypes['Response'], ParentType, ContextType, RequireFields<MutationDeleteAssignmentArgs, 'id'>>;
   deleteCategory?: Resolver<ResolversTypes['Response'], ParentType, ContextType, RequireFields<MutationDeleteCategoryArgs, 'id'>>;
   deleteCategoryByIds?: Resolver<ResolversTypes['Response'], ParentType, ContextType, RequireFields<MutationDeleteCategoryByIdsArgs, 'ids'>>;
   deleteEmployee?: Resolver<ResolversTypes['Response'], ParentType, ContextType, RequireFields<MutationDeleteEmployeeArgs, 'id' | 'input'>>;
+  deleteMaintenanceTicket?: Resolver<ResolversTypes['Response'], ParentType, ContextType, RequireFields<MutationDeleteMaintenanceTicketArgs, 'id'>>;
   editCategoryById?: Resolver<ResolversTypes['Response'], ParentType, ContextType, RequireFields<MutationEditCategoryByIdArgs, 'input'>>;
   finalizeCensusEvent?: Resolver<ResolversTypes['Response'], ParentType, ContextType, RequireFields<MutationFinalizeCensusEventArgs, 'censusId'>>;
   updateAsset?: Resolver<ResolversTypes['Response'], ParentType, ContextType, RequireFields<MutationUpdateAssetArgs, 'id' | 'input'>>;
   updateAssignment?: Resolver<ResolversTypes['Response'], ParentType, ContextType, RequireFields<MutationUpdateAssignmentArgs, 'id' | 'input'>>;
   updateCensusTask?: Resolver<ResolversTypes['Response'], ParentType, ContextType, RequireFields<MutationUpdateCensusTaskArgs, 'input'>>;
   updateEmployee?: Resolver<ResolversTypes['Response'], ParentType, ContextType, RequireFields<MutationUpdateEmployeeArgs, 'id' | 'input'>>;
+  updateMaintenanceTicket?: Resolver<ResolversTypes['Response'], ParentType, ContextType, RequireFields<MutationUpdateMaintenanceTicketArgs, 'id' | 'input'>>;
 };
 
 export type QueryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
@@ -720,7 +819,10 @@ export type QueryResolvers<ContextType = Context, ParentType extends ResolversPa
   getEmployeeById?: Resolver<Maybe<ResolversTypes['Employee']>, ParentType, ContextType, RequireFields<QueryGetEmployeeByIdArgs, 'id'>>;
   getEmployees?: Resolver<Array<ResolversTypes['Employee']>, ParentType, ContextType>;
   getEmployeesByStatus?: Resolver<Array<ResolversTypes['Employee']>, ParentType, ContextType, RequireFields<QueryGetEmployeesByStatusArgs, 'status'>>;
+  getMaintenanceTicketById?: Resolver<Maybe<ResolversTypes['MaintenanceTicket']>, ParentType, ContextType, RequireFields<QueryGetMaintenanceTicketByIdArgs, 'id'>>;
+  getMaintenanceTickets?: Resolver<Maybe<Array<Maybe<ResolversTypes['MaintenanceTicket']>>>, ParentType, ContextType>;
   getPendingAssignments?: Resolver<Array<ResolversTypes['Assignment']>, ParentType, ContextType, RequireFields<QueryGetPendingAssignmentsArgs, 'token'>>;
+  getTicketsByAssetId?: Resolver<Maybe<Array<Maybe<ResolversTypes['MaintenanceTicket']>>>, ParentType, ContextType, RequireFields<QueryGetTicketsByAssetIdArgs, 'assetId'>>;
 };
 
 export type Resolvers<ContextType = Context> = {
@@ -731,6 +833,7 @@ export type Resolvers<ContextType = Context> = {
   CensusReport?: CensusReportResolvers<ContextType>;
   CensusTask?: CensusTaskResolvers<ContextType>;
   Employee?: EmployeeResolvers<ContextType>;
+  MaintenanceTicket?: MaintenanceTicketResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
 };
