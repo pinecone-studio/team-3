@@ -232,7 +232,7 @@ export enum MaintenanceSeverityEnum {
 
 export type MaintenanceTicket = {
   __typename?: 'MaintenanceTicket';
-  asset: Asset;
+  asset?: Maybe<Asset>;
   createdAt?: Maybe<Scalars['String']['output']>;
   description: Scalars['String']['output'];
   id: Scalars['ID']['output'];
@@ -872,7 +872,7 @@ export type EmployeeResolvers<ContextType = Context, ParentType extends Resolver
 };
 
 export type MaintenanceTicketResolvers<ContextType = Context, ParentType extends ResolversParentTypes['MaintenanceTicket'] = ResolversParentTypes['MaintenanceTicket']> = {
-  asset?: Resolver<ResolversTypes['Asset'], ParentType, ContextType>;
+  asset?: Resolver<Maybe<ResolversTypes['Asset']>, ParentType, ContextType>;
   createdAt?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   description?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
