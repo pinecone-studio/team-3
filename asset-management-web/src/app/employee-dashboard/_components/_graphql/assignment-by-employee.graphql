@@ -1,0 +1,18 @@
+query GetAssignmentsByEmployee($employeeId: ID!) {
+  getAssignmentsByEmployee(employeeId: $employeeId) {
+    id # Required by Assignment type
+    employeeId # Required by Assignment type
+    assetId # Required by Assignment type
+    assignedAt # Required by Assignment type
+    conditionAtAssign # Required by Assignment type
+    signatureR2Key
+    asset {
+      id
+      assetTag
+      serialNumber
+      category {
+        name
+      }
+    }
+  }
+}

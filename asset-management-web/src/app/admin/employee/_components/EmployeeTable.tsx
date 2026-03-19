@@ -10,6 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "@/libs";
 import {
+  Asset,
   EmployeeStatus,
   useGetAssetsForAssetPageQuery,
   useUpdateEmployeeMutation,
@@ -45,7 +46,7 @@ export default function EmployeeTable({ data }: { data: Employee[] }) {
 
   const { data: assetsData } = useGetAssetsForAssetPageQuery();
   const availableAssets = (assetsData?.getAssets || []).filter(
-    (asset) => asset.status === "AVAILABLE",
+    (asset) => asset?.status === "AVAILABLE",
   );
 
   return (
@@ -180,7 +181,7 @@ export default function EmployeeTable({ data }: { data: Employee[] }) {
         <AssetAssignDialog
           key={selectedEmployee.id}
           employee={selectedEmployee}
-          availableAssets={availableAssets}
+          availableAssets={availableAssets as Asset[]}
           onClose={() => setSelectedEmployee(null)}
         />
       )}

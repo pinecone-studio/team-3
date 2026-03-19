@@ -88,6 +88,7 @@ export type CensusReport = {
 
 export type CensusTask = {
   __typename?: 'CensusTask';
+  asset?: Maybe<Asset>;
   assetId: Scalars['String']['output'];
   censusId: Scalars['String']['output'];
   conditionReported?: Maybe<Scalars['String']['output']>;
@@ -301,7 +302,8 @@ export enum PosStatusEnum {
 export type Query = {
   __typename?: 'Query';
   getAssetById?: Maybe<Asset>;
-  getAssets: Array<Asset>;
+  getAssets?: Maybe<Array<Maybe<Asset>>>;
+  getAssetsByEmployeeId?: Maybe<Array<Maybe<Asset>>>;
   getAssignmentById?: Maybe<Assignment>;
   getAssignments: Array<Assignment>;
   getAssignmentsByAsset: Array<Assignment>;
@@ -324,6 +326,11 @@ export type Query = {
 
 export type QueryGetAssetByIdArgs = {
   id: Scalars['ID']['input'];
+};
+
+
+export type QueryGetAssetsByEmployeeIdArgs = {
+  employeeId: Scalars['ID']['input'];
 };
 
 
@@ -468,7 +475,7 @@ export type DeleteAssetMutation = { __typename?: 'Mutation', deleteAsset: Respon
 export type GetAssetsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetAssetsQuery = { __typename?: 'Query', getAssets: Array<{ __typename?: 'Asset', assetTag: string, serialNumber?: string | null, status: AssetStatusEnum, currentBookValue?: number | null, assignedTo?: string | null, id: string, category?: { __typename?: 'Category', name: string } | null }> };
+export type GetAssetsQuery = { __typename?: 'Query', getAssets?: Array<{ __typename?: 'Asset', assetTag: string, serialNumber?: string | null, status: AssetStatusEnum, currentBookValue?: number | null, assignedTo?: string | null, id: string, category?: { __typename?: 'Category', name: string } | null } | null> | null };
 
 export type UpdateAssetMutationVariables = Exact<{
   updateAssetId: Scalars['ID']['input'];
@@ -521,7 +528,7 @@ export type CreateAssignmentMutation = { __typename?: 'Mutation', createAssignme
 export type GetAssetsForAssetPageQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetAssetsForAssetPageQuery = { __typename?: 'Query', getAssets: Array<{ __typename?: 'Asset', assetTag: string, id: string, status: AssetStatusEnum, category?: { __typename?: 'Category', id: string, name: string } | null }> };
+export type GetAssetsForAssetPageQuery = { __typename?: 'Query', getAssets?: Array<{ __typename?: 'Asset', assetTag: string, id: string, status: AssetStatusEnum, category?: { __typename?: 'Category', id: string, name: string } | null } | null> | null };
 
 export type GetEmployeesQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -539,7 +546,7 @@ export type UpdateEmployeeMutation = { __typename?: 'Mutation', updateEmployee: 
 export type GetAssetsReturnQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetAssetsReturnQuery = { __typename?: 'Query', getAssets: Array<{ __typename?: 'Asset', id: string, assetTag: string, assignedTo?: string | null, status: AssetStatusEnum, category?: { __typename?: 'Category', name: string } | null }> };
+export type GetAssetsReturnQuery = { __typename?: 'Query', getAssets?: Array<{ __typename?: 'Asset', id: string, assetTag: string, assignedTo?: string | null, status: AssetStatusEnum, category?: { __typename?: 'Category', name: string } | null } | null> | null };
 
 export type GetEmployeeByIdQueryVariables = Exact<{
   getEmployeeByIdId: Scalars['ID']['input'];
@@ -553,6 +560,11 @@ export type CreateCensusEventMutationVariables = Exact<{
 }>;
 
 
+export type CreateCensusEventMutation = { __typename?: 'Mutation', createCensusEvent: Response };
+
+export type GetCensusEventsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
 export type GetCensusEventsQuery = { __typename?: 'Query', getCensusEvents: Array<{ __typename?: 'CensusEvent', id: string, name: string, scope: string, scopeFilter?: string | null, startedAt: string, closedAt?: string | null, createdBy: string }> };
 
 export type GetAssetByIdQueryVariables = Exact<{
@@ -561,6 +573,33 @@ export type GetAssetByIdQueryVariables = Exact<{
 
 
 export type GetAssetByIdQuery = { __typename?: 'Query', getAssetById?: { __typename?: 'Asset', id: string, serialNumber?: string | null, assetTag: string } | null };
+
+export type GetAssetsByEmployeeIdQueryVariables = Exact<{
+  employeeId: Scalars['ID']['input'];
+}>;
+
+
+export type GetAssetsByEmployeeIdQuery = { __typename?: 'Query', getAssetsByEmployeeId?: Array<{ __typename?: 'Asset', assetTag: string, serialNumber?: string | null, category?: { __typename?: 'Category', name: string } | null } | null> | null };
+
+export type GetAssetsAtEmployeeQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetAssetsAtEmployeeQuery = { __typename?: 'Query', getAssets?: Array<{ __typename?: 'Asset', assignedTo?: string | null, serialNumber?: string | null, assetTag: string, category?: { __typename?: 'Category', name: string } | null } | null> | null };
+
+export type GetAssignmentsByEmployeeQueryVariables = Exact<{
+  employeeId: Scalars['ID']['input'];
+}>;
+
+
+export type GetAssignmentsByEmployeeQuery = { __typename?: 'Query', getAssignmentsByEmployee: Array<{ __typename?: 'Assignment', id: string, employeeId: string, assetId: string, assignedAt: string, conditionAtAssign: string, signatureR2Key?: string | null, asset?: { __typename?: 'Asset', id: string, assetTag: string, serialNumber?: string | null, category?: { __typename?: 'Category', name: string } | null } | null }> };
+
+export type GetEmployeeDataQueryVariables = Exact<{
+  employeeId: Scalars['ID']['input'];
+  token: Scalars['String']['input'];
+}>;
+
+
+export type GetEmployeeDataQuery = { __typename?: 'Query', getAssignmentsByEmployee: Array<{ __typename?: 'Assignment', id: string, assignedAt: string, returnedAt?: string | null, asset?: { __typename?: 'Asset', assetTag: string, serialNumber?: string | null, category?: { __typename?: 'Category', name: string, description?: string | null } | null } | null }>, getPendingAssignments: Array<{ __typename?: 'Assignment', id: string, asset?: { __typename?: 'Asset', assetTag: string, serialNumber?: string | null } | null }>, getEmployeeById?: { __typename?: 'Employee', firstName: string, lastName: string } | null };
 
 export type GetPendingAssignmentsQueryVariables = Exact<{
   token: Scalars['String']['input'];
@@ -858,17 +897,6 @@ export function useUpdateEmployeeMutation(baseOptions?: Apollo.MutationHookOptio
 export type UpdateEmployeeMutationHookResult = ReturnType<typeof useUpdateEmployeeMutation>;
 export type UpdateEmployeeMutationResult = Apollo.MutationResult<UpdateEmployeeMutation>;
 export type UpdateEmployeeMutationOptions = Apollo.BaseMutationOptions<UpdateEmployeeMutation, UpdateEmployeeMutationVariables>;
-export const GetCensusEventsDocument = gql`
-    query GetCensusEvents {
-  getCensusEvents {
-    id
-    name
-    scope
-    scopeFilter
-    startedAt
-    closedAt
-    createdBy
-  }
 export const GetAssetsReturnDocument = gql`
     query GetAssetsReturn {
   getAssets {
@@ -937,6 +965,27 @@ export const CreateCensusEventDocument = gql`
   createCensusEvent(input: $input)
 }
     `;
+export type CreateCensusEventMutationFn = Apollo.MutationFunction<CreateCensusEventMutation, CreateCensusEventMutationVariables>;
+export function useCreateCensusEventMutation(baseOptions?: Apollo.MutationHookOptions<CreateCensusEventMutation, CreateCensusEventMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateCensusEventMutation, CreateCensusEventMutationVariables>(CreateCensusEventDocument, options);
+      }
+export type CreateCensusEventMutationHookResult = ReturnType<typeof useCreateCensusEventMutation>;
+export type CreateCensusEventMutationResult = Apollo.MutationResult<CreateCensusEventMutation>;
+export type CreateCensusEventMutationOptions = Apollo.BaseMutationOptions<CreateCensusEventMutation, CreateCensusEventMutationVariables>;
+export const GetCensusEventsDocument = gql`
+    query GetCensusEvents {
+  getCensusEvents {
+    id
+    name
+    scope
+    scopeFilter
+    startedAt
+    closedAt
+    createdBy
+  }
+}
+    `;
 export function useGetCensusEventsQuery(baseOptions?: Apollo.QueryHookOptions<GetCensusEventsQuery, GetCensusEventsQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<GetCensusEventsQuery, GetCensusEventsQueryVariables>(GetCensusEventsDocument, options);
@@ -984,6 +1033,153 @@ export type GetAssetByIdQueryHookResult = ReturnType<typeof useGetAssetByIdQuery
 export type GetAssetByIdLazyQueryHookResult = ReturnType<typeof useGetAssetByIdLazyQuery>;
 export type GetAssetByIdSuspenseQueryHookResult = ReturnType<typeof useGetAssetByIdSuspenseQuery>;
 export type GetAssetByIdQueryResult = Apollo.QueryResult<GetAssetByIdQuery, GetAssetByIdQueryVariables>;
+export const GetAssetsByEmployeeIdDocument = gql`
+    query GetAssetsByEmployeeId($employeeId: ID!) {
+  getAssetsByEmployeeId(employeeId: $employeeId) {
+    category {
+      name
+    }
+    assetTag
+    serialNumber
+  }
+}
+    `;
+export function useGetAssetsByEmployeeIdQuery(baseOptions: Apollo.QueryHookOptions<GetAssetsByEmployeeIdQuery, GetAssetsByEmployeeIdQueryVariables> & ({ variables: GetAssetsByEmployeeIdQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetAssetsByEmployeeIdQuery, GetAssetsByEmployeeIdQueryVariables>(GetAssetsByEmployeeIdDocument, options);
+      }
+export function useGetAssetsByEmployeeIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAssetsByEmployeeIdQuery, GetAssetsByEmployeeIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetAssetsByEmployeeIdQuery, GetAssetsByEmployeeIdQueryVariables>(GetAssetsByEmployeeIdDocument, options);
+        }
+// @ts-ignore
+export function useGetAssetsByEmployeeIdSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetAssetsByEmployeeIdQuery, GetAssetsByEmployeeIdQueryVariables>): Apollo.UseSuspenseQueryResult<GetAssetsByEmployeeIdQuery, GetAssetsByEmployeeIdQueryVariables>;
+export function useGetAssetsByEmployeeIdSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetAssetsByEmployeeIdQuery, GetAssetsByEmployeeIdQueryVariables>): Apollo.UseSuspenseQueryResult<GetAssetsByEmployeeIdQuery | undefined, GetAssetsByEmployeeIdQueryVariables>;
+export function useGetAssetsByEmployeeIdSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetAssetsByEmployeeIdQuery, GetAssetsByEmployeeIdQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetAssetsByEmployeeIdQuery, GetAssetsByEmployeeIdQueryVariables>(GetAssetsByEmployeeIdDocument, options);
+        }
+export type GetAssetsByEmployeeIdQueryHookResult = ReturnType<typeof useGetAssetsByEmployeeIdQuery>;
+export type GetAssetsByEmployeeIdLazyQueryHookResult = ReturnType<typeof useGetAssetsByEmployeeIdLazyQuery>;
+export type GetAssetsByEmployeeIdSuspenseQueryHookResult = ReturnType<typeof useGetAssetsByEmployeeIdSuspenseQuery>;
+export type GetAssetsByEmployeeIdQueryResult = Apollo.QueryResult<GetAssetsByEmployeeIdQuery, GetAssetsByEmployeeIdQueryVariables>;
+export const GetAssetsAtEmployeeDocument = gql`
+    query GetAssetsAtEmployee {
+  getAssets {
+    category {
+      name
+    }
+    assignedTo
+    serialNumber
+    assetTag
+  }
+}
+    `;
+export function useGetAssetsAtEmployeeQuery(baseOptions?: Apollo.QueryHookOptions<GetAssetsAtEmployeeQuery, GetAssetsAtEmployeeQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetAssetsAtEmployeeQuery, GetAssetsAtEmployeeQueryVariables>(GetAssetsAtEmployeeDocument, options);
+      }
+export function useGetAssetsAtEmployeeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAssetsAtEmployeeQuery, GetAssetsAtEmployeeQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetAssetsAtEmployeeQuery, GetAssetsAtEmployeeQueryVariables>(GetAssetsAtEmployeeDocument, options);
+        }
+// @ts-ignore
+export function useGetAssetsAtEmployeeSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetAssetsAtEmployeeQuery, GetAssetsAtEmployeeQueryVariables>): Apollo.UseSuspenseQueryResult<GetAssetsAtEmployeeQuery, GetAssetsAtEmployeeQueryVariables>;
+export function useGetAssetsAtEmployeeSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetAssetsAtEmployeeQuery, GetAssetsAtEmployeeQueryVariables>): Apollo.UseSuspenseQueryResult<GetAssetsAtEmployeeQuery | undefined, GetAssetsAtEmployeeQueryVariables>;
+export function useGetAssetsAtEmployeeSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetAssetsAtEmployeeQuery, GetAssetsAtEmployeeQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetAssetsAtEmployeeQuery, GetAssetsAtEmployeeQueryVariables>(GetAssetsAtEmployeeDocument, options);
+        }
+export type GetAssetsAtEmployeeQueryHookResult = ReturnType<typeof useGetAssetsAtEmployeeQuery>;
+export type GetAssetsAtEmployeeLazyQueryHookResult = ReturnType<typeof useGetAssetsAtEmployeeLazyQuery>;
+export type GetAssetsAtEmployeeSuspenseQueryHookResult = ReturnType<typeof useGetAssetsAtEmployeeSuspenseQuery>;
+export type GetAssetsAtEmployeeQueryResult = Apollo.QueryResult<GetAssetsAtEmployeeQuery, GetAssetsAtEmployeeQueryVariables>;
+export const GetAssignmentsByEmployeeDocument = gql`
+    query GetAssignmentsByEmployee($employeeId: ID!) {
+  getAssignmentsByEmployee(employeeId: $employeeId) {
+    id
+    employeeId
+    assetId
+    assignedAt
+    conditionAtAssign
+    signatureR2Key
+    asset {
+      id
+      assetTag
+      serialNumber
+      category {
+        name
+      }
+    }
+  }
+}
+    `;
+export function useGetAssignmentsByEmployeeQuery(baseOptions: Apollo.QueryHookOptions<GetAssignmentsByEmployeeQuery, GetAssignmentsByEmployeeQueryVariables> & ({ variables: GetAssignmentsByEmployeeQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetAssignmentsByEmployeeQuery, GetAssignmentsByEmployeeQueryVariables>(GetAssignmentsByEmployeeDocument, options);
+      }
+export function useGetAssignmentsByEmployeeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAssignmentsByEmployeeQuery, GetAssignmentsByEmployeeQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetAssignmentsByEmployeeQuery, GetAssignmentsByEmployeeQueryVariables>(GetAssignmentsByEmployeeDocument, options);
+        }
+// @ts-ignore
+export function useGetAssignmentsByEmployeeSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetAssignmentsByEmployeeQuery, GetAssignmentsByEmployeeQueryVariables>): Apollo.UseSuspenseQueryResult<GetAssignmentsByEmployeeQuery, GetAssignmentsByEmployeeQueryVariables>;
+export function useGetAssignmentsByEmployeeSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetAssignmentsByEmployeeQuery, GetAssignmentsByEmployeeQueryVariables>): Apollo.UseSuspenseQueryResult<GetAssignmentsByEmployeeQuery | undefined, GetAssignmentsByEmployeeQueryVariables>;
+export function useGetAssignmentsByEmployeeSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetAssignmentsByEmployeeQuery, GetAssignmentsByEmployeeQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetAssignmentsByEmployeeQuery, GetAssignmentsByEmployeeQueryVariables>(GetAssignmentsByEmployeeDocument, options);
+        }
+export type GetAssignmentsByEmployeeQueryHookResult = ReturnType<typeof useGetAssignmentsByEmployeeQuery>;
+export type GetAssignmentsByEmployeeLazyQueryHookResult = ReturnType<typeof useGetAssignmentsByEmployeeLazyQuery>;
+export type GetAssignmentsByEmployeeSuspenseQueryHookResult = ReturnType<typeof useGetAssignmentsByEmployeeSuspenseQuery>;
+export type GetAssignmentsByEmployeeQueryResult = Apollo.QueryResult<GetAssignmentsByEmployeeQuery, GetAssignmentsByEmployeeQueryVariables>;
+export const GetEmployeeDataDocument = gql`
+    query GetEmployeeData($employeeId: ID!, $token: String!) {
+  getAssignmentsByEmployee(employeeId: $employeeId) {
+    id
+    asset {
+      assetTag
+      serialNumber
+      category {
+        name
+        description
+      }
+    }
+    assignedAt
+    returnedAt
+  }
+  getPendingAssignments(token: $token) {
+    id
+    asset {
+      assetTag
+      serialNumber
+    }
+  }
+  getEmployeeById(id: $employeeId) {
+    firstName
+    lastName
+  }
+}
+    `;
+export function useGetEmployeeDataQuery(baseOptions: Apollo.QueryHookOptions<GetEmployeeDataQuery, GetEmployeeDataQueryVariables> & ({ variables: GetEmployeeDataQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetEmployeeDataQuery, GetEmployeeDataQueryVariables>(GetEmployeeDataDocument, options);
+      }
+export function useGetEmployeeDataLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetEmployeeDataQuery, GetEmployeeDataQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetEmployeeDataQuery, GetEmployeeDataQueryVariables>(GetEmployeeDataDocument, options);
+        }
+// @ts-ignore
+export function useGetEmployeeDataSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetEmployeeDataQuery, GetEmployeeDataQueryVariables>): Apollo.UseSuspenseQueryResult<GetEmployeeDataQuery, GetEmployeeDataQueryVariables>;
+export function useGetEmployeeDataSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetEmployeeDataQuery, GetEmployeeDataQueryVariables>): Apollo.UseSuspenseQueryResult<GetEmployeeDataQuery | undefined, GetEmployeeDataQueryVariables>;
+export function useGetEmployeeDataSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetEmployeeDataQuery, GetEmployeeDataQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetEmployeeDataQuery, GetEmployeeDataQueryVariables>(GetEmployeeDataDocument, options);
+        }
+export type GetEmployeeDataQueryHookResult = ReturnType<typeof useGetEmployeeDataQuery>;
+export type GetEmployeeDataLazyQueryHookResult = ReturnType<typeof useGetEmployeeDataLazyQuery>;
+export type GetEmployeeDataSuspenseQueryHookResult = ReturnType<typeof useGetEmployeeDataSuspenseQuery>;
+export type GetEmployeeDataQueryResult = Apollo.QueryResult<GetEmployeeDataQuery, GetEmployeeDataQueryVariables>;
 export const GetPendingAssignmentsDocument = gql`
     query GetPendingAssignments($token: String!) {
   getPendingAssignments(token: $token) {

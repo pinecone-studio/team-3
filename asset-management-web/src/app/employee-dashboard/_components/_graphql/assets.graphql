@@ -1,0 +1,10 @@
+query GetAssetsAtEmployee {
+  getAssets {
+    category {
+      name
+    }
+    assignedTo
+    serialNumber
+    assetTag
+  }
+}

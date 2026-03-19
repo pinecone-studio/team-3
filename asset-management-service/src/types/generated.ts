@@ -301,7 +301,8 @@ export enum PosStatusEnum {
 export type Query = {
   __typename?: 'Query';
   getAssetById?: Maybe<Asset>;
-  getAssets: Array<Asset>;
+  getAssets?: Maybe<Array<Maybe<Asset>>>;
+  getAssetsByEmployeeId?: Maybe<Array<Maybe<Asset>>>;
   getAssignmentById?: Maybe<Assignment>;
   getAssignments: Array<Assignment>;
   getAssignmentsByAsset: Array<Assignment>;
@@ -324,6 +325,11 @@ export type Query = {
 
 export type QueryGetAssetByIdArgs = {
   id: Scalars['ID']['input'];
+};
+
+
+export type QueryGetAssetsByEmployeeIdArgs = {
+  employeeId: Scalars['ID']['input'];
 };
 
 
@@ -696,7 +702,8 @@ export type MutationResolvers<ContextType = Context, ParentType extends Resolver
 
 export type QueryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   getAssetById?: Resolver<Maybe<ResolversTypes['Asset']>, ParentType, ContextType, RequireFields<QueryGetAssetByIdArgs, 'id'>>;
-  getAssets?: Resolver<Array<ResolversTypes['Asset']>, ParentType, ContextType>;
+  getAssets?: Resolver<Maybe<Array<Maybe<ResolversTypes['Asset']>>>, ParentType, ContextType>;
+  getAssetsByEmployeeId?: Resolver<Maybe<Array<Maybe<ResolversTypes['Asset']>>>, ParentType, ContextType, RequireFields<QueryGetAssetsByEmployeeIdArgs, 'employeeId'>>;
   getAssignmentById?: Resolver<Maybe<ResolversTypes['Assignment']>, ParentType, ContextType, RequireFields<QueryGetAssignmentByIdArgs, 'id'>>;
   getAssignments?: Resolver<Array<ResolversTypes['Assignment']>, ParentType, ContextType>;
   getAssignmentsByAsset?: Resolver<Array<ResolversTypes['Assignment']>, ParentType, ContextType, RequireFields<QueryGetAssignmentsByAssetArgs, 'assetId'>>;
