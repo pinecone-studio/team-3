@@ -1,15 +1,16 @@
 import { CheckSmall, MacBook } from "@/app/_components/icons/icons";
-import { Monitor } from "lucide-react";
+import { Monitor } from "lucide-react"; 
 
 type Report = {
   id: string;
-  assetId: string;
+  asset: {
+    name: string;
+    assetTag: string;
+  };
   description: string;
   createdAt: string;
   resolvedAt?: string | null;
-  category?: {
-    name: string;
-  } | null;
+  severity?: string;
 };
 interface PreviousReportsProps {
   reports: Report[];
@@ -34,7 +35,7 @@ export default function PreviousReports({ reports }: PreviousReportsProps) {
           >
             <div className="flex justify gap-4">
               <div className="w-12 h-12 flex items-center justify-center bg-[#F8FAFC] rounded-lg text-[#64748B]">
-                {report.category?.name === "Техник хангамж" ? (
+                {report.asset.name.toLowerCase().includes("mac") ? (
                   <MacBook />
                 ) : (
                   <Monitor size={22} />
@@ -44,7 +45,7 @@ export default function PreviousReports({ reports }: PreviousReportsProps) {
               <div className="flex flex-col">
                 <div className="flex items-center gap-3">
                   <h4 className="text-[16px] font-medium leading-[20px] text-[#000000]">
-                    {report.assetId}
+                    {report.asset.name}
                   </h4>
                   <span className="flex items-center gap-1 bg-[#F0FDF4] text-[12px] text-[#666666] px-2 rounded-md font-medium border border-[#DCFCE7]">
                     <svg
@@ -63,9 +64,9 @@ export default function PreviousReports({ reports }: PreviousReportsProps) {
                   </span>
                 </div>
 
-                {/* <p className="text-[#666666] text-[14px] font-normal mt-0.5">
-                  {report.code}
-                </p> */}
+                <p className="text-[#666666] text-[14px] font-normal mt-0.5">
+                  {report.asset.assetTag}
+                </p>
 
                 <p className="text-[#334155] text-[14px] mt-3 leading-[125%]">
                   <span className="font-medium">Шалтгаан:</span>{" "}
@@ -76,15 +77,13 @@ export default function PreviousReports({ reports }: PreviousReportsProps) {
                   <p className="text-[12px]">
                     Мэдэгдсэн хугацаа:{" "}
                     <span className="text-[#666666] text-[12px]">
-                      {new Date(report.createdAt).toLocaleString()}
+                      {report.createdAt}
                     </span>
                   </p>
                   <p className="text-[12px] ">
                     Шийдвэрлэсэн хугацаа:{" "}
                     <span className="text-[#666666] text-[12px]">
-                      {report.resolvedAt
-                        ? new Date(report.resolvedAt).toLocaleString()
-                        : "-"}
+                      {report.resolvedAt}
                     </span>
                   </p>
                 </div>
@@ -93,7 +92,7 @@ export default function PreviousReports({ reports }: PreviousReportsProps) {
 
             <div className="hidden sm:block">
               <span className="text-[12px] border border-[#E2E8F0] text-[#64748B] px-3 py-1.5 rounded-lg font-medium ">
-                {report.category?.name}
+                {report.severity || "Техник хангамж"}
               </span>
             </div>
           </div>

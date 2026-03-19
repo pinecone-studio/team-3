@@ -233,7 +233,8 @@ export enum MaintenanceSeverityEnum {
 export type MaintenanceTicket = {
   __typename?: 'MaintenanceTicket';
   asset?: Maybe<Asset>;
-  createdAt?: Maybe<Scalars['String']['output']>;
+  assetId: Scalars['ID']['output'];
+  createdAt: Scalars['String']['output'];
   description: Scalars['String']['output'];
   id: Scalars['ID']['output'];
   repairCost?: Maybe<Scalars['Float']['output']>;
@@ -241,7 +242,7 @@ export type MaintenanceTicket = {
   resolvedAt?: Maybe<Scalars['String']['output']>;
   severity?: Maybe<MaintenanceSeverityEnum>;
   status: TicketStatusEnum;
-  updatedAt?: Maybe<Scalars['String']['output']>;
+  updatedAt: Scalars['String']['output'];
   vendorId?: Maybe<Scalars['String']['output']>;
 };
 
@@ -423,11 +424,11 @@ export type Query = {
   getEmployees: Array<Employee>;
   getEmployeesByStatus: Array<Employee>;
   getMaintenanceTicketById?: Maybe<MaintenanceTicket>;
-  getMaintenanceTickets?: Maybe<Array<Maybe<MaintenanceTicket>>>;
+  getMaintenanceTickets: Array<MaintenanceTicket>;
   getPendingAssignments: Array<Assignment>;
   getSubCategories: Array<SubCategory>;
   getSubCategoriesWithCategory: Array<GetSubCategoriesProps>;
-  getTicketsByAssetId?: Maybe<Array<Maybe<MaintenanceTicket>>>;
+  getTicketsByAssetId: Array<MaintenanceTicket>;
 };
 
 
@@ -873,7 +874,8 @@ export type EmployeeResolvers<ContextType = Context, ParentType extends Resolver
 
 export type MaintenanceTicketResolvers<ContextType = Context, ParentType extends ResolversParentTypes['MaintenanceTicket'] = ResolversParentTypes['MaintenanceTicket']> = {
   asset?: Resolver<Maybe<ResolversTypes['Asset']>, ParentType, ContextType>;
-  createdAt?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  assetId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   description?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   repairCost?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
@@ -881,7 +883,7 @@ export type MaintenanceTicketResolvers<ContextType = Context, ParentType extends
   resolvedAt?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   severity?: Resolver<Maybe<ResolversTypes['MaintenanceSeverityEnum']>, ParentType, ContextType>;
   status?: Resolver<ResolversTypes['TicketStatusEnum'], ParentType, ContextType>;
-  updatedAt?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   vendorId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
 };
 
@@ -934,11 +936,11 @@ export type QueryResolvers<ContextType = Context, ParentType extends ResolversPa
   getEmployees?: Resolver<Array<ResolversTypes['Employee']>, ParentType, ContextType>;
   getEmployeesByStatus?: Resolver<Array<ResolversTypes['Employee']>, ParentType, ContextType, RequireFields<QueryGetEmployeesByStatusArgs, 'status'>>;
   getMaintenanceTicketById?: Resolver<Maybe<ResolversTypes['MaintenanceTicket']>, ParentType, ContextType, RequireFields<QueryGetMaintenanceTicketByIdArgs, 'id'>>;
-  getMaintenanceTickets?: Resolver<Maybe<Array<Maybe<ResolversTypes['MaintenanceTicket']>>>, ParentType, ContextType>;
+  getMaintenanceTickets?: Resolver<Array<ResolversTypes['MaintenanceTicket']>, ParentType, ContextType>;
   getPendingAssignments?: Resolver<Array<ResolversTypes['Assignment']>, ParentType, ContextType, RequireFields<QueryGetPendingAssignmentsArgs, 'token'>>;
   getSubCategories?: Resolver<Array<ResolversTypes['SubCategory']>, ParentType, ContextType>;
   getSubCategoriesWithCategory?: Resolver<Array<ResolversTypes['getSubCategoriesProps']>, ParentType, ContextType>;
-  getTicketsByAssetId?: Resolver<Maybe<Array<Maybe<ResolversTypes['MaintenanceTicket']>>>, ParentType, ContextType, RequireFields<QueryGetTicketsByAssetIdArgs, 'assetId'>>;
+  getTicketsByAssetId?: Resolver<Array<ResolversTypes['MaintenanceTicket']>, ParentType, ContextType, RequireFields<QueryGetTicketsByAssetIdArgs, 'assetId'>>;
 };
 
 export type SubCategoryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['SubCategory'] = ResolversParentTypes['SubCategory']> = {

@@ -1,7 +1,7 @@
 import { gql } from 'graphql-tag';
 
 export const maintenanceTicketTypeDefs = gql`
-	# The values here match your TypeScript enum strings: 'CANCELLED', 'OPEN', etc.
+	# Ensure these match the values in your 'TicketStatusEnum' TS enum
 	enum TicketStatusEnum {
 		CANCELLED
 		IN_PROGRESS
@@ -9,6 +9,7 @@ export const maintenanceTicketTypeDefs = gql`
 		RESOLVED
 	}
 
+	# Added to match the 'severity' text field in your Drizzle schema
 	enum MaintenanceSeverityEnum {
 		LOW
 		MEDIUM
@@ -18,16 +19,17 @@ export const maintenanceTicketTypeDefs = gql`
 
 	type MaintenanceTicket {
 		id: ID!
-		asset: Asset
+		assetId: ID! # Changed to match DB column name
+		asset: Asset # For relational joining in resolvers
 		reporterId: ID!
 		description: String!
 		severity: MaintenanceSeverityEnum
-		status: TicketStatusEnum!
+		status: TicketStatusEnum
 		vendorId: String
-		repairCost: Float
-		resolvedAt: String
-		createdAt: String
-		updatedAt: String
+		repairCost: Float # Matches 'real' in Drizzle
+		resolvedAt: String # Timestamps often passed as ISO strings or Ints
+		createdAt: String! # Now marked as non-nullable per DB schema
+		updatedAt: String! # Now marked as non-nullable per DB schema
 	}
 
 	input CreateMaintenanceTicketInput {
@@ -52,9 +54,9 @@ export const maintenanceTicketTypeDefs = gql`
 	}
 
 	extend type Query {
-		getMaintenanceTickets: [MaintenanceTicket]
+		getMaintenanceTickets: [MaintenanceTicket!]!
 		getMaintenanceTicketById(id: ID!): MaintenanceTicket
-		getTicketsByAssetId(assetId: ID!): [MaintenanceTicket]
+		getTicketsByAssetId(assetId: ID!): [MaintenanceTicket!]!
 	}
 
 	extend type Mutation {
