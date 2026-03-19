@@ -1,12 +1,15 @@
 "use client";
-import { useDeleteAssetMutation, useGetAssetsQuery, useUpdateAssetMutation } from "@/gql/graphql";
+import {
+  useDeleteAssetMutation,
+  useGetAssetsQuery,
+  useUpdateAssetMutation,
+} from "@/gql/graphql";
 import AssetManagement from "./_components/AssetManagement";
 
 export default function AdminAssetPage() {
   const { data, loading, error, refetch } = useGetAssetsQuery();
   const [deleteAsset] = useDeleteAssetMutation();
-   const [updateAsset] = useUpdateAssetMutation();
-
+  const [updateAsset] = useUpdateAssetMutation();
   const handleDelete = async (id: string) => {
     if (!confirm("Та энэ хөрөнгийг устгахдаа итгэлтэй байна уу?")) return;
 
@@ -18,7 +21,6 @@ export default function AdminAssetPage() {
       console.error(err);
       alert("Устгах үед алдаа гарлаа: " + err.message);
     }
-    
   };
   const handleUpdate = async (id: string, input: any) => {
     try {
@@ -54,5 +56,12 @@ export default function AdminAssetPage() {
 
   const assets = data?.getAssets || [];
 
-  return <AssetManagement refetch={refetch} assets={assets} onDelete={handleDelete} onUpdate={handleUpdate}/>;
+  return (
+    <AssetManagement
+      refetch={refetch}
+      assets={assets}
+      onDelete={handleDelete}
+      onUpdate={handleUpdate}
+    />
+  );
 }

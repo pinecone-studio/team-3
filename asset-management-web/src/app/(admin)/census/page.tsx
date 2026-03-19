@@ -4,8 +4,9 @@ import { useMemo, useState } from "react";
 import { Plus, Loader2 } from "lucide-react";
 import { gql, useMutation, useQuery } from "@apollo/client";
 import StatCard from "./_components/Statcard";
-import ProjectCard from "./_components/ProjectCard";
+
 import CreateModal from "./_components/CreateModal";
+import ProjectCard from "./_components/ProjectCard";
 
 const GET_CENSUS_EVENTS = gql`
   query GetCensusEvents {
