@@ -29,6 +29,7 @@ export const assets = sqliteTable('assets', {
 	locationId: text('location_id'),
 	assignedTo: text('assigned_to').references(() => employees.id),
 	deletedAt: integer('deleted_at', { mode: 'timestamp' }),
+	imageUrl: text('image_url').notNull(),
 });
 export const assetsRelations = relations(assets, ({ one }) => ({
 	category: one(categories, {

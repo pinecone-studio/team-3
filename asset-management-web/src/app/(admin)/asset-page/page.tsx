@@ -53,6 +53,6 @@ export default function AdminAssetPage() {
   }
 
   const assets = data?.getAssets || [];
-  console.log("data", data);
-  return <AssetManagement assets={assets} onDelete={handleDelete} onUpdate={handleUpdate}/>;
+
+  return <AssetManagement refetch={refetch} assets={assets} onDelete={handleDelete} onUpdate={handleUpdate}/>;
 }

@@ -1,0 +1,3 @@
+mutation DeleteSubCategoryById($deleteSubCategoryByIdId: ID!) {
+  deleteSubCategoryById(id: $deleteSubCategoryByIdId)
+}

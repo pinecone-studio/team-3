@@ -21,6 +21,7 @@ import {
   mockHistory,
 } from "./_components/mockData";
 import {
+  useGetActiveCensusIdQuery,
   useGetAssetsByEmployeeIdQuery,
   useGetAssignmentsByEmployeeQuery,
   useGetEmployeeDataQuery,
@@ -51,7 +52,6 @@ export default function AssetsPage() {
     },
     skip: !user?.id,
   });
-  console.log("assetsData", assetsData);
 
   const assetsHistory =
     assignmentsData?.getAssignmentsByEmployee.filter(
@@ -79,6 +79,11 @@ export default function AssetsPage() {
     },
     skip: !employeeId, // Don't run the query until we have the ID
   });
+  const {
+    data: censusData,
+    loading: censusLoading,
+    error: censusError,
+  } = useGetActiveCensusIdQuery();
 
   /**
    * 2. Transform the Data
@@ -118,6 +123,10 @@ export default function AssetsPage() {
     };
   }, [employeeData]);
 
+  const ACTIVE_CENSUS_ID =
+    censusData?.getCensusEvents[censusData.getCensusEvents.length - 1]?.id ||
+    "ede88790-5b49-47fe-8c2a-e77dbc5f16f9";
+  console.log(ACTIVE_CENSUS_ID, "test");
   // Handler for GarTab (Signature)
   const handleSignatureConfirm = async (signature: string) => {
     console.log("Signature captured:", signature);
@@ -142,8 +151,6 @@ export default function AssetsPage() {
       </div>
     );
   }
-
-  const ACTIVE_CENSUS_ID = "ede88790-5b49-47fe-8c2a-e77dbc5f16f9";
 
   return (
     <div className="min-h-screen bg-[#F9FAFB]">
@@ -213,7 +220,7 @@ export default function AssetsPage() {
         isOpen={isScannerOpen}
         onClose={() => setIsScannerOpen(false)}
         censusId={ACTIVE_CENSUS_ID}
-        verifierId={user?.id || employeeId}
+        verifierId={localStorage.getItem("employeeId") || user?.id || ""}
       />
     </div>
   );

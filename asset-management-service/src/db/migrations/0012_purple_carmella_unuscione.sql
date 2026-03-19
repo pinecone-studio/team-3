@@ -1,0 +1,2 @@
+ALTER TABLE `census_tasks` ADD `created_at` integer DEFAULT '"2026-03-19T01:40:50.381Z"' NOT NULL;--> statement-breakpoint
+ALTER TABLE `census_tasks` ADD `updated_at` integer DEFAULT '"2026-03-19T01:40:50.381Z"' NOT NULL;

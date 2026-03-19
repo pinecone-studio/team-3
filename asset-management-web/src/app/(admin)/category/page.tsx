@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { Checkbox, Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/libs"
-import { useGetCategoriesQuery } from "@/gql/graphql"
+import {  useGetCategoriesWithAssetsQuery } from "@/gql/graphql"
 import { CategoryHeader } from "./_components/CategoryHeader"
 import { CategoryPagination } from "./_components/CategoryPagination"
 import { AddCategoryAndSearch } from "./_components/AddCategoryAndSearch"
@@ -14,7 +14,7 @@ export default function CategoryPage() {
     const [currentPage, setCurrentPage] = useState(1)
     const [itemsPerPage, setItemsPerPage] = useState("10")
 
-    const { data, loading, refetch } = useGetCategoriesQuery()
+    const { data, loading, refetch } = useGetCategoriesWithAssetsQuery()
     const categories = data?.getCategories ?? []
 
     const filteredCategories = categories.filter((category) =>
@@ -64,7 +64,7 @@ export default function CategoryPage() {
             <h1 className="font-bold text-[22px]">Categories</h1>
             <AddCategoryAndSearch refetch={refetch} searchQuery={searchQuery} handleSearch={handleSearch} />
             <div className="border rounded-lg">
-                <CategoryHeader  filteredCategories={filteredCategories} selectedCategories={selectedCategories} />
+                <CategoryHeader  refetch={refetch} filteredCategories={filteredCategories} selectedCategories={selectedCategories} />
                 <Table>
                     <TableHeader>
                         <TableRow>

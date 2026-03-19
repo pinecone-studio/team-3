@@ -1,4 +1,4 @@
-query GetCategories {
+query GetCategoriesWithAssets {
   getCategories {
     id
     name
@@ -19,6 +19,7 @@ query GetCategories {
       locationId
       assignedTo
       deletedAt
+      imageUrl
     }
   }
 }

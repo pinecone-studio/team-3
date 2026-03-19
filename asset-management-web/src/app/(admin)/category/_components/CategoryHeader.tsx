@@ -1,14 +1,16 @@
 import { Category, useDeleteCategoryByIdsMutation } from '@/gql/graphql'
 import { Button, Popover, PopoverContent, PopoverTrigger } from '@/libs'
 import { Trash } from 'lucide-react'
-import React from 'react'
+import React, { useState } from 'react'
 import { toast } from 'sonner'
 type CategoryHeaderProps = {
     filteredCategories: Category[]
     selectedCategories: string[]
+    refetch:()=> void
 }
-export const CategoryHeader = ({ filteredCategories, selectedCategories }: CategoryHeaderProps) => {
-    const [deleteAllCategory, { loading }] = useDeleteCategoryByIdsMutation({onCompleted:()=>{toast.success("Амжилттай бүх ангилалийг устгалаа")}})
+export const CategoryHeader = ({ filteredCategories, selectedCategories ,refetch}: CategoryHeaderProps) => {
+    const [isOpen,setIsOpen] = useState(false)
+    const [deleteAllCategory, { loading }] = useDeleteCategoryByIdsMutation({onCompleted:()=>{toast.success("Амжилттай бүх ангилалийг устгалаа");refetch();setIsOpen(false)}})
     const deleteHandler = async () => {
         await deleteAllCategory({ variables: { ids: selectedCategories } })
     }
@@ -20,7 +22,7 @@ export const CategoryHeader = ({ filteredCategories, selectedCategories }: Categ
                     {filteredCategories.length} categories
                 </p>
             </div>
-            <Popover >
+            <Popover open={isOpen} onOpenChange={setIsOpen}>
                 <PopoverTrigger asChild disabled={selectedCategories.length === 0}>
                     <Button variant="outline" disabled={selectedCategories.length === 0}>
                         Actions
