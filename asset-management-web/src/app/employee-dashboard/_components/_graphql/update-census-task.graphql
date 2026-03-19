@@ -1,0 +1,3 @@
+mutation UpdateCensusTask($input: UpdateCensusTaskInput!) {
+  updateCensusTask(input: $input)
+}

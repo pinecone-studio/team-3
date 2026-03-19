@@ -7,6 +7,7 @@ import { notifyCensusStart } from '../../../../utils/notify-census-start';
 export const createCensusEvent: MutationResolvers['createCensusEvent'] = async (_, { input }, context) => {
 	const DB = drizzle(context.env.DB);
 	const censusId = crypto.randomUUID();
+	console.log('working');
 
 	try {
 		// 1. Fetch relevant assets and employees
@@ -19,10 +20,12 @@ export const createCensusEvent: MutationResolvers['createCensusEvent'] = async (
 			employeeEmail: employees.email,
 			department: employees.department,
 		})
+
 			.from(assignments)
 			.innerJoin(assets, eq(assignments.assetId, assets.id))
 			.innerJoin(employees, eq(assignments.employeeId, employees.id))
 			.where(and(isNull(assets.deletedAt), isNull(assignments.returnedAt)));
+		console.log('1');
 
 		// 2. Filter based on Scope
 		let filtered = assignedAssets;
@@ -31,6 +34,7 @@ export const createCensusEvent: MutationResolvers['createCensusEvent'] = async (
 		} else if (input.scope === 'department' && input.scopeFilter) {
 			filtered = assignedAssets.filter((a) => a.department === input.scopeFilter);
 		}
+		console.log('2');
 
 		// 3. De-duplicate assets
 		const uniqueAssets = Array.from(new Map(filtered.map((a) => [a.assetId, a])).values());
@@ -57,6 +61,8 @@ export const createCensusEvent: MutationResolvers['createCensusEvent'] = async (
 				discrepancyFlag: false, // Matches your schema default
 			}));
 
+			console.log('3');
+
 			// 5. Execute in Chunks using Batch
 			// We push the event creation as the first statement in the batch
 			const statements: any[] = [censusEventInsert];
@@ -68,6 +74,7 @@ export const createCensusEvent: MutationResolvers['createCensusEvent'] = async (
 			}
 
 			await DB.batch(statements as [any, ...any[]]);
+			console.log('4');
 
 			// 6. Group by Employee for Emailing
 			const employeeGroups = uniqueAssets.reduce(
@@ -85,6 +92,7 @@ export const createCensusEvent: MutationResolvers['createCensusEvent'] = async (
 				},
 				{} as Record<string, { email: string; name: string; tags: string[] }>,
 			);
+			console.log('5');
 
 			// 7. Trigger Notifications
 			const notificationPromises = Object.values(employeeGroups).map((emp) =>
@@ -92,6 +100,7 @@ export const createCensusEvent: MutationResolvers['createCensusEvent'] = async (
 			);
 
 			await Promise.allSettled(notificationPromises);
+			console.log('6');
 		}
 
 		return Response.Success;

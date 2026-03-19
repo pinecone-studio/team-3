@@ -1,6 +1,6 @@
 import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core';
-import { assets, employees ,censusEvents } from './index';
-
+import { assets, employees, censusEvents } from './index';
+import { create } from 'node:domain';
 
 export const censusTasks = sqliteTable('census_tasks', {
 	id: text('id').primaryKey(),
@@ -15,4 +15,6 @@ export const censusTasks = sqliteTable('census_tasks', {
 	conditionReported: text('condition_reported'),
 	locationConfirmed: integer('location_confirmed', { mode: 'boolean' }),
 	discrepancyFlag: integer('discrepancy_flag', { mode: 'boolean' }).default(false),
+	createdAt: integer('created_at', { mode: 'timestamp' }).notNull().default(new Date()), // Or .default(() => new Date())
+	updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull().default(new Date()),
 });

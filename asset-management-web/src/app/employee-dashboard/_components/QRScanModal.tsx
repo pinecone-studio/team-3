@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import QrScanner from "qr-scanner";
 import { X } from "lucide-react";
+import { useUpdateCensusTaskMutation } from "@/gql/graphql";
 
 type ScannedTask = {
   id: string;
@@ -47,79 +48,20 @@ export default function QRScanModal({
   const [confirming, setConfirming] = useState(false);
   const [success, setSuccess] = useState("");
 
-  useEffect(() => {
-    if (!isOpen || !videoRef.current) return;
+  const [updateCensusTask] = useUpdateCensusTaskMutation();
 
-    let stopped = false;
-
-    const startScanner = async () => {
+  const fetchTaskByAssetId = useCallback(
+    async (assetId: string) => {
+      const cleanAssetId = assetId.trim();
       try {
+        setLoading(true);
         setScanError("");
-        setSuccess("");
-        setTask(null);
 
-        const scanner = new QrScanner(
-          videoRef.current!,
-          async (result) => {
-            if (stopped) return;
-
-            const raw = typeof result === "string" ? result : result.data;
-            const assetId = raw.trim();
-
-            console.log("SCANNED RAW:", raw);
-            console.log("SCANNED CLEAN:", assetId);
-
-            if (!assetId) return;
-
-            scanner.stop();
-            await fetchTaskByAssetId(assetId);
-          },
-          {
-            returnDetailedScanResult: true,
-            highlightScanRegion: true,
-            highlightCodeOutline: true,
-          },
-        );
-
-        scannerRef.current = scanner;
-        await scanner.start();
-      } catch (error) {
-        console.error(error);
-        setScanError("Камер асаахад алдаа гарлаа");
-      }
-    };
-
-    startScanner();
-
-    return () => {
-      stopped = true;
-      if (scannerRef.current) {
-        scannerRef.current.stop();
-        scannerRef.current.destroy();
-        scannerRef.current = null;
-      }
-    };
-  }, [isOpen]);
-
-  const fetchTaskByAssetId = async (assetId: string) => {
-    const cleanAssetId = assetId.trim();
-
-    try {
-      setLoading(true);
-      setScanError("");
-
-      console.log("FETCHING TASK WITH:", {
-        censusId,
-        assetId: cleanAssetId,
-      });
-
-      const res = await fetch("http://localhost:8787/graphql", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          query: `
+        const res = await fetch("http://localhost:8787/graphql", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            query: `
           query GetCensusTaskByAssetId($censusId: ID!, $assetId: ID!) {
             getCensusTaskByAssetId(censusId: $censusId, assetId: $assetId) {
               id
@@ -143,31 +85,74 @@ export default function QRScanModal({
             }
           }
         `,
-          variables: {
-            censusId,
-            assetId: cleanAssetId,
-          },
-        }),
-      });
+            variables: { censusId, assetId: cleanAssetId },
+          }),
+        });
 
-      const json = await res.json();
-      console.log("TASK QUERY RESULT:", json);
+        const json = await res.json();
+        const foundTask = json?.data?.getCensusTaskByAssetId;
 
-      const foundTask = json?.data?.getCensusTaskByAssetId;
+        if (!foundTask) {
+          setScanError("Энэ QR-д тохирох census task олдсонгүй");
+          return;
+        }
 
-      if (!foundTask) {
-        setScanError("Энэ QR-д тохирох census task олдсонгүй");
-        return;
+        setTask(foundTask);
+      } catch (error) {
+        console.error(error);
+        setScanError("Мэдээлэл авахад алдаа гарлаа");
+      } finally {
+        setLoading(false);
       }
+    },
+    [censusId],
+  );
 
-      setTask(foundTask);
-    } catch (error) {
-      console.error(error);
-      setScanError("QR мэдээлэл авахад алдаа гарлаа");
-    } finally {
-      setLoading(false);
+  const startScanner = useCallback(async () => {
+    if (!videoRef.current) return;
+
+    setScanError("");
+    setSuccess("");
+    setTask(null);
+
+    const scanner = new QrScanner(
+      videoRef.current,
+      async (result) => {
+        const raw = typeof result === "string" ? result : result.data;
+        if (!raw) return;
+
+        scanner.stop();
+        await fetchTaskByAssetId(raw);
+      },
+      {
+        returnDetailedScanResult: true,
+        highlightScanRegion: true,
+        highlightCodeOutline: true,
+      },
+    );
+
+    scannerRef.current = scanner;
+    try {
+      await scanner.start();
+    } catch (err) {
+      setScanError("Камер асаахад алдаа гарлаа");
     }
-  };
+  }, [fetchTaskByAssetId]);
+
+  useEffect(() => {
+    if (isOpen) {
+      startScanner();
+    } else {
+      scannerRef.current?.stop();
+      scannerRef.current?.destroy();
+      scannerRef.current = null;
+    }
+
+    return () => {
+      scannerRef.current?.stop();
+      scannerRef.current?.destroy();
+    };
+  }, [isOpen, startScanner]);
 
   const handleConfirm = async () => {
     if (!task) return;
@@ -175,36 +160,28 @@ export default function QRScanModal({
     try {
       setConfirming(true);
       setScanError("");
-      setSuccess("");
 
-      const res = await fetch("http://localhost:8787/graphql", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          query: `
-            mutation UpdateCensusTask($input: UpdateCensusTaskInput!) {
-              updateCensusTask(input: $input)
-            }
-          `,
-          variables: {
-            input: {
-              id: task.id,
-              verifierId,
-              verifiedAt: new Date().toISOString(),
-              conditionReported: task.conditionReported || "Good",
-              locationConfirmed: true,
-              discrepancyFlag: false,
-            },
+      // Using en-CA locale for consistent YYYY-MM-DD local time
+      const today = new Intl.DateTimeFormat("en-CA").format(new Date());
+
+      const { data } = await updateCensusTask({
+        variables: {
+          input: {
+            id: task.id,
+            verifierId,
+            verifiedAt: today,
+            conditionReported: task.conditionReported || "Good",
+            locationConfirmed: true,
+            discrepancyFlag: false,
           },
-        }),
+        },
       });
 
-      const json = await res.json();
-      console.log("UPDATE RESULT:", json);
-
-      setSuccess("QR баталгаажуулалт амжилттай");
+      if (data) {
+        setSuccess("QR баталгаажуулалт амжилттай");
+        // Optional: Close modal after a short delay
+        setTimeout(() => onClose(), 1500);
+      }
     } catch (error) {
       console.error(error);
       setScanError("Баталгаажуулах үед алдаа гарлаа");
@@ -213,141 +190,109 @@ export default function QRScanModal({
     }
   };
 
-  const handleRescan = async () => {
-    setTask(null);
-    setScanError("");
-    setSuccess("");
-
-    if (!videoRef.current) return;
-
-    try {
-      const scanner = new QrScanner(
-        videoRef.current,
-        async (result) => {
-          const assetId = typeof result === "string" ? result : result.data;
-          if (!assetId) return;
-
-          scanner.stop();
-          await fetchTaskByAssetId(assetId);
-        },
-        {
-          returnDetailedScanResult: true,
-          highlightScanRegion: true,
-          highlightCodeOutline: true,
-        },
-      );
-
-      scannerRef.current = scanner;
-      await scanner.start();
-    } catch (error) {
-      console.error(error);
-      setScanError("Камер дахин асаахад алдаа гарлаа");
-    }
-  };
-
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 px-4">
-      <div className="w-full max-w-[420px] rounded-[28px] bg-white p-6 shadow-2xl">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4 backdrop-blur-sm">
+      <div className="w-full max-w-[420px] rounded-[28px] bg-white p-6 shadow-2xl animate-in fade-in zoom-in duration-200">
         <div className="mb-4 flex items-start justify-between">
           <div>
-            <h2 className="text-[28px] font-semibold text-gray-900">
+            <h2 className="text-[26px] font-semibold text-gray-900 leading-tight">
               QR баталгаажуулалт
             </h2>
-            <p className="mt-2 text-sm text-gray-500">
-              Төхөөрөмж дээрх QR кодыг камераар скан хийнэ үү
+            <p className="mt-1 text-sm text-gray-500">
+              Хөрөнгийн QR кодыг камераар уншуулна уу
             </p>
           </div>
-
           <button
             onClick={onClose}
-            className="rounded-full p-2 hover:bg-gray-100"
+            className="rounded-full p-2 hover:bg-gray-100 transition-colors"
           >
-            <X className="h-6 w-6 text-gray-700" />
+            <X className="h-6 w-6 text-gray-400" />
           </button>
         </div>
 
-        {!task && (
-          <div className="rounded-2xl bg-[#EEF2F7] p-4">
-            <div className="overflow-hidden rounded-2xl bg-[#E9EEF5]">
+        <div className="relative overflow-hidden rounded-2xl bg-[#F1F5F9]">
+          {!task ? (
+            <div className="p-1">
               <video
                 ref={videoRef}
-                className="h-[320px] w-full rounded-2xl object-cover"
+                className="h-[300px] w-full rounded-xl object-cover"
               />
+              {loading && (
+                <div className="absolute inset-0 flex items-center justify-center bg-white/60">
+                  <p className="text-sm font-medium text-blue-600 animate-pulse">
+                    Шалгаж байна...
+                  </p>
+                </div>
+              )}
             </div>
+          ) : (
+            <div className="space-y-4 p-5 bg-white border border-blue-50">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <p className="text-[11px] uppercase tracking-wider text-gray-400 font-bold">
+                    Asset Tag
+                  </p>
+                  <p className="text-lg font-bold text-gray-900">
+                    {task.asset?.assetTag}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-[11px] uppercase tracking-wider text-gray-400 font-bold">
+                    Status
+                  </p>
+                  <p className="text-sm font-medium text-blue-600 bg-blue-50 px-2 py-0.5 rounded-md inline-block">
+                    {task.asset?.status}
+                  </p>
+                </div>
+              </div>
 
-            {loading && (
-              <p className="mt-4 text-center text-sm text-gray-500">
-                QR шалгаж байна...
-              </p>
-            )}
+              <div className="h-px bg-gray-100 w-full" />
 
-            {!loading && !scanError && (
-              <p className="mt-4 text-center text-sm text-gray-500">
-                Камер ачаалж байна...
-              </p>
-            )}
-          </div>
-        )}
+              <div className="space-y-3">
+                <div className="flex justify-between">
+                  <span className="text-sm text-gray-500">Ангилал</span>
+                  <span className="text-sm font-medium text-gray-800">
+                    {task.asset?.category?.name || "—"}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-sm text-gray-500">Сериал дугаар</span>
+                  <span className="text-sm font-medium text-gray-800">
+                    {task.asset?.serialNumber || "—"}
+                  </span>
+                </div>
+              </div>
 
-        {task && (
-          <div className="space-y-4 rounded-2xl border border-gray-200 bg-[#F8FAFC] p-4">
-            <div>
-              <p className="text-xs text-gray-400">Asset tag</p>
-              <p className="text-lg font-semibold text-gray-900">
-                {task.asset?.assetTag || task.assetId}
-              </p>
+              <div className="flex gap-3 pt-3">
+                <button
+                  onClick={handleConfirm}
+                  disabled={confirming}
+                  className="flex-1 rounded-xl bg-blue-600 px-4 py-3.5 text-sm font-bold text-white shadow-lg shadow-blue-200 hover:bg-blue-700 disabled:opacity-50 transition-all active:scale-95"
+                >
+                  {confirming ? "Хадгалж байна..." : "Баталгаажуулах"}
+                </button>
+                <button
+                  onClick={startScanner}
+                  className="rounded-xl border border-gray-200 px-4 py-3.5 text-sm font-bold text-gray-600 hover:bg-gray-50 transition-all"
+                >
+                  Дахин
+                </button>
+              </div>
             </div>
-
-            <div>
-              <p className="text-xs text-gray-400">Category</p>
-              <p className="text-base font-medium text-gray-900">
-                {task.asset?.category?.name || "Тодорхойгүй"}
-              </p>
-            </div>
-
-            <div>
-              <p className="text-xs text-gray-400">Serial number</p>
-              <p className="text-base font-medium text-gray-900">
-                {task.asset?.serialNumber || "Сериал дугааргүй"}
-              </p>
-            </div>
-
-            <div>
-              <p className="text-xs text-gray-400">Status</p>
-              <p className="text-base font-medium text-gray-900">
-                {task.asset?.status || "Тодорхойгүй"}
-              </p>
-            </div>
-
-            <div className="flex gap-3 pt-2">
-              <button
-                onClick={handleConfirm}
-                disabled={confirming}
-                className="flex-1 rounded-xl bg-[#2563EB] px-4 py-3 text-sm font-semibold text-white hover:bg-blue-700 disabled:opacity-60"
-              >
-                {confirming ? "Баталгаажуулж байна..." : "Баталгаажуулах"}
-              </button>
-
-              <button
-                onClick={handleRescan}
-                className="rounded-xl border border-gray-200 px-4 py-3 text-sm font-semibold text-gray-700 hover:bg-gray-50"
-              >
-                Дахин уншуулах
-              </button>
-            </div>
-          </div>
-        )}
+          )}
+        </div>
 
         {scanError && (
-          <div className="mt-4 rounded-2xl border border-red-200 bg-red-50 p-3 text-sm text-red-600">
+          <div className="mt-4 rounded-xl bg-red-50 p-3.5 text-xs font-medium text-red-600 border border-red-100">
             {scanError}
           </div>
         )}
 
         {success && (
-          <div className="mt-4 rounded-2xl border border-green-200 bg-green-50 p-3 text-sm text-green-600">
+          <div className="mt-4 rounded-xl bg-green-50 p-3.5 text-xs font-medium text-green-600 border border-green-100 flex items-center gap-2">
+            <div className="h-2 w-2 rounded-full bg-green-500 animate-ping" />
             {success}
           </div>
         )}
