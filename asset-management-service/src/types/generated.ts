@@ -27,6 +27,7 @@ export type Asset = {
   id: Scalars['ID']['output'];
   imageUrl: Scalars['String']['output'];
   locationId?: Maybe<Scalars['String']['output']>;
+  name: Scalars['String']['output'];
   purchaseCost?: Maybe<Scalars['Float']['output']>;
   purchaseDate?: Maybe<Scalars['String']['output']>;
   qrUrl: Scalars['String']['output'];
@@ -178,6 +179,11 @@ export type Department = {
   name: Scalars['String']['output'];
 };
 
+export type DuplicateAssetInput = {
+  assetId: Scalars['String']['input'];
+  count: Scalars['Int']['input'];
+};
+
 export type Employee = {
   __typename?: 'Employee';
   birthDayAndMonth?: Maybe<Scalars['String']['output']>;
@@ -255,6 +261,7 @@ export type Mutation = {
   deleteEmployee: Response;
   deleteMaintenanceTicket: Response;
   deleteSubCategoryById: Response;
+  duplicateAsset: Response;
   editCategoryById: Response;
   editSubCategoryById: Response;
   finalizeCensusEvent: Response;
@@ -334,6 +341,11 @@ export type MutationDeleteMaintenanceTicketArgs = {
 
 export type MutationDeleteSubCategoryByIdArgs = {
   id: Scalars['ID']['input'];
+};
+
+
+export type MutationDuplicateAssetArgs = {
+  input: DuplicateAssetInput;
 };
 
 
@@ -690,6 +702,7 @@ export type ResolversTypes = {
   CreateMaintenanceTicketInput: CreateMaintenanceTicketInput;
   DeleteEmployeeInput: DeleteEmployeeInput;
   Department: ResolverTypeWrapper<Department>;
+  DuplicateAssetInput: DuplicateAssetInput;
   Employee: ResolverTypeWrapper<Employee>;
   EmployeeRole: EmployeeRole;
   EmployeeStatus: EmployeeStatus;
@@ -733,6 +746,7 @@ export type ResolversParentTypes = {
   CreateMaintenanceTicketInput: CreateMaintenanceTicketInput;
   DeleteEmployeeInput: DeleteEmployeeInput;
   Department: Department;
+  DuplicateAssetInput: DuplicateAssetInput;
   Employee: Employee;
   Float: Scalars['Float']['output'];
   ID: Scalars['ID']['output'];
@@ -763,6 +777,7 @@ export type AssetResolvers<ContextType = Context, ParentType extends ResolversPa
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   imageUrl?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   locationId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   purchaseCost?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
   purchaseDate?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   qrUrl?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
@@ -885,6 +900,7 @@ export type MutationResolvers<ContextType = Context, ParentType extends Resolver
   deleteEmployee?: Resolver<ResolversTypes['Response'], ParentType, ContextType, RequireFields<MutationDeleteEmployeeArgs, 'id' | 'input'>>;
   deleteMaintenanceTicket?: Resolver<ResolversTypes['Response'], ParentType, ContextType, RequireFields<MutationDeleteMaintenanceTicketArgs, 'id'>>;
   deleteSubCategoryById?: Resolver<ResolversTypes['Response'], ParentType, ContextType, RequireFields<MutationDeleteSubCategoryByIdArgs, 'id'>>;
+  duplicateAsset?: Resolver<ResolversTypes['Response'], ParentType, ContextType, RequireFields<MutationDuplicateAssetArgs, 'input'>>;
   editCategoryById?: Resolver<ResolversTypes['Response'], ParentType, ContextType, RequireFields<MutationEditCategoryByIdArgs, 'input'>>;
   editSubCategoryById?: Resolver<ResolversTypes['Response'], ParentType, ContextType, RequireFields<MutationEditSubCategoryByIdArgs, 'input'>>;
   finalizeCensusEvent?: Resolver<ResolversTypes['Response'], ParentType, ContextType, RequireFields<MutationFinalizeCensusEventArgs, 'censusId'>>;

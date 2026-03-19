@@ -1,11 +1,12 @@
 "use client";
 
-import { Asset } from "@/gql/graphql";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/libs";
-import { ChevronLeft, ChevronRight, Download, ExternalLink, MoreHorizontal, PanelLeft, Pencil, Search } from "lucide-react";
+import { Asset, AssetStatusEnum } from "@/gql/graphql";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/libs";
+import { ChevronLeft, ChevronRight, Download,  PanelLeft, Search } from "lucide-react";
 import { useState, useMemo } from "react";
 import { AddAsset } from "./add-asset/AddAsset";
 import Image from "next/image";
+import { AssetActions } from "./AssetActions";
 
 
 type AssetManagementProps = {
@@ -24,20 +25,6 @@ export default function AssetManagement({ assets, refetch }: AssetManagementProp
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
   const pageSize = 12;
 
-  const getStatusStyle = (status: string) => {
-    switch (status) {
-      case "ASSIGNED":
-        return "text-[#0251CB] bg-[#EEF4FF] border-[#D1E0FF]";
-      case "REPAIR":
-        return "text-[#F79009] bg-[#FFFAEB] border-[#FEDF89]";
-      case "DECOMMISSION":
-        return "text-[#F04438] bg-[#FEF3F2] border-[#FEE4E2]";
-      case "AVAILABLE":
-        return "text-[#12B76A] bg-[#ECFDF3] border-[#ABEFC6]";
-      default:
-        return "text-gray-600 bg-gray-50 border-gray-200";
-    }
-  };
 
   const getStatusLabel = (status: string) => {
     switch (status) {
@@ -92,7 +79,7 @@ export default function AssetManagement({ assets, refetch }: AssetManagementProp
       setSelectedItems(paginatedAssets.map((item) => item.id));
     }
   };
-console.log(paginatedAssets)
+
   return (
     <div className="flex min-h-screen bg-white">
       {/* Header */}
@@ -184,11 +171,11 @@ console.log(paginatedAssets)
           </div>
 
           {/* Table */}
-          <div className="border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+          <div className="border border-gray-200 rounded-lg overflow-hidden">
             <table className="w-full text-left border-collapse bg-white">
-              <thead className="border-b border-gray-200 bg-gray-50/50">
-                <tr className="text-gray-600 text-xs font-medium uppercase tracking-wider">
-                  <th className="px-6 py-4 w-12">
+              <thead className="border-b border-gray-200">
+                <tr className="text-gray-500 text-sm font-normal">
+                  <th className="px-4 py-4 w-10 font-normal">
                     <input
                       type="checkbox"
                       checked={
@@ -199,13 +186,21 @@ console.log(paginatedAssets)
                       className="rounded border-gray-300 w-4 h-4 accent-amber-500 cursor-pointer"
                     />
                   </th>
-                  <th className="px-4 py-4">Нэр</th>
-                  <th className="px-4 py-4">Ангилал</th>
-                  <th className="px-4 py-4">Таг</th>
-                  <th className="px-4 py-4">Хувиарлагдсан</th>
-                  <th className="px-4 py-4">Байршил</th>
-                  <th className="px-4 py-4 text-right">Үнэ</th>
-                  <th className="px-10 py-4 w-10"></th>
+                  <th className="py-4 font-normal text-left" style={{ width: '40%' }}>Хөрөнгө</th>
+                  <th className="px-4 py-4 font-normal text-left">Ангилал</th>
+                  
+                  <th className="px-4 py-4 font-normal text-left">
+                    <span className="inline-flex items-center gap-1">
+                      Хуваарилагдсан
+                      <svg className="w-3.5 h-3.5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <circle cx="12" cy="12" r="10" strokeWidth="1.5" />
+                        <path strokeLinecap="round" strokeWidth="1.5" d="M12 16v-4m0-4h.01" />
+                      </svg>
+                    </span>
+                  </th>
+                  <th className="px-4 py-4 font-normal text-left">Хэлтэс</th>
+                  <th className="px-4 py-4 font-normal text-left">Үнэ</th>
+                  <th className="px-4 py-4 font-normal text-right">Actions</th>
                 </tr>
               </thead>
 
@@ -215,7 +210,7 @@ console.log(paginatedAssets)
                     key={item.id}
                     className="hover:bg-gray-50/50 transition-colors group"
                   >
-                    <td className="px-6 py-4">
+                    <td className="px-4 py-4">
                       <input
                         type="checkbox"
                         checked={selectedItems.includes(item.id)}
@@ -224,67 +219,47 @@ console.log(paginatedAssets)
                       />
                     </td>
 
-                    <td className="px-4 py-4 font-medium text-gray-900">
-                      <div className="flex gap-2">
-                        <div className="border p-2 w-12 rounded-sm">
-                          <img src={item.imageUrl} width={30} height={20} alt="zurag" />
+                    <td className="py-4 font-medium text-gray-900">
+                      <div className="flex items-center gap-3">
+                        <div className="border border-gray-200 p-1.5 w-12 h-12 rounded-md flex items-center justify-center bg-white">
+                          <Image src={item.imageUrl} width={32} height={32} alt="zurag" className="object-contain" />
                         </div>
-                        <div className="flex flex-col gap-2">
-                          <p>{item.subCategory?.name}</p>
-
+                        <div className="flex flex-col gap-1">
+                          <p className="text-sm font-medium text-gray-900">{item.name}</p>
                           <span
-                            className={`px-5 border rounded-[8px] text-xs font-medium inline-flex items-center whitespace-nowrap ${getStatusStyle(
-                              item.status
-                            )}`}
+                            className={`inline-flex items-center gap-1.5 text-xs font-medium ${item.status === AssetStatusEnum.Available ? "text-emerald-600" :
+                              item.status === AssetStatusEnum.Assigned ? "text-blue-600" :
+                                item.status === AssetStatusEnum.InRepair ? "text-amber-600" : "text-red-600"
+                              }`}
                           >
+                            <span className={`w-1.5 h-1.5 rounded-full ${item.status === AssetStatusEnum.Available ? "bg-emerald-500" :
+                              item.status === AssetStatusEnum.Assigned ? "bg-blue-500" :
+                                item.status === AssetStatusEnum.InRepair ? "bg-amber-500" : "bg-red-500"
+                              }`}></span>
                             {getStatusLabel(item.status)}
                           </span>
                         </div>
-
                       </div>
                     </td>
 
                     <td className="px-4 py-4">
-                      <span className="px-2.5 py-1 border border-gray-200 rounded-md text-xs text-gray-700 font-medium bg-white">
-                        {item?.category?.name}
+                      <span className="px-3 py-1.5 bg-gray-100 rounded-full text-xs  font-medium">
+                        {item?.category?.name || "—"}
                       </span>
                     </td>
-                    <td className="px-4 py-4 text-gray-600 font-medium">
-                      {item.assetTag}
+                    <td className="px-4 py-4 text-gray-400 text-sm">
+                      {item.assignedTo ? "Хувиарлагдсан" : "Хувиардагдаагүй"}
                     </td>
+                    <td className="px-4 py-4 text-gray-400 text-sm">
+                      {item.department?.name || "—"}
+                    </td>
+                    <td className="px-4 py-4 text-gray-400 text-sm">
+                      {item.purchaseCost}
+                    </td>
+                   
+                    
                     <td className="px-4 py-4">
-                      {item.assignedTo ? (
-                        <div className="flex items-center gap-3">
-                          <p>Хуваарилагдсан</p>
-                        </div>
-                      ) : (
-                        <span className="text-gray-400">Хуваарилагдаагүй</span>
-                      )}
-                    </td>
-                    <td className="px-4 py-4 text-gray-600 text-sm">
-                      {item.department?.name}
-                    </td>
-                    <td className="px-4 py-4 text-right font-semibold text-gray-900 whitespace-nowrap">
-                      {item.purchaseCost?.toLocaleString()} ₮
-                    </td>
-                    <td className="px-6 py-4">
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <button className="p-1.5 hover:bg-gray-100 rounded-md transition-colors  group-hover:opacity-100">
-                            <MoreHorizontal size={18}/>
-                          </button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end" className="w-40">
-                          <DropdownMenuItem className="gap-2">
-                            <Pencil size={14} />
-                            Засах
-                          </DropdownMenuItem>
-                          <DropdownMenuItem className="gap-2">
-                            <ExternalLink size={14} />
-                            Дэлгэрэнгүй
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
+                      <AssetActions item={item} refetch={refetch}/>
                     </td>
                   </tr>
                 ))}
