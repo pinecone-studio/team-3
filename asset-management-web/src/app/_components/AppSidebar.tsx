@@ -1,6 +1,10 @@
 "use client";
 
-import { EmployeeRole, useGetAdminEmployeesQuery } from "@/gql/graphql";
+import {
+  EmployeeRole,
+  useGetAdminEmployeesQuery,
+  useGetEmployeeByIdQuery,
+} from "@/gql/graphql";
 import {
   Sidebar,
   SidebarContent,
@@ -9,23 +13,34 @@ import {
   SidebarMenuItem,
   cn,
 } from "@/libs";
-import { LayoutDashboard, AlertTriangle, Boxes, Settings } from "lucide-react";
+import { useUser } from "@clerk/nextjs";
+import {
+  LayoutDashboard,
+  AlertTriangle,
+  Boxes,
+  Settings,
+  User,
+} from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { useEmployee } from "../_providers/user-provider";
 
 export function AppSidebar() {
+  const { employee } = useEmployee();
   const router = useRouter();
   const pathname = usePathname();
-  const { data, loading } = useGetAdminEmployeesQuery();
-  const { employee } = useEmployee();
-  const employees = data?.getEmployees || [];
 
-  const storedEmployeeId =
-    typeof window !== "undefined" ? localStorage.getItem("employeeId") : null;
+  const employeeId = "-H7_24M85L-FMHKpkv4gp";
 
-  const currentEmployee = employees.find((emp) => emp.id === storedEmployeeId);
-  const hasTerminationEmployee =
-    !loading && currentEmployee?.terminationDate !== null;
+  const { data, loading } = useGetEmployeeByIdQuery({
+    variables: {
+      getEmployeeByIdId: employeeId!,
+    },
+    skip: !employeeId,
+  });
+
+  const currentEmployee = data?.getEmployeeById;
+
+  const hasTerminationEmployee = Boolean(currentEmployee?.terminationDate);
 
   const isAdmin = employee?.role === EmployeeRole.Admin;
 
@@ -48,7 +63,6 @@ export function AppSidebar() {
     { title: "дэд ангилал", icon: Settings, path: "/sub-category" },
   ];
 
-
   const renderMenuItems = (items: typeof menuItems) =>
     items.map((item) => {
       const isActive = pathname === item.path;
@@ -60,19 +74,23 @@ export function AppSidebar() {
               "relative flex items-center gap-3 px-4 py-4 transition-all duration-300 rounded-none group cursor-pointer",
               isActive
                 ? "bg-gradient-to-r from-transparent via-[#1e293b]/50 to-[#3b82f6]/20"
-                : "hover:bg-white/5"
+                : "hover:bg-white/5",
             )}
           >
             <item.icon
               className={cn(
                 "w-5 h-5 transition-colors",
-                isActive ? "text-white" : "text-slate-400 group-hover:text-white"
+                isActive
+                  ? "text-white"
+                  : "text-slate-400 group-hover:text-white",
               )}
             />
             <span
               className={cn(
                 "flex-1 font-medium text-[15px] transition-colors",
-                isActive ? "text-white" : "text-slate-400 group-hover:text-white"
+                isActive
+                  ? "text-white"
+                  : "text-slate-400 group-hover:text-white",
               )}
             >
               {item.title}
