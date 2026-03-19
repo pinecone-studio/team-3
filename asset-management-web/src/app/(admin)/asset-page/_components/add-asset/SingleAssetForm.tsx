@@ -56,6 +56,7 @@ export const SingleAssetForm = ({ onSuccess ,refetch}: Props) => {
             subCategoryId: "",
             serialNumber: "",
             assetTag: "",
+            department:"",
         },
     })
 
@@ -90,10 +91,13 @@ export const SingleAssetForm = ({ onSuccess ,refetch}: Props) => {
                 input: {
                     assetTag: values.assetTag,
                     categoryId: values.categoryId,
+                    subCategoryId:values.subCategoryId,
+                    locationId:"asd",
                     serialNumber: values.serialNumber,
                     purchaseDate: values.purchaseDate.toISOString(),
                     purchaseCost: values.price,
                     imageBase64,
+                    departmentId:values.department
                 },
             },
         })

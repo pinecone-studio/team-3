@@ -7,6 +7,7 @@ import StatCard from "./_components/Statcard";
 
 import CreateModal from "./_components/CreateModal";
 import ProjectCard from "./_components/ProjectCard";
+import { useEmployee } from "@/app/_providers/user-provider";
 
 const GET_CENSUS_EVENTS = gql`
   query GetCensusEvents {
@@ -66,7 +67,7 @@ type CensusProject = {
   createdBy: string;
   endDate: string;
 };
-
+const { employee } = useEmployee();
 export default function Page() {
   const [open, setOpen] = useState(false);
 
@@ -145,7 +146,7 @@ export default function Page() {
         name: formData.name,
         scope: formData.scope || "company",
         scopeFilter: formData.location || undefined,
-        createdBy: "-H7_24M85L-FMHKpkv4gp", // TODO: real auth employee id-гаар солино
+        createdBy: employee?.id as string,
         startedAt: formData.startDate
           ? new Date(formData.startDate).toISOString()
           : new Date().toISOString(),

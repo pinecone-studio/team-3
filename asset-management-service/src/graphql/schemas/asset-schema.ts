@@ -14,6 +14,7 @@ export const assetTypeDefs = gql`
         id: ID!
         assetTag: String!
         category: Category
+        subCategory:SubCategory
         serialNumber: String
         status: AssetStatusEnum!
         purchaseDate: String
@@ -22,18 +23,22 @@ export const assetTypeDefs = gql`
         locationId: String
         assignedTo: String
         deletedAt: String
+        department:Department
         imageUrl: String!
+        qrUrl:String!
     }
 
 	input CreateAssetInput {
-    assetTag: String!
-    categoryId: String
-    serialNumber: String
-    status: AssetStatusEnum
-    locationId: String
-    purchaseDate: String
-    purchaseCost: Float
-    imageBase64: String!    
+    assetTag: String!         
+    categoryId: String!       
+    subCategoryId: String!    
+    serialNumber: String!     
+    status: AssetStatusEnum   
+    locationId: String!       
+    purchaseDate: String!     
+    departmentId:String!
+    purchaseCost: Float!      
+    imageBase64: String!      
 }
 
     input UpdateAssetInput {

@@ -4,6 +4,8 @@ import { FileText, Monitor, XCircle } from "lucide-react";
 import ReportDialog from "./_components/ReportDialog";
 import PreviousReports from "./_components/PreviousReports";
 import { useGetMaintenanceTicketsQuery } from "@/gql/graphql";
+import Lottie from "lottie-react";
+import loaderAnimation from "../../libs/lottie/animation.json";
 
 export default function ReportPage() {
   const { data, loading, error } = useGetMaintenanceTicketsQuery();
@@ -17,8 +19,16 @@ export default function ReportPage() {
 
   if (loading) {
     return (
-      <div className="p-8 text-gray-500 animate-pulse font-gilroy text-center mt-20">
-        Уншиж байна...
+      <div className="flex h-screen items-center justify-center bg-white">
+        {/* Controlled size container */}
+        <div className="w-12 md:w-48 md:h-48">
+          <Lottie
+            animationData={loaderAnimation}
+            loop
+            autoplay
+            onError={(error) => console.error("Lottie Error:", error)}
+          />
+        </div>
       </div>
     );
   }

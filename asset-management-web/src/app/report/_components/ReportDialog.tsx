@@ -17,7 +17,7 @@ import {
   Textarea,
   DialogFooter,
 } from "@/libs";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   GetMaintenanceTicketsDocument,
   useCreateMaintenanceTicketMutation,
@@ -36,9 +36,7 @@ export default function ReportDialog() {
 
   const { data, loading: assetsLoading } =
     useGetAssetsByEmployeeIdForReportQuery({
-      variables: {
-        employeeId: employeeId as string,
-      },
+      variables: { employeeId: employeeId as string },
       skip: !employeeId,
     });
   console.log("asset data", data);
@@ -73,7 +71,7 @@ export default function ReportDialog() {
       console.error("Create ticket error:", err);
     }
   };
-
+  if (!employeeId) return null;
   return (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
       <DialogTrigger asChild>
