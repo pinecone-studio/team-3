@@ -5,13 +5,13 @@ interface TabsProps {
 
 export default function Tabs({ activeTab, setActiveTab }: TabsProps) {
   const tabs = [
-    { id: 'general', label: 'Хэрэглэгч', badge: null },
-    { id: 'gar', label: 'Гарын үсэг баталгаажуулалт', badge: 3 },
-    { id: 'qr', label: 'QR баталгаажуулалт', badge: 4 },
+    { id: 'general', label: 'Хөрөнгө', badge: null },
+    { id: 'gar', label: 'Гарын үсэг баталгаажуулалт', badge: null},
+    { id: 'qr', label: 'QR баталгаажуулалт', badge: null },
   ];
 
   return (
-    <div className="flex border-b border-gray-200">
+    <div className="flex border-b  border-gray-200">
       {tabs.map((tab) => (
         <button
           key={tab.id}

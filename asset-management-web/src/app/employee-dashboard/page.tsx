@@ -153,27 +153,22 @@ export default function AssetsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#F9FAFB]">
+    <div className="min-h-screen ">
       {/* Header */}
-      <header className="border-b bg-white px-8 py-5">
-        <div className="mx-auto max-w-7xl flex justify-between items-center">
+      <header className=" bg-white px-8 py-5">
+        <div className="w-full flex justify-between items-center">
           <div>
             <h1 className="text-2xl font-bold">
               Сайн байна уу, {employeeName} 👋
             </h1>
-            <p className="text-sm text-gray-500">Таны хөрөнгийн нэгдсэн тойм</p>
+            <p className="text-sm text-gray-500">Таны хөрөнгийн порталын тойм</p>
           </div>
-          <div className="relative">
-            <Bell className="text-gray-400 cursor-pointer hover:text-gray-600 transition-colors" />
-            {pendingAssignments.length > 0 && (
-              <span className="absolute -top-1 -right-1 flex h-3 w-3 rounded-full bg-red-500 border-2 border-white" />
-            )}
-          </div>
+        
         </div>
       </header>
 
       {/* Main Content */}
-      <main className="mx-auto max-w-7xl px-8 py-8">
+      <main className="w-full px-8 py-8">
         <StatsCards stats={mockStats} />
 
         <div className="my-6">
