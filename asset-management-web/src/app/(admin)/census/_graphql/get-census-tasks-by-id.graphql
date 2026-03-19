@@ -1,0 +1,6 @@
+query GetCensusTasks {
+  getCensusTasks {
+    verifiedAt
+    censusId
+  }
+}

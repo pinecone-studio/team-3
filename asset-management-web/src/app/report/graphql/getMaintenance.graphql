@@ -1,6 +1,11 @@
 query GetMaintenanceTickets {
   getMaintenanceTickets {
     id
+    asset {
+      id
+      name
+    }
+    reporterId
     description
     createdAt
     resolvedAt

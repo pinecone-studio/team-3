@@ -402,7 +402,7 @@ export enum PosStatusEnum {
 
 export type Query = {
   __typename?: 'Query';
-  getAssetById?: Maybe<Asset>;
+  getAssetById: Asset;
   getAssets?: Maybe<Array<Maybe<Asset>>>;
   getAssetsByEmployeeId?: Maybe<Array<Maybe<Asset>>>;
   getAssignmentById?: Maybe<Assignment>;
@@ -707,6 +707,11 @@ export type CreateCensusEventMutationVariables = Exact<{
 
 export type CreateCensusEventMutation = { __typename?: 'Mutation', createCensusEvent: Response };
 
+export type GetCensusTasksQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetCensusTasksQuery = { __typename?: 'Query', getCensusTasks: Array<{ __typename?: 'CensusTask', verifiedAt?: string | null, censusId: string }> };
+
 export type GetCensusEventsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -805,7 +810,7 @@ export type GetAssetByIdQueryVariables = Exact<{
 }>;
 
 
-export type GetAssetByIdQuery = { __typename?: 'Query', getAssetById?: { __typename?: 'Asset', id: string, serialNumber?: string | null, assetTag: string } | null };
+export type GetAssetByIdQuery = { __typename?: 'Query', getAssetById: { __typename?: 'Asset', id: string, serialNumber?: string | null, assetTag: string } };
 
 export type GetAssetsByEmployeeIdQueryVariables = Exact<{
   employeeId: Scalars['ID']['input'];
@@ -878,7 +883,7 @@ export type GetAssetsByEmployeeIdForReportQuery = { __typename?: 'Query', getAss
 export type GetMaintenanceTicketsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetMaintenanceTicketsQuery = { __typename?: 'Query', getMaintenanceTickets?: Array<{ __typename?: 'MaintenanceTicket', id: string, description: string, createdAt?: string | null, resolvedAt?: string | null, severity?: MaintenanceSeverityEnum | null, status: TicketStatusEnum, asset?: { __typename?: 'Asset', assetTag: string, name: string } | null } | null> | null };
+export type GetMaintenanceTicketsQuery = { __typename?: 'Query', getMaintenanceTickets?: Array<{ __typename?: 'MaintenanceTicket', id: string, reporterId: string, description: string, status: TicketStatusEnum, createdAt?: string | null, resolvedAt?: string | null, asset?: { __typename?: 'Asset', id: string, name: string } | null } | null> | null };
 
 
 export const CreateAssetDocument = gql`
@@ -1193,6 +1198,33 @@ export function useCreateCensusEventMutation(baseOptions?: Apollo.MutationHookOp
 export type CreateCensusEventMutationHookResult = ReturnType<typeof useCreateCensusEventMutation>;
 export type CreateCensusEventMutationResult = Apollo.MutationResult<CreateCensusEventMutation>;
 export type CreateCensusEventMutationOptions = Apollo.BaseMutationOptions<CreateCensusEventMutation, CreateCensusEventMutationVariables>;
+export const GetCensusTasksDocument = gql`
+    query GetCensusTasks {
+  getCensusTasks {
+    verifiedAt
+    censusId
+  }
+}
+    `;
+export function useGetCensusTasksQuery(baseOptions?: Apollo.QueryHookOptions<GetCensusTasksQuery, GetCensusTasksQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetCensusTasksQuery, GetCensusTasksQueryVariables>(GetCensusTasksDocument, options);
+      }
+export function useGetCensusTasksLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCensusTasksQuery, GetCensusTasksQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetCensusTasksQuery, GetCensusTasksQueryVariables>(GetCensusTasksDocument, options);
+        }
+// @ts-ignore
+export function useGetCensusTasksSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetCensusTasksQuery, GetCensusTasksQueryVariables>): Apollo.UseSuspenseQueryResult<GetCensusTasksQuery, GetCensusTasksQueryVariables>;
+export function useGetCensusTasksSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetCensusTasksQuery, GetCensusTasksQueryVariables>): Apollo.UseSuspenseQueryResult<GetCensusTasksQuery | undefined, GetCensusTasksQueryVariables>;
+export function useGetCensusTasksSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetCensusTasksQuery, GetCensusTasksQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetCensusTasksQuery, GetCensusTasksQueryVariables>(GetCensusTasksDocument, options);
+        }
+export type GetCensusTasksQueryHookResult = ReturnType<typeof useGetCensusTasksQuery>;
+export type GetCensusTasksLazyQueryHookResult = ReturnType<typeof useGetCensusTasksLazyQuery>;
+export type GetCensusTasksSuspenseQueryHookResult = ReturnType<typeof useGetCensusTasksSuspenseQuery>;
+export type GetCensusTasksQueryResult = Apollo.QueryResult<GetCensusTasksQuery, GetCensusTasksQueryVariables>;
 export const GetCensusEventsDocument = gql`
     query GetCensusEvents {
   getCensusEvents {
@@ -1903,6 +1935,11 @@ export const GetMaintenanceTicketsDocument = gql`
     query GetMaintenanceTickets {
   getMaintenanceTickets {
     id
+    asset {
+      id
+      name
+    }
+    reporterId
     description
     createdAt
     resolvedAt
