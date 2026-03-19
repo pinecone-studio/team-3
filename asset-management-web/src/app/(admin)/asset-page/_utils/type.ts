@@ -12,6 +12,7 @@ export const formSchema = z.object({
         .instanceof(File, { message: "Зураг заавал оруулна уу" })
         .refine((f) => f.size <= 5 * 1024 * 1024, "Зургийн хэмжээ 5MB-аас ихгүй байна уу")
         .refine((f) => ["image/jpeg", "image/png", "image/webp"].includes(f.type), "Зөвхөн JPG, PNG, WEBP зураг оруулна уу"),
+        department: z.string().min(1, "Хөрөнгийн таг заавал оруулна уу"),
 })
 
 export type AssetFormValues = z.infer<typeof formSchema>

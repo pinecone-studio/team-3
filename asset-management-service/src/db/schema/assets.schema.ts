@@ -4,6 +4,7 @@ import { employees } from './employees.schema';
 import { categories } from './categories.schema';
 import {  relations } from 'drizzle-orm';
 import { subCategory } from './sub-category.schema';
+import { department } from './department.schema';
 
 // --- 2. ASSETS ---
 export const assets = sqliteTable('assets', {
@@ -30,6 +31,7 @@ export const assets = sqliteTable('assets', {
 	deletedAt: integer('deleted_at', { mode: 'timestamp' }),
 	imageUrl: text('image_url').notNull(),
 	qrUrl:text('qr_url').notNull(),
+	departmentId: text('department_id').references(() => department.id),
 });
 
 export const assetsRelations = relations(assets, ({ one }) => ({
@@ -40,5 +42,9 @@ export const assetsRelations = relations(assets, ({ one }) => ({
     subCategory: one(subCategory, {
         fields: [assets.subCategoryId], 
         references: [subCategory.id],
+    }),
+	department: one(department, {
+        fields: [assets.departmentId], 
+        references: [department.id],
     }),
 }));
