@@ -26,10 +26,12 @@ import {
   useGetAssignmentsByEmployeeQuery,
   useGetEmployeeDataQuery,
 } from "@/gql/graphql";
+import { useEmployee } from "../_providers/user-provider";
 
 export default function AssetsPage() {
   const { user, isLoaded: isClerkLoaded } = useUser();
   const [activeTab, setActiveTab] = useState("qr");
+  const { employee } = useEmployee();
   const [isScannerOpen, setIsScannerOpen] = useState(false);
   const {
     data: assignmentsData,
@@ -37,9 +39,9 @@ export default function AssetsPage() {
     error: assignmentsError,
   } = useGetAssignmentsByEmployeeQuery({
     variables: {
-      employeeId: localStorage.getItem("employeeId") || "",
+      employeeId: employee?.id as string,
     },
-    skip: !user?.id,
+    skip: !employee?.id,
   });
 
   const {
@@ -48,9 +50,9 @@ export default function AssetsPage() {
     error: assetsError,
   } = useGetAssetsByEmployeeIdQuery({
     variables: {
-      employeeId: localStorage.getItem("employeeId") || "",
+      employeeId: employee?.id as string,
     },
-    skip: !user?.id,
+    skip: !employee?.id,
   });
 
   const assetsHistory =
@@ -61,9 +63,9 @@ export default function AssetsPage() {
   const [employeeId, setEmployeeId] = useState<string>("");
 
   useEffect(() => {
-    const id = localStorage.getItem("employeeId");
+    const id = employee?.id;
     if (id) setEmployeeId(id);
-  }, []);
+  }, [employee?.id]);
 
   /**
    * 1. Execute the GraphQL Hook
@@ -111,7 +113,6 @@ export default function AssetsPage() {
         ? new Date(item.assignedAt).toLocaleDateString("en-CA")
         : "",
       type: "laptop",
-      // Adding missing properties required by the QrItem type definition
       location: "Төв оффис",
       owner: name,
     }));
@@ -124,10 +125,9 @@ export default function AssetsPage() {
   }, [employeeData]);
 
   const ACTIVE_CENSUS_ID =
-    censusData?.getCensusEvents[censusData.getCensusEvents.length - 1]?.id ||
-    "ede88790-5b49-47fe-8c2a-e77dbc5f16f9";
-  console.log(ACTIVE_CENSUS_ID, "test");
-  // Handler for GarTab (Signature)
+    censusData?.getCensusEvents[censusData.getCensusEvents.length - 1]?.id;
+  console.log(ACTIVE_CENSUS_ID, "ACTIVE_CENSUS_ID");
+
   const handleSignatureConfirm = async (signature: string) => {
     console.log("Signature captured:", signature);
     // You would typically call a mutation here to save the signature
@@ -151,7 +151,9 @@ export default function AssetsPage() {
       </div>
     );
   }
-
+  if (!employeeData?.getEmployeeById) {
+    return null;
+  }
   return (
     <div className="min-h-screen ">
       {/* Header */}
@@ -161,9 +163,10 @@ export default function AssetsPage() {
             <h1 className="text-2xl font-bold">
               Сайн байна уу, {employeeName} 👋
             </h1>
-            <p className="text-sm text-gray-500">Таны хөрөнгийн порталын тойм</p>
+            <p className="text-sm text-gray-500">
+              Таны хөрөнгийн порталын тойм
+            </p>
           </div>
-        
         </div>
       </header>
 
@@ -215,7 +218,7 @@ export default function AssetsPage() {
         isOpen={isScannerOpen}
         onClose={() => setIsScannerOpen(false)}
         censusId={ACTIVE_CENSUS_ID}
-        verifierId={localStorage.getItem("employeeId") || user?.id || ""}
+        verifierId={employee?.id as string}
       />
     </div>
   );

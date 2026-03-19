@@ -29,6 +29,7 @@ export type Asset = {
   locationId?: Maybe<Scalars['String']['output']>;
   purchaseCost?: Maybe<Scalars['Float']['output']>;
   purchaseDate?: Maybe<Scalars['String']['output']>;
+  qrUrl: Scalars['String']['output'];
   serialNumber?: Maybe<Scalars['String']['output']>;
   status: AssetStatusEnum;
 };
