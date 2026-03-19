@@ -173,6 +173,7 @@ export type Employee = {
   birthDayAndMonth?: Maybe<Scalars['String']['output']>;
   birthdayPoster?: Maybe<Scalars['String']['output']>;
   branch: Scalars['String']['output'];
+  clerkId: Scalars['String']['output'];
   department: Scalars['String']['output'];
   email: Scalars['String']['output'];
   employeeCode: Scalars['String']['output'];
@@ -190,9 +191,15 @@ export type Employee = {
   lastNameEng: Scalars['String']['output'];
   level: Scalars['String']['output'];
   numberOfVacationDays?: Maybe<Scalars['Int']['output']>;
+  role: Scalars['String']['output'];
   status: EmployeeStatus;
   terminationDate?: Maybe<Scalars['String']['output']>;
 };
+
+export enum EmployeeRole {
+  Admin = 'ADMIN',
+  User = 'USER'
+}
 
 export enum EmployeeStatus {
   Active = 'ACTIVE',
@@ -387,6 +394,7 @@ export type Query = {
   getCensusTaskByAssetId?: Maybe<CensusTask>;
   getCensusTaskById?: Maybe<CensusTask>;
   getCensusTasks: Array<CensusTask>;
+  getEmployeeByClerkID: Employee;
   getEmployeeByCode?: Maybe<Employee>;
   getEmployeeById?: Maybe<Employee>;
   getEmployees: Array<Employee>;
@@ -448,6 +456,11 @@ export type QueryGetCensusTaskByAssetIdArgs = {
 
 export type QueryGetCensusTaskByIdArgs = {
   id: Scalars['ID']['input'];
+};
+
+
+export type QueryGetEmployeeByClerkIdArgs = {
+  clerkId: Scalars['String']['input'];
 };
 
 
@@ -674,6 +687,13 @@ export type GetAdminEmployeesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetAdminEmployeesQuery = { __typename?: 'Query', getEmployees: Array<{ __typename?: 'Employee', id: string, entraId: string, firstName: string, lastName: string, terminationDate?: string | null, department: string, branch: string }> };
+
+export type GetEmployeeByClerkIdQueryVariables = Exact<{
+  clerkId: Scalars['String']['input'];
+}>;
+
+
+export type GetEmployeeByClerkIdQuery = { __typename?: 'Query', getEmployeeByClerkID: { __typename?: 'Employee', id: string, clerkId: string, firstName: string, lastName: string, email: string, status: EmployeeStatus, hireDate: string, terminationDate?: string | null, role: string } };
 
 export type CreateAssignmentMutationVariables = Exact<{
   input: CreateAssignmentInput;
@@ -1110,6 +1130,40 @@ export type GetAdminEmployeesQueryHookResult = ReturnType<typeof useGetAdminEmpl
 export type GetAdminEmployeesLazyQueryHookResult = ReturnType<typeof useGetAdminEmployeesLazyQuery>;
 export type GetAdminEmployeesSuspenseQueryHookResult = ReturnType<typeof useGetAdminEmployeesSuspenseQuery>;
 export type GetAdminEmployeesQueryResult = Apollo.QueryResult<GetAdminEmployeesQuery, GetAdminEmployeesQueryVariables>;
+export const GetEmployeeByClerkIdDocument = gql`
+    query GetEmployeeByClerkID($clerkId: String!) {
+  getEmployeeByClerkID(clerkId: $clerkId) {
+    id
+    clerkId
+    firstName
+    lastName
+    email
+    status
+    hireDate
+    terminationDate
+    role
+  }
+}
+    `;
+export function useGetEmployeeByClerkIdQuery(baseOptions: Apollo.QueryHookOptions<GetEmployeeByClerkIdQuery, GetEmployeeByClerkIdQueryVariables> & ({ variables: GetEmployeeByClerkIdQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetEmployeeByClerkIdQuery, GetEmployeeByClerkIdQueryVariables>(GetEmployeeByClerkIdDocument, options);
+      }
+export function useGetEmployeeByClerkIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetEmployeeByClerkIdQuery, GetEmployeeByClerkIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetEmployeeByClerkIdQuery, GetEmployeeByClerkIdQueryVariables>(GetEmployeeByClerkIdDocument, options);
+        }
+// @ts-ignore
+export function useGetEmployeeByClerkIdSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetEmployeeByClerkIdQuery, GetEmployeeByClerkIdQueryVariables>): Apollo.UseSuspenseQueryResult<GetEmployeeByClerkIdQuery, GetEmployeeByClerkIdQueryVariables>;
+export function useGetEmployeeByClerkIdSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetEmployeeByClerkIdQuery, GetEmployeeByClerkIdQueryVariables>): Apollo.UseSuspenseQueryResult<GetEmployeeByClerkIdQuery | undefined, GetEmployeeByClerkIdQueryVariables>;
+export function useGetEmployeeByClerkIdSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetEmployeeByClerkIdQuery, GetEmployeeByClerkIdQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetEmployeeByClerkIdQuery, GetEmployeeByClerkIdQueryVariables>(GetEmployeeByClerkIdDocument, options);
+        }
+export type GetEmployeeByClerkIdQueryHookResult = ReturnType<typeof useGetEmployeeByClerkIdQuery>;
+export type GetEmployeeByClerkIdLazyQueryHookResult = ReturnType<typeof useGetEmployeeByClerkIdLazyQuery>;
+export type GetEmployeeByClerkIdSuspenseQueryHookResult = ReturnType<typeof useGetEmployeeByClerkIdSuspenseQuery>;
+export type GetEmployeeByClerkIdQueryResult = Apollo.QueryResult<GetEmployeeByClerkIdQuery, GetEmployeeByClerkIdQueryVariables>;
 export const CreateAssignmentDocument = gql`
     mutation CreateAssignment($input: CreateAssignmentInput!) {
   createAssignment(input: $input)

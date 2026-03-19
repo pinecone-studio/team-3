@@ -6,6 +6,10 @@ export const employeeTypeDefs = gql`
 		ON_LEAVE
 		TERMINATED
 	}
+	enum EmployeeRole {
+		ADMIN
+		USER
+	}
 
 	type Employee {
 		id: ID!
@@ -30,18 +34,10 @@ export const employeeTypeDefs = gql`
 		isSalaryCompany: Boolean!
 		birthDayAndMonth: String
 		birthdayPoster: String
+		clerkId:String!
+		role:String!
 	}
-	type Query {
-		# Get all employees (ideal for the main AMSS table)
-		getEmployees: [Employee!]!
-
-		# Get a single employee by internal ID or HR Code
-		getEmployeeById(id: ID!): Employee
-		getEmployeeByCode(employeeCode: String!): Employee
-
-		# Filtered lists for specific workflows (e.g., Offboarding)
-		getEmployeesByStatus(status: EmployeeStatus!): [Employee!]!
-	}
+	
 	input CreateEmployeeInput {
 		entraId: String!
 		employeeCode: String!
@@ -85,6 +81,18 @@ export const employeeTypeDefs = gql`
 		terminationDate: String!
 	}
 
+    type Query {
+		# Get all employees (ideal for the main AMSS table)
+		getEmployees: [Employee!]!
+
+		# Get a single employee by internal ID or HR Code
+		getEmployeeById(id: ID!): Employee
+		getEmployeeByCode(employeeCode: String!): Employee
+
+		# Filtered lists for specific workflows (e.g., Offboarding)
+		getEmployeesByStatus(status: EmployeeStatus!): [Employee!]!
+		getEmployeeByClerkID(clerkId:String!):Employee!
+	}
 	type Mutation {
 		createEmployee(input: CreateEmployeeInput!): Response!
 
