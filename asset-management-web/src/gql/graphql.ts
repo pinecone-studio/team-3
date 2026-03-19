@@ -548,6 +548,13 @@ export type GetAssetsReturnQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetAssetsReturnQuery = { __typename?: 'Query', getAssets?: Array<{ __typename?: 'Asset', id: string, assetTag: string, assignedTo?: string | null, status: AssetStatusEnum, category?: { __typename?: 'Category', name: string } | null } | null> | null };
 
+export type GetEmployeeByIdQueryVariables = Exact<{
+  getEmployeeByIdId: Scalars['ID']['input'];
+}>;
+
+
+export type GetEmployeeByIdQuery = { __typename?: 'Query', getEmployeeById?: { __typename?: 'Employee', id: string, firstName: string, lastName: string, terminationDate?: string | null, department: string, branch: string } | null };
+
 export type CreateCensusEventMutationVariables = Exact<{
   input: CreateCensusEventInput;
 }>;
@@ -922,6 +929,37 @@ export type GetAssetsReturnQueryHookResult = ReturnType<typeof useGetAssetsRetur
 export type GetAssetsReturnLazyQueryHookResult = ReturnType<typeof useGetAssetsReturnLazyQuery>;
 export type GetAssetsReturnSuspenseQueryHookResult = ReturnType<typeof useGetAssetsReturnSuspenseQuery>;
 export type GetAssetsReturnQueryResult = Apollo.QueryResult<GetAssetsReturnQuery, GetAssetsReturnQueryVariables>;
+export const GetEmployeeByIdDocument = gql`
+    query GetEmployeeById($getEmployeeByIdId: ID!) {
+  getEmployeeById(id: $getEmployeeByIdId) {
+    id
+    firstName
+    lastName
+    terminationDate
+    department
+    branch
+  }
+}
+    `;
+export function useGetEmployeeByIdQuery(baseOptions: Apollo.QueryHookOptions<GetEmployeeByIdQuery, GetEmployeeByIdQueryVariables> & ({ variables: GetEmployeeByIdQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetEmployeeByIdQuery, GetEmployeeByIdQueryVariables>(GetEmployeeByIdDocument, options);
+      }
+export function useGetEmployeeByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetEmployeeByIdQuery, GetEmployeeByIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetEmployeeByIdQuery, GetEmployeeByIdQueryVariables>(GetEmployeeByIdDocument, options);
+        }
+// @ts-ignore
+export function useGetEmployeeByIdSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetEmployeeByIdQuery, GetEmployeeByIdQueryVariables>): Apollo.UseSuspenseQueryResult<GetEmployeeByIdQuery, GetEmployeeByIdQueryVariables>;
+export function useGetEmployeeByIdSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetEmployeeByIdQuery, GetEmployeeByIdQueryVariables>): Apollo.UseSuspenseQueryResult<GetEmployeeByIdQuery | undefined, GetEmployeeByIdQueryVariables>;
+export function useGetEmployeeByIdSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetEmployeeByIdQuery, GetEmployeeByIdQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetEmployeeByIdQuery, GetEmployeeByIdQueryVariables>(GetEmployeeByIdDocument, options);
+        }
+export type GetEmployeeByIdQueryHookResult = ReturnType<typeof useGetEmployeeByIdQuery>;
+export type GetEmployeeByIdLazyQueryHookResult = ReturnType<typeof useGetEmployeeByIdLazyQuery>;
+export type GetEmployeeByIdSuspenseQueryHookResult = ReturnType<typeof useGetEmployeeByIdSuspenseQuery>;
+export type GetEmployeeByIdQueryResult = Apollo.QueryResult<GetEmployeeByIdQuery, GetEmployeeByIdQueryVariables>;
 export const CreateCensusEventDocument = gql`
     mutation CreateCensusEvent($input: CreateCensusEventInput!) {
   createCensusEvent(input: $input)
