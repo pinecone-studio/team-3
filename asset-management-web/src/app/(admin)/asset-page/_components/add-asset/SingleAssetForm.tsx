@@ -22,19 +22,21 @@ const toBase64 = (file: File): Promise<string> =>
 
 type Props = {
     onSuccess: () => void
+    refetch:()=>void
 }
 
-export const SingleAssetForm = ({ onSuccess }: Props) => {
+export const SingleAssetForm = ({ onSuccess ,refetch}: Props) => {
     const [imagePreview, setImagePreview] = useState<string | null>(null)
 
-    const { data: categoriesData } = useGetCategoriesQuery()
-    const { data: subCategoriesData } = useGetSubCategoriesQuery()
+    const { data: categoriesData, refetch: categoryRefetch } = useGetCategoriesQuery()
+    const { data: subCategoriesData, refetch: subCategoryRefetch } = useGetSubCategoriesQuery()
     const [createAsset, { loading }] = useCreateAssetMutation({
         onCompleted: () => {
             onSuccess()
             reset()
             setImagePreview(null)
-            toast.success('Амжилттай бараа нэмлээ')
+            toast.success('Амжилттай бараа нэмлээ');
+            refetch()
         }
     })
 
@@ -99,7 +101,7 @@ export const SingleAssetForm = ({ onSuccess }: Props) => {
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-        
+
             <AssetInfoSection
                 control={control}
                 errors={errors}
@@ -108,8 +110,10 @@ export const SingleAssetForm = ({ onSuccess }: Props) => {
                 selectedCategoryId={selectedCategoryId}
                 categoryOptions={categoryOptions}
                 subCategoryOptions={subCategoryOptions}
+                categoryRefetch={categoryRefetch}
+                subCategoryRefetch={subCategoryRefetch}
             />
-                <ImageUploadSection
+            <ImageUploadSection
                 control={control}
                 errors={errors}
                 imagePreview={imagePreview}

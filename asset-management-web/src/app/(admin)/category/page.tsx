@@ -64,7 +64,7 @@ export default function CategoryPage() {
             <h1 className="font-bold text-[22px]">Categories</h1>
             <AddCategoryAndSearch refetch={refetch} searchQuery={searchQuery} handleSearch={handleSearch} />
             <div className="border rounded-lg">
-                <CategoryHeader  filteredCategories={filteredCategories} selectedCategories={selectedCategories} />
+                <CategoryHeader  refetch={refetch} filteredCategories={filteredCategories} selectedCategories={selectedCategories} />
                 <Table>
                     <TableHeader>
                         <TableRow>
