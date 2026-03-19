@@ -16,18 +16,22 @@ import {
   DropdownMenuItem,
 } from "@/libs";
 
-import { GetAssetsQuery } from "@/gql/graphql";;
+import { GetAssetsQuery } from "@/gql/graphql";
 import { AddAsset } from "./add-asset/AddAsset";
-
 
 type AssetType = NonNullable<GetAssetsQuery["getAssets"]>[number];
 type Props = {
   assets: AssetType[];
   onDelete: (id: string) => void;
   onUpdate?: (id: string, input: any) => void;
-  refetch:()=>void
-}
-export default function AssetManagement({ assets, onDelete, onUpdate,refetch }: Props) {
+  refetch: () => void;
+};
+export default function AssetManagement({
+  assets,
+  onDelete,
+  onUpdate,
+  refetch,
+}: Props) {
   const [category, setCategory] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
   const [search, setSearch] = useState("");
@@ -90,7 +94,7 @@ export default function AssetManagement({ assets, onDelete, onUpdate,refetch }: 
             <button className="p-2 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
               <Download size={20} className="text-gray-500" />
             </button>
-            <AddAsset refetch={refetch}/>
+            <AddAsset refetch={refetch} />
           </div>
         </div>
 
@@ -109,7 +113,7 @@ export default function AssetManagement({ assets, onDelete, onUpdate,refetch }: 
           </div>
 
           <select
-            className="border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] bg-white min-w-[160px] text-gray-600 outline-none cursor-pointer"
+            className="border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] bg-white min-w-40 text-gray-600 outline-none cursor-pointer"
             onChange={(e) => {
               setCategory(e.target.value);
               setPage(1);
@@ -122,7 +126,7 @@ export default function AssetManagement({ assets, onDelete, onUpdate,refetch }: 
           </select>
 
           <select
-            className="border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] bg-white min-w-[160px] text-gray-600 outline-none cursor-pointer"
+            className="border border-gray-200 rounded-lg px-4 py-2.5 text-[14px] bg-white min-w-40 text-gray-600 outline-none cursor-pointer"
             onChange={(e) => setStatusFilter(e.target.value)}
           >
             <option value="all">Бүх төлөв</option>
@@ -136,7 +140,7 @@ export default function AssetManagement({ assets, onDelete, onUpdate,refetch }: 
           </button>
         </div>
 
-        <div className="border border-gray-200 rounded-2xl overflow-hidden shadow-sm p-5 min-h-[530px]">
+        <div className="border border-gray-200 rounded-2xl overflow-hidden shadow-sm p-5 min-h-132.5">
           <table className="w-full text-left border-collapse bg-white">
             <thead className=" border-b border-gray-200">
               <tr className="text-[#000000] text-[14px] font-semibold leading-[125%] uppercase  tracking-wider">
@@ -165,25 +169,25 @@ export default function AssetManagement({ assets, onDelete, onUpdate,refetch }: 
                     />
                   </td>
                   <td className="px-4 py-3.5 font-medium text-gray-900">
-                    {item.serialNumber || "-"}
+                    {item?.serialNumber || "-"}
                   </td>
                   <td className="px-4 py-4 text-center">
                     <span className="px-2.5 py-1 border border-[#E2E8F0] rounded-lg text-[12px] text-[#000000] font-medium">
-                      {item.category?.name || "Бусад"}
+                      {item?.category?.name || "Бусад"}
                     </span>
                   </td>
                   <td className="px-4 py-4 font-semibold text-gray-900">
-                    {item.assetTag}
+                    {item?.assetTag}
                   </td>
                   <td className="px-4 py-3.5 text-center ">
                     <span
-                      className={`px-3 py-1  border rounded-full text-[12px] font-medium inline-flex items-center justify-center whitespace-nowrap ${getStatusStyle(item.status || "")}`}
+                      className={`px-3 py-1  border rounded-full text-[12px] font-medium inline-flex items-center justify-center whitespace-nowrap ${getStatusStyle(item?.status || "")}`}
                     >
-                      {item.status || "—"}
+                      {item?.status || "—"}
                     </span>
                   </td>
                   <td className="px-4 py-3.5">
-                    {item.assignedTo ? (
+                    {item?.assignedTo ? (
                       <div className="flex items-center gap-3">
                         <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-[10px] font-bold text-gray-500 border border-gray-200 shrink-0">
                           {item.assignedTo.substring(0, 2).toUpperCase()}
@@ -201,7 +205,7 @@ export default function AssetManagement({ assets, onDelete, onUpdate,refetch }: 
                     GG - Floor 1
                   </td>
                   <td className="px-4 py-4 text-right font-bold text-gray-900 whitespace-nowrap">
-                    {item.currentBookValue?.toLocaleString()} ₮
+                    {item?.currentBookValue?.toLocaleString()} ₮
                   </td>
                   <td className="px-6 py-3.5 text-right">
                     <DropdownMenu>
@@ -211,15 +215,15 @@ export default function AssetManagement({ assets, onDelete, onUpdate,refetch }: 
                         </button>
                       </DropdownMenuTrigger>
 
-                      <DropdownMenuContent align="end" className="w-[140px]">
+                      <DropdownMenuContent align="end" className="w-35">
                         <DropdownMenuItem
                           onClick={() => {
                             const newName = prompt(
                               "Шинэ нэрийг оруулна уу:",
-                              item.assetTag,
+                              item?.assetTag,
                             );
                             if (newName && onUpdate) {
-                              onUpdate(item.id!, { assetTag: newName });
+                              onUpdate(item?.id!, { assetTag: newName });
                             }
                           }}
                         >
@@ -228,7 +232,7 @@ export default function AssetManagement({ assets, onDelete, onUpdate,refetch }: 
 
                         <DropdownMenuItem
                           onClick={() =>
-                            console.log("duplicate", item.assetTag)
+                            console.log("duplicate", item?.assetTag)
                           }
                         >
                           Хувилах
@@ -236,7 +240,7 @@ export default function AssetManagement({ assets, onDelete, onUpdate,refetch }: 
 
                         <DropdownMenuItem
                           className="text-red-600"
-                          onClick={() => onDelete(item.id)}
+                          onClick={() => onDelete(item?.id as string)}
                         >
                           Устгах
                         </DropdownMenuItem>
@@ -258,10 +262,11 @@ export default function AssetManagement({ assets, onDelete, onUpdate,refetch }: 
             <button
               onClick={() => setPage((p) => Math.max(1, p - 1))}
               disabled={page === 1}
-              className={`flex items-center gap-2 border border-gray-200 px-4 py-2 rounded-lg text-[14px] font-semibold transition-all ${page === 1
-                ? "text-gray-300 cursor-not-allowed opacity-50"
-                : "text-gray-900 hover:bg-gray-50 active:scale-95"
-                }`}
+              className={`flex items-center gap-2 border border-gray-200 px-4 py-2 rounded-lg text-[14px] font-semibold transition-all ${
+                page === 1
+                  ? "text-gray-300 cursor-not-allowed opacity-50"
+                  : "text-gray-900 hover:bg-gray-50 active:scale-95"
+              }`}
             >
               <ChevronLeft size={18} />
               Өмнөх
@@ -270,10 +275,11 @@ export default function AssetManagement({ assets, onDelete, onUpdate,refetch }: 
             <button
               onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
               disabled={page === totalPages || totalPages === 0}
-              className={`flex items-center gap-2 border border-gray-200 px-4 py-2 rounded-lg text-[14px] font-bold transition-all ${page === totalPages || totalPages === 0
-                ? "text-gray-300 cursor-not-allowed opacity-50"
-                : "text-gray-900 hover:bg-gray-50 active:scale-95"
-                }`}
+              className={`flex items-center gap-2 border border-gray-200 px-4 py-2 rounded-lg text-[14px] font-bold transition-all ${
+                page === totalPages || totalPages === 0
+                  ? "text-gray-300 cursor-not-allowed opacity-50"
+                  : "text-gray-900 hover:bg-gray-50 active:scale-95"
+              }`}
             >
               Дараах
               <ChevronRight size={18} />

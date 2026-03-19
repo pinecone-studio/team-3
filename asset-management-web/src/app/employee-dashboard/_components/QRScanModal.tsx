@@ -163,7 +163,7 @@ export default function QRScanModal({
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm px-4">
       {success ? (
         /* Success State View */
-        <div className="relative w-full max-w-[450px] overflow-hidden rounded-[32px] bg-white p-8 shadow-2xl transition-all">
+        <div className="relative w-full max-w-112.5 overflow-hidden rounded-[32px] bg-white p-8 shadow-2xl transition-all">
           <button
             onClick={handleResetAndNext}
             className="absolute right-6 top-6 rounded-full p-2 text-gray-900 transition-colors hover:bg-gray-100"
@@ -181,7 +181,7 @@ export default function QRScanModal({
             <h2 className="mb-4 text-2xl font-bold tracking-tight text-gray-900">
               Амжилттай илгээгдсэн
             </h2>
-            <p className="max-w-[280px] text-base leading-relaxed text-gray-500">
+            <p className="max-w-70 text-base leading-relaxed text-gray-500">
               Өөрийн хөрөнгийн жагсаалтыг хянах самбараас харах боломжтой
             </p>
             <button
@@ -194,7 +194,7 @@ export default function QRScanModal({
         </div>
       ) : (
         /* Scanner / Info View */
-        <div className="w-full max-w-[420px] rounded-[28px] bg-white p-6 shadow-2xl">
+        <div className="w-full max-w-105 rounded-[28px] bg-white p-6 shadow-2xl">
           <div className="mb-4 flex items-start justify-between">
             <div>
               <h2 className="text-[28px] font-semibold text-gray-900">
@@ -217,7 +217,7 @@ export default function QRScanModal({
               <div className="overflow-hidden rounded-2xl bg-[#E9EEF5]">
                 <video
                   ref={videoRef}
-                  className="h-[320px] w-full rounded-2xl object-cover"
+                  className="h-80 w-full rounded-2xl object-cover"
                 />
               </div>
               <p className="mt-4 text-center text-sm text-gray-500">

@@ -31,7 +31,7 @@ export default function GeneralTab({
                 className="bg-white border border-gray-200 rounded-xl p-5 shadow-sm"
               >
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 bg-gray-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                  <div className="w-10 h-10 bg-gray-100 rounded-xl flex items-center justify-center shrink-0">
                     {/* <DeviceIcon type={asset.type} size={20} /> */}
                   </div>
                   <div className="min-w-0">
