@@ -191,9 +191,15 @@ export type Employee = {
   lastNameEng: Scalars['String']['output'];
   level: Scalars['String']['output'];
   numberOfVacationDays?: Maybe<Scalars['Int']['output']>;
+  role: Scalars['String']['output'];
   status: EmployeeStatus;
   terminationDate?: Maybe<Scalars['String']['output']>;
 };
+
+export enum EmployeeRole {
+  Admin = 'ADMIN',
+  User = 'USER'
+}
 
 export enum EmployeeStatus {
   Active = 'ACTIVE',
@@ -454,7 +460,7 @@ export type QueryGetCensusTaskByIdArgs = {
 
 
 export type QueryGetEmployeeByClerkIdArgs = {
-  clerkId: Scalars['ID']['input'];
+  clerkId: Scalars['String']['input'];
 };
 
 
@@ -744,12 +750,24 @@ export type UpdateAssignmentMutationVariables = Exact<{
 
 export type UpdateAssignmentMutation = { __typename?: 'Mutation', updateAssignment: Response };
 
+export type CreateMaintenanceTicketMutationVariables = Exact<{
+  input: CreateMaintenanceTicketInput;
+}>;
+
+
+export type CreateMaintenanceTicketMutation = { __typename?: 'Mutation', createMaintenanceTicket: Response };
+
 export type GetAssetsByEmployeeIdForReportQueryVariables = Exact<{
   employeeId: Scalars['ID']['input'];
 }>;
 
 
 export type GetAssetsByEmployeeIdForReportQuery = { __typename?: 'Query', getAssetsByEmployeeId?: Array<{ __typename?: 'Asset', id: string, assetTag: string, serialNumber?: string | null, category?: { __typename?: 'Category', id: string, name: string } | null } | null> | null };
+
+export type GetMaintenanceTicketsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetMaintenanceTicketsQuery = { __typename?: 'Query', getMaintenanceTickets?: Array<{ __typename?: 'MaintenanceTicket', id: string, assetId: string, reporterId: string, description: string, status: TicketStatusEnum, createdAt?: string | null, resolvedAt?: string | null } | null> | null };
 
 
 export const GetAdminEmployeesDocument = gql`
@@ -1365,6 +1383,19 @@ export function useUpdateAssignmentMutation(baseOptions?: Apollo.MutationHookOpt
 export type UpdateAssignmentMutationHookResult = ReturnType<typeof useUpdateAssignmentMutation>;
 export type UpdateAssignmentMutationResult = Apollo.MutationResult<UpdateAssignmentMutation>;
 export type UpdateAssignmentMutationOptions = Apollo.BaseMutationOptions<UpdateAssignmentMutation, UpdateAssignmentMutationVariables>;
+export const CreateMaintenanceTicketDocument = gql`
+    mutation CreateMaintenanceTicket($input: CreateMaintenanceTicketInput!) {
+  createMaintenanceTicket(input: $input)
+}
+    `;
+export type CreateMaintenanceTicketMutationFn = Apollo.MutationFunction<CreateMaintenanceTicketMutation, CreateMaintenanceTicketMutationVariables>;
+export function useCreateMaintenanceTicketMutation(baseOptions?: Apollo.MutationHookOptions<CreateMaintenanceTicketMutation, CreateMaintenanceTicketMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateMaintenanceTicketMutation, CreateMaintenanceTicketMutationVariables>(CreateMaintenanceTicketDocument, options);
+      }
+export type CreateMaintenanceTicketMutationHookResult = ReturnType<typeof useCreateMaintenanceTicketMutation>;
+export type CreateMaintenanceTicketMutationResult = Apollo.MutationResult<CreateMaintenanceTicketMutation>;
+export type CreateMaintenanceTicketMutationOptions = Apollo.BaseMutationOptions<CreateMaintenanceTicketMutation, CreateMaintenanceTicketMutationVariables>;
 export const GetAssetsByEmployeeIdForReportDocument = gql`
     query GetAssetsByEmployeeIdForReport($employeeId: ID!) {
   getAssetsByEmployeeId(employeeId: $employeeId) {
@@ -1397,3 +1428,35 @@ export type GetAssetsByEmployeeIdForReportQueryHookResult = ReturnType<typeof us
 export type GetAssetsByEmployeeIdForReportLazyQueryHookResult = ReturnType<typeof useGetAssetsByEmployeeIdForReportLazyQuery>;
 export type GetAssetsByEmployeeIdForReportSuspenseQueryHookResult = ReturnType<typeof useGetAssetsByEmployeeIdForReportSuspenseQuery>;
 export type GetAssetsByEmployeeIdForReportQueryResult = Apollo.QueryResult<GetAssetsByEmployeeIdForReportQuery, GetAssetsByEmployeeIdForReportQueryVariables>;
+export const GetMaintenanceTicketsDocument = gql`
+    query GetMaintenanceTickets {
+  getMaintenanceTickets {
+    id
+    assetId
+    reporterId
+    description
+    status
+    createdAt
+    resolvedAt
+  }
+}
+    `;
+export function useGetMaintenanceTicketsQuery(baseOptions?: Apollo.QueryHookOptions<GetMaintenanceTicketsQuery, GetMaintenanceTicketsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetMaintenanceTicketsQuery, GetMaintenanceTicketsQueryVariables>(GetMaintenanceTicketsDocument, options);
+      }
+export function useGetMaintenanceTicketsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetMaintenanceTicketsQuery, GetMaintenanceTicketsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetMaintenanceTicketsQuery, GetMaintenanceTicketsQueryVariables>(GetMaintenanceTicketsDocument, options);
+        }
+// @ts-ignore
+export function useGetMaintenanceTicketsSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetMaintenanceTicketsQuery, GetMaintenanceTicketsQueryVariables>): Apollo.UseSuspenseQueryResult<GetMaintenanceTicketsQuery, GetMaintenanceTicketsQueryVariables>;
+export function useGetMaintenanceTicketsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetMaintenanceTicketsQuery, GetMaintenanceTicketsQueryVariables>): Apollo.UseSuspenseQueryResult<GetMaintenanceTicketsQuery | undefined, GetMaintenanceTicketsQueryVariables>;
+export function useGetMaintenanceTicketsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetMaintenanceTicketsQuery, GetMaintenanceTicketsQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetMaintenanceTicketsQuery, GetMaintenanceTicketsQueryVariables>(GetMaintenanceTicketsDocument, options);
+        }
+export type GetMaintenanceTicketsQueryHookResult = ReturnType<typeof useGetMaintenanceTicketsQuery>;
+export type GetMaintenanceTicketsLazyQueryHookResult = ReturnType<typeof useGetMaintenanceTicketsLazyQuery>;
+export type GetMaintenanceTicketsSuspenseQueryHookResult = ReturnType<typeof useGetMaintenanceTicketsSuspenseQuery>;
+export type GetMaintenanceTicketsQueryResult = Apollo.QueryResult<GetMaintenanceTicketsQuery, GetMaintenanceTicketsQueryVariables>;

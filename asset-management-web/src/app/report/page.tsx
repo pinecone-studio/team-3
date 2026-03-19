@@ -3,51 +3,28 @@
 import { FileText, Monitor, XCircle } from "lucide-react";
 import ReportDialog from "./_components/ReportDialog";
 import PreviousReports from "./_components/PreviousReports";
-
-export const MOCK_REPORTS = [
-  {
-    id: "1",
-    assetId: "ASSET-MAC-001",
-    reporterId: "EMP-001",
-    description: "Батерей хурдан дуусч байна",
-    status: "RESOLVED",
-    createdAt: "2025-11-15T10:00:00Z",
-    resolvedAt: "2025-11-20T15:30:00Z",
-  },
-  {
-    id: "2",
-    assetId: "ASSET-MON-002",
-    reporterId: "EMP-001",
-    description: "Дэлгэцийн зүүн талд зураас гарч ирсэн",
-    status: "RESOLVED",
-    createdAt: "2025-10-05T09:20:00Z",
-    resolvedAt: "2025-10-12T14:10:00Z",
-  },
-  {
-    id: "3",
-    assetId: "ASSET-KB-003",
-    reporterId: "EMP-001",
-    description: "Keyboard товчнууд гацаж байна",
-    status: "IN_PROGRESS",
-    createdAt: "2025-03-10T08:45:00Z",
-    resolvedAt: null,
-  },
-  {
-    id: "4",
-    assetId: "ASSET-HP-004",
-    reporterId: "EMP-002",
-    description: "Принтер хэвлэхгүй байна",
-    status: "OPEN",
-    createdAt: "2025-03-12T11:30:00Z",
-    resolvedAt: null,
-  },
-];
+import { useGetMaintenanceTicketsQuery } from "@/gql/graphql";
 
 export default function ReportPage() {
-  const allReports = MOCK_REPORTS;
+  const { data, loading, error } = useGetMaintenanceTicketsQuery();
+  console.log("data", data);
+
+  const allReports =
+    data?.getMaintenanceTickets?.filter(
+      (r): r is NonNullable<typeof r> => r !== null,
+    ) ?? [];
 
   const activeReports = allReports.filter((r) => r.status !== "RESOLVED");
+
   const resolvedReports = allReports.filter((r) => r.status === "RESOLVED");
+
+  if (loading) {
+    return <div className="p-6 text-gray-500">Loading...</div>;
+  }
+
+  if (error) {
+    return <div className="p-6 text-red-500">Error loading reports</div>;
+  }
   return (
     <div className="p-6 flex flex-col w-full text-[#0F172A] gap-6 font-gilroy">
       <div className="flex justify-between items-center ">
@@ -101,7 +78,7 @@ export default function ReportPage() {
           </div>
         </div>
 
-        <PreviousReports reports={resolvedReports} />
+        <PreviousReports reports={resolvedReports as any} />
       </div>
     </div>
   );

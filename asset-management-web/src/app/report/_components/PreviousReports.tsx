@@ -1,10 +1,20 @@
 import { CheckSmall, MacBook } from "@/app/_components/icons/icons";
 import { Monitor } from "lucide-react";
 
+type Report = {
+  id: string;
+  assetId: string;
+  description: string;
+  createdAt: string;
+  resolvedAt?: string | null;
+  category?: {
+    name: string;
+  } | null;
+};
 interface PreviousReportsProps {
-  reports: any[];
+  reports: Report[];
 }
-export default function PreviousReports({ reports }: { reports: any[] }) {
+export default function PreviousReports({ reports }: PreviousReportsProps) {
   return (
     <div className="w-full border-[#E2E8F0] border p-6 rounded-xl flex flex-col gap-5 bg-[#F8FAFC]">
       <div>
@@ -24,7 +34,7 @@ export default function PreviousReports({ reports }: { reports: any[] }) {
           >
             <div className="flex gap-4">
               <div className="w-12 h-12 flex items-center justify-center bg-[#F8FAFC] rounded-lg text-[#64748B]">
-                {report.category === "Техник хангамж" ? (
+                {report.category?.name === "Техник хангамж" ? (
                   <MacBook />
                 ) : (
                   <Monitor size={22} />
@@ -54,13 +64,15 @@ export default function PreviousReports({ reports }: { reports: any[] }) {
                   <p className="text-[12px]">
                     Мэдэгдсэн хугацаа:{" "}
                     <span className="text-[#666666] text-[12px]">
-                      {report.createdAt}
+                      {new Date(report.createdAt).toLocaleString()}
                     </span>
                   </p>
                   <p className="text-[12px] ">
                     Шийдвэрлэсэн хугацаа:{" "}
                     <span className="text-[#666666] text-[12px]">
-                      \{report.resolvedAt || "-"}
+                      {report.resolvedAt
+                        ? new Date(report.resolvedAt).toLocaleString()
+                        : "-"}
                     </span>
                   </p>
                 </div>
@@ -69,7 +81,7 @@ export default function PreviousReports({ reports }: { reports: any[] }) {
 
             <div className="hidden sm:block">
               <span className="text-[12px] border border-[#E2E8F0] text-[#64748B] px-3 py-1.5 rounded-lg font-medium ">
-                {report.category}
+                {report.category?.name}
               </span>
             </div>
           </div>
