@@ -217,7 +217,7 @@ export default function AssetsPage() {
       <QRScanModal
         isOpen={isScannerOpen}
         onClose={() => setIsScannerOpen(false)}
-        censusId={ACTIVE_CENSUS_ID}
+        censusId={ACTIVE_CENSUS_ID as string}
         verifierId={employee?.id as string}
       />
     </div>
