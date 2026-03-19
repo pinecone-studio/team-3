@@ -2,11 +2,12 @@
 
 import { Asset, AssetStatusEnum } from "@/gql/graphql";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/libs";
-import { ChevronLeft, ChevronRight, Download,  PanelLeft, Search } from "lucide-react";
+import { ChevronLeft, ChevronRight, Download, PanelLeft, Search } from "lucide-react";
 import { useState, useMemo } from "react";
 import { AddAsset } from "./add-asset/AddAsset";
 import Image from "next/image";
 import { AssetActions } from "./AssetActions";
+import { exportAssetsToExcel } from "../_utils/exportAssetsToExcel";
 
 
 type AssetManagementProps = {
@@ -106,9 +107,17 @@ export default function AssetManagement({ assets, refetch }: AssetManagementProp
               </p>
             </div>
             <div className="flex gap-2">
-              <button className="p-2.5 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
-                <Download size={20} className="text-gray-500" />
-              </button>
+              <div className="relative group">
+                <button
+                  onClick={() => exportAssetsToExcel(assets)}
+                  className="p-2.5 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+                >
+                  <Download size={20} className="text-gray-500" />
+                </button>
+                <span className="absolute w-[90px] -top-13 left-1/2 -translate-x-1/2 text-xs bg-gray-800 text-white px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">
+                  Татаж авах
+                </span>
+              </div>
               <AddAsset refetch={refetch} />
             </div>
           </div>
@@ -188,7 +197,7 @@ export default function AssetManagement({ assets, refetch }: AssetManagementProp
                   </th>
                   <th className="py-4 font-normal text-left" style={{ width: '40%' }}>Хөрөнгө</th>
                   <th className="px-4 py-4 font-normal text-left">Ангилал</th>
-                  
+
                   <th className="px-4 py-4 font-normal text-left">
                     <span className="inline-flex items-center gap-1">
                       Хуваарилагдсан
@@ -256,10 +265,10 @@ export default function AssetManagement({ assets, refetch }: AssetManagementProp
                     <td className="px-4 py-4 text-gray-400 text-sm">
                       {item.purchaseCost}
                     </td>
-                   
-                    
+
+
                     <td className="px-4 py-4">
-                      <AssetActions item={item} refetch={refetch}/>
+                      <AssetActions item={item} refetch={refetch} />
                     </td>
                   </tr>
                 ))}
