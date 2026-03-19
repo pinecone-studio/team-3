@@ -3,6 +3,7 @@
 import { useState, useMemo, useEffect, use } from "react";
 import { Bell } from "lucide-react";
 import { useUser } from "@clerk/nextjs";
+import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 
 // Components
 import StatsCards from "./_components/StatsCards";
@@ -27,6 +28,7 @@ import {
   useGetEmployeeDataQuery,
 } from "@/gql/graphql";
 import { useEmployee } from "../_providers/user-provider";
+import dynamic from "next/dynamic";
 
 export default function AssetsPage() {
   const { user, isLoaded: isClerkLoaded } = useUser();
@@ -137,8 +139,16 @@ export default function AssetsPage() {
   // Loading State
   if (!isClerkLoaded || (employeeLoading && !employeeData)) {
     return (
-      <div className="flex h-screen items-center justify-center font-medium">
-        Уншиж байна...
+      <div className="flex h-screen items-center justify-center bg-white">
+        {/* Controlled size container */}
+        <div className="w-32 h-32 md:w-48 md:h-48">
+          <DotLottieReact
+            src="/loader.lottie"
+            loop
+            autoplay
+            onError={(error) => console.error("Lottie Error:", error)}
+          />
+        </div>
       </div>
     );
   }

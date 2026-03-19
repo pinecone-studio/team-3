@@ -5,6 +5,7 @@ import {
   useUpdateAssetMutation,
 } from "@/gql/graphql";
 import AssetManagement from "./_components/AssetManagement";
+import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 
 export default function AdminAssetPage() {
   const { data, loading, error, refetch } = useGetAssetsQuery();
@@ -45,10 +46,15 @@ export default function AdminAssetPage() {
   }
   if (loading) {
     return (
-      <div className="flex h-screen w-full items-center justify-center bg-[#F9FAFB]">
-        <div className="text-center font-gilroy">
-          <div className="h-8 w-8 animate-spin rounded-full border-4 border-[#0251CB] border-t-transparent mx-auto"></div>
-          <p className="mt-4 text-gray-500">Уншиж байна...</p>
+      <div className="flex h-screen items-center justify-center bg-white">
+        {/* Controlled size container */}
+        <div className="w-32 h-32 md:w-48 md:h-48">
+          <DotLottieReact
+            src="/loader.lottie"
+            loop
+            autoplay
+            onError={(error) => console.error("Lottie Error:", error)}
+          />
         </div>
       </div>
     );
