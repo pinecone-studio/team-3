@@ -233,7 +233,7 @@ export enum MaintenanceSeverityEnum {
 
 export type MaintenanceTicket = {
   __typename?: 'MaintenanceTicket';
-  assetId: Scalars['ID']['output'];
+  asset?: Maybe<Asset>;
   createdAt?: Maybe<Scalars['String']['output']>;
   description: Scalars['String']['output'];
   id: Scalars['ID']['output'];
@@ -737,6 +737,11 @@ export type UpdateEmployeeMutationVariables = Exact<{
 
 export type UpdateEmployeeMutation = { __typename?: 'Mutation', updateEmployee: Response };
 
+export type GetAdminMaintenanceTicketsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetAdminMaintenanceTicketsQuery = { __typename?: 'Query', getMaintenanceTickets?: Array<{ __typename?: 'MaintenanceTicket', id: string, reporterId: string, description: string, createdAt?: string | null, resolvedAt?: string | null, severity?: MaintenanceSeverityEnum | null, status: TicketStatusEnum, asset?: { __typename?: 'Asset', assetTag: string, name: string, id: string, locationId?: string | null, department?: { __typename?: 'Department', name: string } | null } | null } | null> | null };
+
 export type UpdateMaintenanceTicketMutationVariables = Exact<{
   updateMaintenanceTicketId: Scalars['ID']['input'];
   input: UpdateMaintenanceTicketInput;
@@ -873,7 +878,7 @@ export type GetAssetsByEmployeeIdForReportQuery = { __typename?: 'Query', getAss
 export type GetMaintenanceTicketsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetMaintenanceTicketsQuery = { __typename?: 'Query', getMaintenanceTickets?: Array<{ __typename?: 'MaintenanceTicket', id: string, assetId: string, reporterId: string, description: string, status: TicketStatusEnum, createdAt?: string | null, resolvedAt?: string | null } | null> | null };
+export type GetMaintenanceTicketsQuery = { __typename?: 'Query', getMaintenanceTickets?: Array<{ __typename?: 'MaintenanceTicket', id: string, description: string, createdAt?: string | null, resolvedAt?: string | null, severity?: MaintenanceSeverityEnum | null, status: TicketStatusEnum, asset?: { __typename?: 'Asset', assetTag: string, name: string } | null } | null> | null };
 
 
 export const CreateAssetDocument = gql`
@@ -1311,6 +1316,47 @@ export function useUpdateEmployeeMutation(baseOptions?: Apollo.MutationHookOptio
 export type UpdateEmployeeMutationHookResult = ReturnType<typeof useUpdateEmployeeMutation>;
 export type UpdateEmployeeMutationResult = Apollo.MutationResult<UpdateEmployeeMutation>;
 export type UpdateEmployeeMutationOptions = Apollo.BaseMutationOptions<UpdateEmployeeMutation, UpdateEmployeeMutationVariables>;
+export const GetAdminMaintenanceTicketsDocument = gql`
+    query GetAdminMaintenanceTickets {
+  getMaintenanceTickets {
+    id
+    reporterId
+    description
+    createdAt
+    resolvedAt
+    severity
+    status
+    asset {
+      assetTag
+      name
+      id
+      locationId
+      department {
+        name
+      }
+    }
+  }
+}
+    `;
+export function useGetAdminMaintenanceTicketsQuery(baseOptions?: Apollo.QueryHookOptions<GetAdminMaintenanceTicketsQuery, GetAdminMaintenanceTicketsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetAdminMaintenanceTicketsQuery, GetAdminMaintenanceTicketsQueryVariables>(GetAdminMaintenanceTicketsDocument, options);
+      }
+export function useGetAdminMaintenanceTicketsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAdminMaintenanceTicketsQuery, GetAdminMaintenanceTicketsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetAdminMaintenanceTicketsQuery, GetAdminMaintenanceTicketsQueryVariables>(GetAdminMaintenanceTicketsDocument, options);
+        }
+// @ts-ignore
+export function useGetAdminMaintenanceTicketsSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetAdminMaintenanceTicketsQuery, GetAdminMaintenanceTicketsQueryVariables>): Apollo.UseSuspenseQueryResult<GetAdminMaintenanceTicketsQuery, GetAdminMaintenanceTicketsQueryVariables>;
+export function useGetAdminMaintenanceTicketsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetAdminMaintenanceTicketsQuery, GetAdminMaintenanceTicketsQueryVariables>): Apollo.UseSuspenseQueryResult<GetAdminMaintenanceTicketsQuery | undefined, GetAdminMaintenanceTicketsQueryVariables>;
+export function useGetAdminMaintenanceTicketsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetAdminMaintenanceTicketsQuery, GetAdminMaintenanceTicketsQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetAdminMaintenanceTicketsQuery, GetAdminMaintenanceTicketsQueryVariables>(GetAdminMaintenanceTicketsDocument, options);
+        }
+export type GetAdminMaintenanceTicketsQueryHookResult = ReturnType<typeof useGetAdminMaintenanceTicketsQuery>;
+export type GetAdminMaintenanceTicketsLazyQueryHookResult = ReturnType<typeof useGetAdminMaintenanceTicketsLazyQuery>;
+export type GetAdminMaintenanceTicketsSuspenseQueryHookResult = ReturnType<typeof useGetAdminMaintenanceTicketsSuspenseQuery>;
+export type GetAdminMaintenanceTicketsQueryResult = Apollo.QueryResult<GetAdminMaintenanceTicketsQuery, GetAdminMaintenanceTicketsQueryVariables>;
 export const UpdateMaintenanceTicketDocument = gql`
     mutation UpdateMaintenanceTicket($updateMaintenanceTicketId: ID!, $input: UpdateMaintenanceTicketInput!) {
   updateMaintenanceTicket(id: $updateMaintenanceTicketId, input: $input)
@@ -1857,12 +1903,15 @@ export const GetMaintenanceTicketsDocument = gql`
     query GetMaintenanceTickets {
   getMaintenanceTickets {
     id
-    assetId
-    reporterId
     description
-    status
     createdAt
     resolvedAt
+    severity
+    asset {
+      assetTag
+      name
+    }
+    status
   }
 }
     `;

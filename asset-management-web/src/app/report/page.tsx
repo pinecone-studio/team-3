@@ -21,7 +21,6 @@ export default function ReportPage() {
   if (loading) {
     return (
       <div className="flex h-screen items-center justify-center bg-white">
-        {/* Controlled size container */}
         <div className="w-12 md:w-48 md:h-48">
           <Lottie
             animationData={loaderAnimation}
@@ -44,7 +43,6 @@ export default function ReportPage() {
 
   return (
     <div className="p-8 flex flex-col w-full bg-[#F8FAFC] min-h-screen font-gilroy">
-      {/* Header Section */}
       <div className="flex justify-between items-start mb-8">
         <div>
           <h1 className="text-[24px] font-bold text-[#0F172A] mb-1">
@@ -102,7 +100,7 @@ export default function ReportPage() {
                       </div>
                       <div>
                         <h4 className="font-bold text-[#1E293B] leading-tight">
-                          {report.assetId}
+                          {report.asset?.name}
                         </h4>
                         <span className="text-[12px] text-[#94A3B8]">
                           ID: {report.id.slice(0, 8)}
@@ -119,7 +117,6 @@ export default function ReportPage() {
           </div>
         </div>
 
-        {/* Previous Reports Card */}
         <div className="h-[600px] overflow-hidden">
           <PreviousReports reports={resolvedReports as any} />
         </div>

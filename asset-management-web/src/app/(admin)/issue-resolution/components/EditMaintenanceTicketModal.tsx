@@ -30,7 +30,7 @@ export default function EditMaintenanceTicketModal({
     status: "OPEN",
   });
 
-  // Reset / fill form when ticket changes
+
   useEffect(() => {
     if (open && ticket) {
       setFormData({

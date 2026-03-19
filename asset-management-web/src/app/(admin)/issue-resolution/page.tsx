@@ -1,8 +1,6 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { Search, ChevronDown, FilterX } from "lucide-react";
-import { debounce } from "lodash";
 import MaintenanceTable from "./components/MaintenanceTable";
 
 type TicketStatus = "OPEN" | "IN_PROGRESS" | "RESOLVED" | "CANCELLED";
@@ -15,27 +13,21 @@ interface MaintenanceTicket {
   status: TicketStatus;
   createdAt?: string | null;
 }
-
 import {
-  useGetMaintenanceTicketsQuery,
   useGetEmployeesQuery,
   useGetAssetsQuery,
+  useGetAdminMaintenanceTicketsQuery,
 } from "@/gql/graphql";
 
 export default function MaintenancePage() {
   const { data: ticketsData, loading: tLoading } =
-    useGetMaintenanceTicketsQuery();
+    useGetAdminMaintenanceTicketsQuery();
+
   const { data: employeesData } = useGetEmployeesQuery();
   const { data: assetsData } = useGetAssetsQuery();
 
-  const [search, setSearch] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedStatus, setSelectedStatus] = useState<string>("all");
-
-  const handleSearch = useMemo(
-    () => debounce((val: string) => setSearchTerm(val), 200),
-    [],
-  );
 
   const tickets = (ticketsData?.getMaintenanceTickets ||
     []) as MaintenanceTicket[];
