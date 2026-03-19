@@ -62,7 +62,6 @@ export function AppSidebar() {
     { title: "дэд ангилал", icon: Settings, path: "/sub-category" },
   ];
 
-
   const renderMenuItems = (items: typeof menuItems) =>
     items.map((item) => {
       const isActive = pathname === item.path;
@@ -74,19 +73,23 @@ export function AppSidebar() {
               "relative flex items-center gap-3 px-4 py-4 transition-all duration-300 rounded-none group cursor-pointer",
               isActive
                 ? "bg-gradient-to-r from-transparent via-[#1e293b]/50 to-[#3b82f6]/20"
-                : "hover:bg-white/5"
+                : "hover:bg-white/5",
             )}
           >
             <item.icon
               className={cn(
                 "w-5 h-5 transition-colors",
-                isActive ? "text-white" : "text-slate-400 group-hover:text-white"
+                isActive
+                  ? "text-white"
+                  : "text-slate-400 group-hover:text-white",
               )}
             />
             <span
               className={cn(
                 "flex-1 font-medium text-[15px] transition-colors",
-                isActive ? "text-white" : "text-slate-400 group-hover:text-white"
+                isActive
+                  ? "text-white"
+                  : "text-slate-400 group-hover:text-white",
               )}
             >
               {item.title}
