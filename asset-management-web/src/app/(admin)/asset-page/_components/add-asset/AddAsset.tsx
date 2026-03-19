@@ -26,7 +26,7 @@ export const AddAsset = ({refetch}:{refetch:()=>void}) => {
                 </Button>
             </DialogTrigger>
 
-            <DialogContent className="sm:max-w-[600px] p-0 gap-0">
+            <DialogContent className="sm:max-w-[800px] p-0 gap-0">
                 <DialogHeader className="p-6 pb-0">
                     <DialogTitle className="text-xl font-semibold">Хөрөнгө нэмэх</DialogTitle>
                 </DialogHeader>
@@ -46,7 +46,7 @@ export const AddAsset = ({refetch}:{refetch:()=>void}) => {
                     </TabsContent>
 
                     <TabsContent value="csv" className="p-6 pt-4 mt-0">
-                        <CsvUploadTab />
+                        <CsvUploadTab refetch={refetch}  onSuccess={() => setOpen(false)} />
                     </TabsContent>
                 </Tabs>
             </DialogContent>

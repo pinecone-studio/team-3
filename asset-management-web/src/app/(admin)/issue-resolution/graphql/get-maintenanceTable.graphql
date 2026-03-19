@@ -1,19 +1,20 @@
-query GetMaintenanceTickets {
+query GetAdminMaintenanceTickets {
   getMaintenanceTickets {
     id
-    asset {
-      id
-      name
-    }
     reporterId
     description
     createdAt
     resolvedAt
     severity
+    status
     asset {
       assetTag
       name
+      id
+      locationId
+      department {
+        name
+      }
     }
-    status
   }
 }

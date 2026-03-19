@@ -22,7 +22,6 @@ import {
   GetMaintenanceTicketsDocument,
   useCreateMaintenanceTicketMutation,
   useGetAssetsByEmployeeIdForReportQuery,
-
 } from "@/gql/graphql";
 import { useEmployee } from "@/app/_providers/user-provider";
 
@@ -36,22 +35,24 @@ export default function ReportDialog() {
 
   const { data, loading: assetsLoading } =
     useGetAssetsByEmployeeIdForReportQuery({
-      variables: { employeeId: employeeId as string },
+      variables: employeeId ? { employeeId } : undefined,
       skip: !employeeId,
     });
-  console.log("asset data", data);
-  console.log("employee", employeeId);
 
   const assets =
     data?.getAssetsByEmployeeId?.filter(
       (asset): asset is NonNullable<typeof asset> => asset !== null,
     ) || [];
 
-  const [createTicket, { loading }] = useCreateMaintenanceTicketMutation();
-
+  // const [createTicket, { loading }] = useCreateMaintenanceTicketMutation();
+  const [createTicket, { loading, error: mutationError }] =
+    useCreateMaintenanceTicketMutation();
+  {
+    mutationError && <p className="text-red-500">{mutationError.message}</p>;
+  }
   const handleSubmit = async () => {
     if (!selectedAsset || !description.trim() || !employeeId) return;
-
+    console.log(employeeId);
     try {
       await createTicket({
         variables: {
