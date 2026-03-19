@@ -19,8 +19,10 @@ import {
 } from "@/libs";
 import { useEffect, useState } from "react";
 import {
+  GetMaintenanceTicketsDocument,
   useCreateMaintenanceTicketMutation,
   useGetAssetsByEmployeeIdForReportQuery,
+
 } from "@/gql/graphql";
 import { useEmployee } from "@/app/_providers/user-provider";
 
@@ -37,6 +39,8 @@ export default function ReportDialog() {
       variables: { employeeId: employeeId as string },
       skip: !employeeId,
     });
+  console.log("asset data", data);
+  console.log("employee", employeeId);
 
   const assets =
     data?.getAssetsByEmployeeId?.filter(
@@ -57,7 +61,7 @@ export default function ReportDialog() {
             reporterId: employeeId,
           },
         },
-        refetchQueries: ["GetMaintenanceTickets"],
+        refetchQueries: [{ query: GetMaintenanceTicketsDocument }],
       });
 
       setDialogOpen(false);
@@ -77,7 +81,10 @@ export default function ReportDialog() {
         </Button>
       </DialogTrigger>
 
-      <DialogContent className="sm:max-w-[500px] flex flex-col p-6 rounded-xl">
+      <DialogContent
+        aria-describedby={undefined}
+        className="sm:max-w-[500px] flex flex-col p-6 rounded-xl"
+      >
         <DialogHeader>
           <DialogTitle className="text-[20px] font-semibold">
             Асуудал мэдэгдэх

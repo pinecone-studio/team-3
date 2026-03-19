@@ -756,6 +756,14 @@ export type GetEmployeeByClerkIdQueryVariables = Exact<{
 
 export type GetEmployeeByClerkIdQuery = { __typename?: 'Query', getEmployeeByClerkID: { __typename?: 'Employee', id: string, clerkId: string, firstName: string, lastName: string, email: string, status: EmployeeStatus, hireDate: string, terminationDate?: string | null, role: string } };
 
+export type UpdateMaintenanceTicketMutationVariables = Exact<{
+  updateMaintenanceTicketId: Scalars['ID']['input'];
+  input: UpdateMaintenanceTicketInput;
+}>;
+
+
+export type UpdateMaintenanceTicketMutation = { __typename?: 'Mutation', updateMaintenanceTicket: Response };
+
 export type GetAssetsReturnQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -1427,6 +1435,19 @@ export type GetEmployeeByClerkIdQueryHookResult = ReturnType<typeof useGetEmploy
 export type GetEmployeeByClerkIdLazyQueryHookResult = ReturnType<typeof useGetEmployeeByClerkIdLazyQuery>;
 export type GetEmployeeByClerkIdSuspenseQueryHookResult = ReturnType<typeof useGetEmployeeByClerkIdSuspenseQuery>;
 export type GetEmployeeByClerkIdQueryResult = Apollo.QueryResult<GetEmployeeByClerkIdQuery, GetEmployeeByClerkIdQueryVariables>;
+export const UpdateMaintenanceTicketDocument = gql`
+    mutation UpdateMaintenanceTicket($updateMaintenanceTicketId: ID!, $input: UpdateMaintenanceTicketInput!) {
+  updateMaintenanceTicket(id: $updateMaintenanceTicketId, input: $input)
+}
+    `;
+export type UpdateMaintenanceTicketMutationFn = Apollo.MutationFunction<UpdateMaintenanceTicketMutation, UpdateMaintenanceTicketMutationVariables>;
+export function useUpdateMaintenanceTicketMutation(baseOptions?: Apollo.MutationHookOptions<UpdateMaintenanceTicketMutation, UpdateMaintenanceTicketMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateMaintenanceTicketMutation, UpdateMaintenanceTicketMutationVariables>(UpdateMaintenanceTicketDocument, options);
+      }
+export type UpdateMaintenanceTicketMutationHookResult = ReturnType<typeof useUpdateMaintenanceTicketMutation>;
+export type UpdateMaintenanceTicketMutationResult = Apollo.MutationResult<UpdateMaintenanceTicketMutation>;
+export type UpdateMaintenanceTicketMutationOptions = Apollo.BaseMutationOptions<UpdateMaintenanceTicketMutation, UpdateMaintenanceTicketMutationVariables>;
 export const GetAssetsReturnDocument = gql`
     query GetAssetsReturn {
   getAssets {
