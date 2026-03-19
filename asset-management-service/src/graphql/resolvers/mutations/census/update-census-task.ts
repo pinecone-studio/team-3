@@ -8,17 +8,17 @@ export const updateCensusTask: MutationResolvers['updateCensusTask'] = async (_,
 
 	try {
 		// Normalize to YYYY-MM-DD at midnight
-		const dateToStore = input.verifiedAt
-			? new Date(new Date(input.verifiedAt).setHours(0, 0, 0, 0))
-			: new Date(new Date().setHours(0, 0, 0, 0));
+		const dateToStore = input.verifiedAt ? new Date(input.verifiedAt) : new Date();
+		console.log('dateToStore', dateToStore);
+		console.log('input', input);
 
 		await DB.update(censusTasks)
 			.set({
-				verifierId: input.verifierId ?? undefined,
+				verifierId: input.verifierId ?? null,
 				verifiedAt: dateToStore, // Drizzle converts this to integer for SQLite
-				conditionReported: input.conditionReported ?? undefined,
-				locationConfirmed: input.locationConfirmed ?? undefined,
-				discrepancyFlag: input.discrepancyFlag ?? undefined,
+				conditionReported: input.conditionReported ?? null,
+				locationConfirmed: input.locationConfirmed ?? null,
+				discrepancyFlag: input.discrepancyFlag ?? null,
 			})
 			.where(eq(censusTasks.id, input.id));
 

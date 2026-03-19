@@ -220,7 +220,7 @@ export default function AssetsPage() {
         isOpen={isScannerOpen}
         onClose={() => setIsScannerOpen(false)}
         censusId={ACTIVE_CENSUS_ID}
-        verifierId={user?.id || localStorage.getItem("employeeId") || ""}
+        verifierId={localStorage.getItem("employeeId") || user?.id || ""}
       />
     </div>
   );
