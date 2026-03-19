@@ -28,8 +28,10 @@ export type Asset = {
   locationId?: Maybe<Scalars['String']['output']>;
   purchaseCost?: Maybe<Scalars['Float']['output']>;
   purchaseDate?: Maybe<Scalars['String']['output']>;
+  qrUrl: Scalars['String']['output'];
   serialNumber?: Maybe<Scalars['String']['output']>;
   status: AssetStatusEnum;
+  subCategory?: Maybe<SubCategory>;
 };
 
 export enum AssetStatusEnum {
@@ -101,13 +103,14 @@ export type CensusTask = {
 
 export type CreateAssetInput = {
   assetTag: Scalars['String']['input'];
-  categoryId?: InputMaybe<Scalars['String']['input']>;
+  categoryId: Scalars['String']['input'];
   imageBase64: Scalars['String']['input'];
-  locationId?: InputMaybe<Scalars['String']['input']>;
-  purchaseCost?: InputMaybe<Scalars['Float']['input']>;
-  purchaseDate?: InputMaybe<Scalars['String']['input']>;
-  serialNumber?: InputMaybe<Scalars['String']['input']>;
+  locationId: Scalars['String']['input'];
+  purchaseCost: Scalars['Float']['input'];
+  purchaseDate: Scalars['String']['input'];
+  serialNumber: Scalars['String']['input'];
   status?: InputMaybe<AssetStatusEnum>;
+  subCategoryId: Scalars['String']['input'];
 };
 
 export type CreateAssignmentInput = {
@@ -750,8 +753,10 @@ export type AssetResolvers<ContextType = Context, ParentType extends ResolversPa
   locationId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   purchaseCost?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>;
   purchaseDate?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  qrUrl?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   serialNumber?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   status?: Resolver<ResolversTypes['AssetStatusEnum'], ParentType, ContextType>;
+  subCategory?: Resolver<Maybe<ResolversTypes['SubCategory']>, ParentType, ContextType>;
 };
 
 export type AssignmentResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Assignment'] = ResolversParentTypes['Assignment']> = {

@@ -1,13 +1,40 @@
 query GetAssets {
   getAssets {
+    id
     assetTag
     category {
+      id
       name
+      description
+      assets {
+        id
+        assetTag
+        serialNumber
+        status
+        purchaseDate
+        purchaseCost
+        currentBookValue
+        locationId
+        assignedTo
+        deletedAt
+        imageUrl
+        qrUrl
+      }
+    }
+    subCategory {
+      id
+      name
+      categoryId
     }
     serialNumber
     status
+    purchaseDate
+    purchaseCost
     currentBookValue
+    locationId
     assignedTo
-    id
+    deletedAt
+    imageUrl
+    qrUrl
   }
 }

@@ -1,5 +1,6 @@
 "use client";
 import {
+  Asset,
   useDeleteAssetMutation,
   useGetAssetsQuery,
   useUpdateAssetMutation,
@@ -60,12 +61,16 @@ export default function AdminAssetPage() {
     );
   }
 
-  const assets = data?.getAssets || [];
+  const rawAssets = data?.getAssets || [];
 
+
+const cleanAssets: Asset[] = rawAssets
+  .filter((item): item is Asset => item !== null)
+  .map((item) => item)
   return (
     <AssetManagement
       refetch={refetch}
-      assets={assets}
+      assets={cleanAssets}
       onDelete={handleDelete}
       onUpdate={handleUpdate}
     />
