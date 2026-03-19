@@ -18,5 +18,13 @@ export const getEmployeeById: QueryResolvers['getEmployeeById'] = async (_, { id
 		hireDate: emp.hireDate ? new Date(emp.hireDate).toISOString() : '',
 		terminationDate: emp.terminationDate ? new Date(emp.terminationDate).toISOString() : undefined,
 		imageUrl: emp.imageUrl ?? undefined,
+		github: emp.github ?? undefined,
+		birthDayAndMonth: emp.birthDayAndMonth ?? undefined,
+		birthdayPoster: emp.birthdayPoster ?? undefined,
+		clerkId: emp.clerkId ?? '',
+		role: emp.role ?? 'Employee',
+		isAdmin: emp.isAdmin ?? false,
+		isSalaryCompany: emp.isSalaryCompany ?? true,
+		isKpi: emp.isKpi ?? false,
 	};
 };

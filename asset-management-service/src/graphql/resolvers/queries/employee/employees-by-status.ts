@@ -18,6 +18,11 @@ export const getEmployeesByStatus: QueryResolvers['getEmployeesByStatus'] = asyn
 			github: emp.github ?? undefined,
 			birthDayAndMonth: emp.birthDayAndMonth ?? undefined,
 			birthdayPoster: emp.birthdayPoster ?? undefined,
+			clerkId: emp.clerkId ?? '',
+			role: emp.role ?? 'Employee',
+			isAdmin: emp.isAdmin ?? false,
+			isSalaryCompany: emp.isSalaryCompany ?? true,
+			isKpi: emp.isKpi ?? false,
 		};
 	});
 };

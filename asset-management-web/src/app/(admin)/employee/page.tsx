@@ -11,7 +11,9 @@ import {
 import EmployeeTable from "./_components/EmployeeTable";
 import { useGetEmployeesQuery } from "@/gql/graphql";
 import { debounce } from "lodash";
-import { DotLottieReact } from "@lottiefiles/dotlottie-react";
+
+import Lottie from "lottie-react";
+import loaderAnimation from "../../../libs/lottie/animation.json";
 
 export default function EmployeePage() {
   const { data, loading, error, refetch } = useGetEmployeesQuery();
@@ -40,11 +42,11 @@ export default function EmployeePage() {
 
   if (loading)
     return (
-      <div className="flex h-screen items-center justify-center bg-white">
-        {/* Controlled size container */}
-        <div className="w-32 h-32 md:w-48 md:h-48">
-          <DotLottieReact
-            src="/loader.lottie"
+      <div className="flex justify-center items-center h-screen">
+        <div className="w-32 h-32 md:w-48 md:h-48  ">
+          {/* Controlled size container */}
+          <Lottie
+            animationData={loaderAnimation}
             loop
             autoplay
             onError={(error) => console.error("Lottie Error:", error)}
