@@ -1,0 +1,11 @@
+query GetAssetsByEmployeeIdForReport($employeeId: ID!) {
+  getAssetsByEmployeeId(employeeId: $employeeId) {
+    id
+    assetTag
+    category {
+      id
+      name
+    }
+    serialNumber
+  }
+}

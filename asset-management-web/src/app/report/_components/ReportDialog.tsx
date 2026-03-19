@@ -19,18 +19,27 @@ import {
   DialogFooter,
 } from "@/libs";
 import { useState } from "react";
-
-const myAssets = [
-  { id: "1", name: 'MacBook Pro 14"', assetTag: "MAC-2026-005" },
-  { id: "2", name: 'Dell UltraSharp 27"', assetTag: "MON-2026-012" },
-];
+import { useGetAssetsByEmployeeIdForReportQuery } from "@/gql/graphql";
 
 export default function ReportDialog() {
   const [dialogOpen, setDialogOpen] = useState(false);
+
   const [selectedAsset, setSelectedAsset] = useState("");
   const [issueType, setIssueType] = useState("");
   const [description, setDescription] = useState("");
 
+  const { data, loading } = useGetAssetsByEmployeeIdForReportQuery({
+    variables: {
+      employeeId: "RvYcfrZBku8dDvPaUe09m",
+    },
+  });
+  const myAssets = (data?.getAssetsByEmployeeId ?? []).filter(
+    (asset): asset is NonNullable<typeof asset> => asset !== null,
+  );
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+  console.log(data?.getAssetsByEmployeeId, "employeeId");
   return (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
       <DialogTrigger asChild>
@@ -50,7 +59,10 @@ export default function ReportDialog() {
         <div className="space-y-5 py-4 w-full">
           <div className="space-y-2">
             <Label className="text-[14px] font-medium">Төхөөрөмж сонгох</Label>
-            <Select value={selectedAsset} onValueChange={setSelectedAsset}>
+            <Select
+              value={selectedAsset}
+              onValueChange={(val) => setSelectedAsset(val)}
+            >
               <SelectTrigger className="w-full py-5  border-[#E2E8F0]">
                 <SelectValue
                   className="py-4"
@@ -58,26 +70,30 @@ export default function ReportDialog() {
                 />
               </SelectTrigger>
               <SelectContent>
-                {myAssets.map((asset) => (
-                  <SelectItem key={asset.id} value={asset.id}>
-                    {asset.name} ({asset.assetTag})
-                  </SelectItem>
-                ))}
+                {myAssets.length === 0 ? (
+                  <div className="p-2 text-sm text-gray-400">
+                    No assets found
+                  </div>
+                ) : (
+                  myAssets.map((asset) => (
+                    <SelectItem key={asset.id} value={asset.id}>
+                      {asset.assetTag}
+                    </SelectItem>
+                  ))
+                )}
               </SelectContent>
             </Select>
           </div>
           <div className="space-y-2 ">
             <Label className="text-[14px] font-medium">Асуудлын төрөл</Label>
-            <Select value={selectedAsset} onValueChange={setSelectedAsset}>
+            <Select value={issueType} onValueChange={setIssueType}>
               <SelectTrigger className="w-full py-5 border-[#E2E8F0]">
                 <SelectValue placeholder="Төхөөрөмж сонгоно уу" />
               </SelectTrigger>
               <SelectContent>
-                {myAssets.map((asset) => (
-                  <SelectItem key={asset.id} value={asset.id}>
-                    {asset.name} ({asset.assetTag})
-                  </SelectItem>
-                ))}
+                <SelectItem value="LOW">LOW</SelectItem>
+                <SelectItem value="MEDIUM">MEDIUM</SelectItem>
+                <SelectItem value="HIGH">HIGH</SelectItem>
               </SelectContent>
             </Select>
           </div>

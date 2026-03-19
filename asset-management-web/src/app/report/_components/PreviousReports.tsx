@@ -4,7 +4,7 @@ import { Monitor } from "lucide-react";
 interface PreviousReportsProps {
   reports: any[];
 }
-export default function PreviousReports({ reports }: PreviousReportsProps) {
+export default function PreviousReports({ reports }: { reports: any[] }) {
   return (
     <div className="w-full border-[#E2E8F0] border p-6 rounded-xl flex flex-col gap-5 bg-[#F8FAFC]">
       <div>
@@ -34,32 +34,33 @@ export default function PreviousReports({ reports }: PreviousReportsProps) {
               <div className="flex flex-col">
                 <div className="flex items-center gap-3">
                   <h4 className="text-[16px] font-medium leading-[20px] text-[#000000]">
-                    {report.title}
+                    {report.assetId}
                   </h4>
                   <span className="flex items-center gap-1 bg-[#F0FDF4] text-[12px] text-[#666666] px-2 rounded-md font-medium border border-[#DCFCE7]">
                     <CheckSmall /> Шийдвэрлэгдсэн
                   </span>
                 </div>
 
-                <p className="text-[#666666] text-[14px] font-normal mt-0.5">
+                {/* <p className="text-[#666666] text-[14px] font-normal mt-0.5">
                   {report.code}
-                </p>
+                </p> */}
 
                 <p className="text-[#334155] text-[14px] mt-3 leading-[125%]">
-                  <span className="font-medium">Шалтгаан:</span> {report.reason}
+                  <span className="font-medium">Шалтгаан:</span>{" "}
+                  {report.description}
                 </p>
 
                 <div className="flex flex-col gap-1  text-[12px] text-[#666666] mt-4 font-normal">
                   <p className="text-[12px]">
                     Мэдэгдсэн хугацаа:{" "}
                     <span className="text-[#666666] text-[12px]">
-                      {report.reportedDate}
+                      {report.createdAt}
                     </span>
                   </p>
                   <p className="text-[12px] ">
                     Шийдвэрлэсэн хугацаа:{" "}
                     <span className="text-[#666666] text-[12px]">
-                      {report.resolvedDate}
+                      \{report.resolvedAt || "-"}
                     </span>
                   </p>
                 </div>

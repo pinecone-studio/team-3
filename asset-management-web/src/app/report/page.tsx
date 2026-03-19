@@ -7,28 +7,43 @@ import PreviousReports from "./_components/PreviousReports";
 export const MOCK_REPORTS = [
   {
     id: "1",
-    title: 'MacBook Pro 14"',
-    code: "MAC-2026-005",
-    reason: "Батерей амархан дуусдаг болсон",
-    reportedDate: "11/15/2025",
-    resolvedDate: "11/20/2025",
-    category: "Техник хангамж",
+    assetId: "ASSET-MAC-001",
+    reporterId: "EMP-001",
+    description: "Батерей хурдан дуусч байна",
     status: "RESOLVED",
+    createdAt: "2025-11-15T10:00:00Z",
+    resolvedAt: "2025-11-20T15:30:00Z",
   },
   {
     id: "2",
-    title: "Dell P2419H",
-    code: "MON-2024-008",
-    reason: "Дэлгэцийн зүүн талд зураас гарч ирсэн",
-    reportedDate: "10/5/2025",
-    resolvedDate: "10/12/2025",
-    category: "Гэмтэл",
+    assetId: "ASSET-MON-002",
+    reporterId: "EMP-001",
+    description: "Дэлгэцийн зүүн талд зураас гарч ирсэн",
     status: "RESOLVED",
+    createdAt: "2025-10-05T09:20:00Z",
+    resolvedAt: "2025-10-12T14:10:00Z",
+  },
+  {
+    id: "3",
+    assetId: "ASSET-KB-003",
+    reporterId: "EMP-001",
+    description: "Keyboard товчнууд гацаж байна",
+    status: "IN_PROGRESS",
+    createdAt: "2025-03-10T08:45:00Z",
+    resolvedAt: null,
+  },
+  {
+    id: "4",
+    assetId: "ASSET-HP-004",
+    reporterId: "EMP-002",
+    description: "Принтер хэвлэхгүй байна",
+    status: "OPEN",
+    createdAt: "2025-03-12T11:30:00Z",
+    resolvedAt: null,
   },
 ];
+
 export default function ReportPage() {
-  const loading = false;
-  const error = null;
   const allReports = MOCK_REPORTS;
 
   const activeReports = allReports.filter((r) => r.status !== "RESOLVED");
@@ -75,9 +90,9 @@ export default function ReportPage() {
                     key={report.id}
                     className="border border-[#E2E8F0] p-4 rounded-xl bg-white"
                   >
-                    <h4 className="font-semibold">{report.title}</h4>
+                    <h4 className="font-semibold">{report.assetId}</h4>
                     <p className="text-sm text-[#666666] mt-1">
-                      {report.reason}
+                      {report.description}
                     </p>
                   </div>
                 ))}

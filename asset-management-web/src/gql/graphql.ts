@@ -25,6 +25,7 @@ export type Asset = {
   currentBookValue?: Maybe<Scalars['Float']['output']>;
   deletedAt?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
+  imageUrl: Scalars['String']['output'];
   locationId?: Maybe<Scalars['String']['output']>;
   purchaseCost?: Maybe<Scalars['Float']['output']>;
   purchaseDate?: Maybe<Scalars['String']['output']>;
@@ -102,6 +103,7 @@ export type CensusTask = {
 export type CreateAssetInput = {
   assetTag: Scalars['String']['input'];
   categoryId?: InputMaybe<Scalars['String']['input']>;
+  imageBase64: Scalars['String']['input'];
   locationId?: InputMaybe<Scalars['String']['input']>;
   purchaseCost?: InputMaybe<Scalars['Float']['input']>;
   purchaseDate?: InputMaybe<Scalars['String']['input']>;
@@ -171,6 +173,7 @@ export type Employee = {
   birthDayAndMonth?: Maybe<Scalars['String']['output']>;
   birthdayPoster?: Maybe<Scalars['String']['output']>;
   branch: Scalars['String']['output'];
+  clerkId: Scalars['String']['output'];
   department: Scalars['String']['output'];
   email: Scalars['String']['output'];
   employeeCode: Scalars['String']['output'];
@@ -228,13 +231,16 @@ export type Mutation = {
   createCensusEvent: Response;
   createEmployee: Response;
   createMaintenanceTicket: Response;
+  createSubCategory: Response;
   deleteAsset: Response;
   deleteAssignment: Response;
   deleteCategory: Response;
   deleteCategoryByIds: Response;
   deleteEmployee: Response;
   deleteMaintenanceTicket: Response;
+  deleteSubCategoryById: Response;
   editCategoryById: Response;
+  editSubCategoryById: Response;
   finalizeCensusEvent: Response;
   updateAsset: Response;
   updateAssignment: Response;
@@ -274,6 +280,11 @@ export type MutationCreateMaintenanceTicketArgs = {
 };
 
 
+export type MutationCreateSubCategoryArgs = {
+  input: CreateSubCategoryInput;
+};
+
+
 export type MutationDeleteAssetArgs = {
   id: Scalars['ID']['input'];
 };
@@ -305,8 +316,18 @@ export type MutationDeleteMaintenanceTicketArgs = {
 };
 
 
+export type MutationDeleteSubCategoryByIdArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
 export type MutationEditCategoryByIdArgs = {
   input: EditCategoryByIdInput;
+};
+
+
+export type MutationEditSubCategoryByIdArgs = {
+  input: EditSubCategoryInput;
 };
 
 
@@ -367,6 +388,7 @@ export type Query = {
   getCensusTaskByAssetId?: Maybe<CensusTask>;
   getCensusTaskById?: Maybe<CensusTask>;
   getCensusTasks: Array<CensusTask>;
+  getEmployeeByClerkID: Employee;
   getEmployeeByCode?: Maybe<Employee>;
   getEmployeeById?: Maybe<Employee>;
   getEmployees: Array<Employee>;
@@ -374,6 +396,8 @@ export type Query = {
   getMaintenanceTicketById?: Maybe<MaintenanceTicket>;
   getMaintenanceTickets?: Maybe<Array<Maybe<MaintenanceTicket>>>;
   getPendingAssignments: Array<Assignment>;
+  getSubCategories: Array<SubCategory>;
+  getSubCategoriesWithCategory: Array<GetSubCategoriesProps>;
   getTicketsByAssetId?: Maybe<Array<Maybe<MaintenanceTicket>>>;
 };
 
@@ -429,6 +453,11 @@ export type QueryGetCensusTaskByIdArgs = {
 };
 
 
+export type QueryGetEmployeeByClerkIdArgs = {
+  clerkId: Scalars['ID']['input'];
+};
+
+
 export type QueryGetEmployeeByCodeArgs = {
   employeeCode: Scalars['String']['input'];
 };
@@ -463,6 +492,13 @@ export enum Response {
   Success = 'SUCCESS'
 }
 
+export type SubCategory = {
+  __typename?: 'SubCategory';
+  categoryId?: Maybe<Scalars['String']['output']>;
+  id: Scalars['String']['output'];
+  name: Scalars['String']['output'];
+};
+
 export enum TicketStatusEnum {
   Cancelled = 'CANCELLED',
   InProgress = 'IN_PROGRESS',
@@ -475,6 +511,7 @@ export type UpdateAssetInput = {
   assignedTo?: InputMaybe<Scalars['String']['input']>;
   categoryId?: InputMaybe<Scalars['String']['input']>;
   currentBookValue?: InputMaybe<Scalars['Float']['input']>;
+  imageBase64?: InputMaybe<Scalars['String']['input']>;
   locationId?: InputMaybe<Scalars['String']['input']>;
   purchaseCost?: InputMaybe<Scalars['Float']['input']>;
   purchaseDate?: InputMaybe<Scalars['String']['input']>;
@@ -529,10 +566,26 @@ export type UpdateMaintenanceTicketInput = {
   vendorId?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type CreateSubCategoryInput = {
+  categoryId: Scalars['String']['input'];
+  name: Scalars['String']['input'];
+};
+
 export type EditCategoryByIdInput = {
   description?: InputMaybe<Scalars['String']['input']>;
   id: Scalars['String']['input'];
   name?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type EditSubCategoryInput = {
+  id: Scalars['String']['input'];
+  name: Scalars['String']['input'];
+};
+
+export type GetSubCategoriesProps = {
+  __typename?: 'getSubCategoriesProps';
+  categories?: Maybe<Category>;
+  sub_categories: SubCategory;
 };
 
 export type GetAdminEmployeesQueryVariables = Exact<{ [key: string]: never; }>;
@@ -690,6 +743,13 @@ export type UpdateAssignmentMutationVariables = Exact<{
 
 
 export type UpdateAssignmentMutation = { __typename?: 'Mutation', updateAssignment: Response };
+
+export type GetAssetsByEmployeeIdForReportQueryVariables = Exact<{
+  employeeId: Scalars['ID']['input'];
+}>;
+
+
+export type GetAssetsByEmployeeIdForReportQuery = { __typename?: 'Query', getAssetsByEmployeeId?: Array<{ __typename?: 'Asset', id: string, assetTag: string, serialNumber?: string | null, category?: { __typename?: 'Category', id: string, name: string } | null } | null> | null };
 
 
 export const GetAdminEmployeesDocument = gql`
@@ -1305,3 +1365,35 @@ export function useUpdateAssignmentMutation(baseOptions?: Apollo.MutationHookOpt
 export type UpdateAssignmentMutationHookResult = ReturnType<typeof useUpdateAssignmentMutation>;
 export type UpdateAssignmentMutationResult = Apollo.MutationResult<UpdateAssignmentMutation>;
 export type UpdateAssignmentMutationOptions = Apollo.BaseMutationOptions<UpdateAssignmentMutation, UpdateAssignmentMutationVariables>;
+export const GetAssetsByEmployeeIdForReportDocument = gql`
+    query GetAssetsByEmployeeIdForReport($employeeId: ID!) {
+  getAssetsByEmployeeId(employeeId: $employeeId) {
+    id
+    assetTag
+    category {
+      id
+      name
+    }
+    serialNumber
+  }
+}
+    `;
+export function useGetAssetsByEmployeeIdForReportQuery(baseOptions: Apollo.QueryHookOptions<GetAssetsByEmployeeIdForReportQuery, GetAssetsByEmployeeIdForReportQueryVariables> & ({ variables: GetAssetsByEmployeeIdForReportQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetAssetsByEmployeeIdForReportQuery, GetAssetsByEmployeeIdForReportQueryVariables>(GetAssetsByEmployeeIdForReportDocument, options);
+      }
+export function useGetAssetsByEmployeeIdForReportLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAssetsByEmployeeIdForReportQuery, GetAssetsByEmployeeIdForReportQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetAssetsByEmployeeIdForReportQuery, GetAssetsByEmployeeIdForReportQueryVariables>(GetAssetsByEmployeeIdForReportDocument, options);
+        }
+// @ts-ignore
+export function useGetAssetsByEmployeeIdForReportSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetAssetsByEmployeeIdForReportQuery, GetAssetsByEmployeeIdForReportQueryVariables>): Apollo.UseSuspenseQueryResult<GetAssetsByEmployeeIdForReportQuery, GetAssetsByEmployeeIdForReportQueryVariables>;
+export function useGetAssetsByEmployeeIdForReportSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetAssetsByEmployeeIdForReportQuery, GetAssetsByEmployeeIdForReportQueryVariables>): Apollo.UseSuspenseQueryResult<GetAssetsByEmployeeIdForReportQuery | undefined, GetAssetsByEmployeeIdForReportQueryVariables>;
+export function useGetAssetsByEmployeeIdForReportSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetAssetsByEmployeeIdForReportQuery, GetAssetsByEmployeeIdForReportQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetAssetsByEmployeeIdForReportQuery, GetAssetsByEmployeeIdForReportQueryVariables>(GetAssetsByEmployeeIdForReportDocument, options);
+        }
+export type GetAssetsByEmployeeIdForReportQueryHookResult = ReturnType<typeof useGetAssetsByEmployeeIdForReportQuery>;
+export type GetAssetsByEmployeeIdForReportLazyQueryHookResult = ReturnType<typeof useGetAssetsByEmployeeIdForReportLazyQuery>;
+export type GetAssetsByEmployeeIdForReportSuspenseQueryHookResult = ReturnType<typeof useGetAssetsByEmployeeIdForReportSuspenseQuery>;
+export type GetAssetsByEmployeeIdForReportQueryResult = Apollo.QueryResult<GetAssetsByEmployeeIdForReportQuery, GetAssetsByEmployeeIdForReportQueryVariables>;
