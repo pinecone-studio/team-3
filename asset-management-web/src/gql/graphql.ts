@@ -28,6 +28,7 @@ export type Asset = {
   id: Scalars['ID']['output'];
   imageUrl: Scalars['String']['output'];
   locationId?: Maybe<Scalars['String']['output']>;
+  name: Scalars['String']['output'];
   purchaseCost?: Maybe<Scalars['Float']['output']>;
   purchaseDate?: Maybe<Scalars['String']['output']>;
   qrUrl: Scalars['String']['output'];
@@ -179,6 +180,11 @@ export type Department = {
   name: Scalars['String']['output'];
 };
 
+export type DuplicateAssetInput = {
+  assetId: Scalars['String']['input'];
+  count: Scalars['Int']['input'];
+};
+
 export type Employee = {
   __typename?: 'Employee';
   birthDayAndMonth?: Maybe<Scalars['String']['output']>;
@@ -256,6 +262,7 @@ export type Mutation = {
   deleteEmployee: Response;
   deleteMaintenanceTicket: Response;
   deleteSubCategoryById: Response;
+  duplicateAsset: Response;
   editCategoryById: Response;
   editSubCategoryById: Response;
   finalizeCensusEvent: Response;
@@ -335,6 +342,11 @@ export type MutationDeleteMaintenanceTicketArgs = {
 
 export type MutationDeleteSubCategoryByIdArgs = {
   id: Scalars['ID']['input'];
+};
+
+
+export type MutationDuplicateAssetArgs = {
+  input: DuplicateAssetInput;
 };
 
 
@@ -718,6 +730,14 @@ export type UpdateEmployeeMutationVariables = Exact<{
 
 export type UpdateEmployeeMutation = { __typename?: 'Mutation', updateEmployee: Response };
 
+export type UpdateMaintenanceTicketMutationVariables = Exact<{
+  updateMaintenanceTicketId: Scalars['ID']['input'];
+  input: UpdateMaintenanceTicketInput;
+}>;
+
+
+export type UpdateMaintenanceTicketMutation = { __typename?: 'Mutation', updateMaintenanceTicket: Response };
+
 export type CreateSubCategoryMutationVariables = Exact<{
   input: CreateSubCategoryInput;
 }>;
@@ -755,14 +775,6 @@ export type GetEmployeeByClerkIdQueryVariables = Exact<{
 
 
 export type GetEmployeeByClerkIdQuery = { __typename?: 'Query', getEmployeeByClerkID: { __typename?: 'Employee', id: string, clerkId: string, firstName: string, lastName: string, email: string, status: EmployeeStatus, hireDate: string, terminationDate?: string | null, role: string } };
-
-export type UpdateMaintenanceTicketMutationVariables = Exact<{
-  updateMaintenanceTicketId: Scalars['ID']['input'];
-  input: UpdateMaintenanceTicketInput;
-}>;
-
-
-export type UpdateMaintenanceTicketMutation = { __typename?: 'Mutation', updateMaintenanceTicket: Response };
 
 export type GetAssetsReturnQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1278,6 +1290,19 @@ export function useUpdateEmployeeMutation(baseOptions?: Apollo.MutationHookOptio
 export type UpdateEmployeeMutationHookResult = ReturnType<typeof useUpdateEmployeeMutation>;
 export type UpdateEmployeeMutationResult = Apollo.MutationResult<UpdateEmployeeMutation>;
 export type UpdateEmployeeMutationOptions = Apollo.BaseMutationOptions<UpdateEmployeeMutation, UpdateEmployeeMutationVariables>;
+export const UpdateMaintenanceTicketDocument = gql`
+    mutation UpdateMaintenanceTicket($updateMaintenanceTicketId: ID!, $input: UpdateMaintenanceTicketInput!) {
+  updateMaintenanceTicket(id: $updateMaintenanceTicketId, input: $input)
+}
+    `;
+export type UpdateMaintenanceTicketMutationFn = Apollo.MutationFunction<UpdateMaintenanceTicketMutation, UpdateMaintenanceTicketMutationVariables>;
+export function useUpdateMaintenanceTicketMutation(baseOptions?: Apollo.MutationHookOptions<UpdateMaintenanceTicketMutation, UpdateMaintenanceTicketMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateMaintenanceTicketMutation, UpdateMaintenanceTicketMutationVariables>(UpdateMaintenanceTicketDocument, options);
+      }
+export type UpdateMaintenanceTicketMutationHookResult = ReturnType<typeof useUpdateMaintenanceTicketMutation>;
+export type UpdateMaintenanceTicketMutationResult = Apollo.MutationResult<UpdateMaintenanceTicketMutation>;
+export type UpdateMaintenanceTicketMutationOptions = Apollo.BaseMutationOptions<UpdateMaintenanceTicketMutation, UpdateMaintenanceTicketMutationVariables>;
 export const CreateSubCategoryDocument = gql`
     mutation CreateSubCategory($input: createSubCategoryInput!) {
   createSubCategory(input: $input)
@@ -1435,19 +1460,6 @@ export type GetEmployeeByClerkIdQueryHookResult = ReturnType<typeof useGetEmploy
 export type GetEmployeeByClerkIdLazyQueryHookResult = ReturnType<typeof useGetEmployeeByClerkIdLazyQuery>;
 export type GetEmployeeByClerkIdSuspenseQueryHookResult = ReturnType<typeof useGetEmployeeByClerkIdSuspenseQuery>;
 export type GetEmployeeByClerkIdQueryResult = Apollo.QueryResult<GetEmployeeByClerkIdQuery, GetEmployeeByClerkIdQueryVariables>;
-export const UpdateMaintenanceTicketDocument = gql`
-    mutation UpdateMaintenanceTicket($updateMaintenanceTicketId: ID!, $input: UpdateMaintenanceTicketInput!) {
-  updateMaintenanceTicket(id: $updateMaintenanceTicketId, input: $input)
-}
-    `;
-export type UpdateMaintenanceTicketMutationFn = Apollo.MutationFunction<UpdateMaintenanceTicketMutation, UpdateMaintenanceTicketMutationVariables>;
-export function useUpdateMaintenanceTicketMutation(baseOptions?: Apollo.MutationHookOptions<UpdateMaintenanceTicketMutation, UpdateMaintenanceTicketMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<UpdateMaintenanceTicketMutation, UpdateMaintenanceTicketMutationVariables>(UpdateMaintenanceTicketDocument, options);
-      }
-export type UpdateMaintenanceTicketMutationHookResult = ReturnType<typeof useUpdateMaintenanceTicketMutation>;
-export type UpdateMaintenanceTicketMutationResult = Apollo.MutationResult<UpdateMaintenanceTicketMutation>;
-export type UpdateMaintenanceTicketMutationOptions = Apollo.BaseMutationOptions<UpdateMaintenanceTicketMutation, UpdateMaintenanceTicketMutationVariables>;
 export const GetAssetsReturnDocument = gql`
     query GetAssetsReturn {
   getAssets {
