@@ -1,6 +1,9 @@
 "use client";
 
-import { EmployeeRole, useGetAdminEmployeesQuery } from "@/gql/graphql";
+import {
+  useGetAdminEmployeesQuery,
+  useGetEmployeeByIdQuery,
+} from "@/gql/graphql";
 import {
   Sidebar,
   SidebarContent,
@@ -9,24 +12,34 @@ import {
   SidebarMenuItem,
   cn,
 } from "@/libs";
-import { LayoutDashboard, AlertTriangle, Boxes, Settings } from "lucide-react";
+import { useUser } from "@clerk/nextjs";
+import {
+  LayoutDashboard,
+  AlertTriangle,
+  Boxes,
+  Settings,
+  User,
+} from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { useEmployee } from "../_providers/user-provider";
 
 export function AppSidebar() {
+  const { user } = useUser();
   const router = useRouter();
   const pathname = usePathname();
-  const { data, loading } = useGetAdminEmployeesQuery();
-  const { employee } = useEmployee();
-  const employees = data?.getEmployees || [];
 
-  const storedEmployeeId =
-    typeof window !== "undefined" ? localStorage.getItem("employeeId") : null;
+  const employeeId = "-H7_24M85L-FMHKpkv4gp";
 
-  const currentEmployee = employees.find((emp) => emp.id === storedEmployeeId);
+  const { data, loading } = useGetEmployeeByIdQuery({
+    variables: {
+      getEmployeeByIdId: employeeId!,
+    },
+    skip: !employeeId,
+  });
 
-  const hasTerminationEmployee =
-    !loading && currentEmployee?.terminationDate !== null;
+  const currentEmployee = data?.getEmployeeById;
+
+  const hasTerminationEmployee = Boolean(currentEmployee?.terminationDate);
 
   const isAdmin = employee?.role === EmployeeRole.Admin;
 

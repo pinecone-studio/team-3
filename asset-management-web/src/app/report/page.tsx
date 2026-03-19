@@ -3,36 +3,28 @@
 import { FileText, Monitor, XCircle } from "lucide-react";
 import ReportDialog from "./_components/ReportDialog";
 import PreviousReports from "./_components/PreviousReports";
+import { useGetMaintenanceTicketsQuery } from "@/gql/graphql";
 
-export const MOCK_REPORTS = [
-  {
-    id: "1",
-    title: 'MacBook Pro 14"',
-    code: "MAC-2026-005",
-    reason: "Батерей амархан дуусдаг болсон",
-    reportedDate: "11/15/2025",
-    resolvedDate: "11/20/2025",
-    category: "Техник хангамж",
-    status: "RESOLVED",
-  },
-  {
-    id: "2",
-    title: "Dell P2419H",
-    code: "MON-2024-008",
-    reason: "Дэлгэцийн зүүн талд зураас гарч ирсэн",
-    reportedDate: "10/5/2025",
-    resolvedDate: "10/12/2025",
-    category: "Гэмтэл",
-    status: "RESOLVED",
-  },
-];
 export default function ReportPage() {
-  const loading = false;
-  const error = null;
-  const allReports = MOCK_REPORTS;
+  const { data, loading, error } = useGetMaintenanceTicketsQuery();
+  console.log("data", data);
+
+  const allReports =
+    data?.getMaintenanceTickets?.filter(
+      (r): r is NonNullable<typeof r> => r !== null,
+    ) ?? [];
 
   const activeReports = allReports.filter((r) => r.status !== "RESOLVED");
+
   const resolvedReports = allReports.filter((r) => r.status === "RESOLVED");
+
+  if (loading) {
+    return <div className="p-6 text-gray-500">Loading...</div>;
+  }
+
+  if (error) {
+    return <div className="p-6 text-red-500">Error loading reports</div>;
+  }
   return (
     <div className="p-6 flex flex-col w-full text-[#0F172A] gap-6 font-gilroy">
       <div className="flex justify-between items-center ">
@@ -75,9 +67,9 @@ export default function ReportPage() {
                     key={report.id}
                     className="border border-[#E2E8F0] p-4 rounded-xl bg-white"
                   >
-                    <h4 className="font-semibold">{report.title}</h4>
+                    <h4 className="font-semibold">{report.assetId}</h4>
                     <p className="text-sm text-[#666666] mt-1">
-                      {report.reason}
+                      {report.description}
                     </p>
                   </div>
                 ))}
@@ -86,7 +78,7 @@ export default function ReportPage() {
           </div>
         </div>
 
-        <PreviousReports reports={resolvedReports} />
+        <PreviousReports reports={resolvedReports as any} />
       </div>
     </div>
   );
