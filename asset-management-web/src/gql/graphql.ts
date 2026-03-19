@@ -32,6 +32,7 @@ export type Asset = {
   qrUrl: Scalars['String']['output'];
   serialNumber?: Maybe<Scalars['String']['output']>;
   status: AssetStatusEnum;
+  subCategory?: Maybe<SubCategory>;
 };
 
 export enum AssetStatusEnum {
@@ -103,13 +104,14 @@ export type CensusTask = {
 
 export type CreateAssetInput = {
   assetTag: Scalars['String']['input'];
-  categoryId?: InputMaybe<Scalars['String']['input']>;
+  categoryId: Scalars['String']['input'];
   imageBase64: Scalars['String']['input'];
-  locationId?: InputMaybe<Scalars['String']['input']>;
-  purchaseCost?: InputMaybe<Scalars['Float']['input']>;
-  purchaseDate?: InputMaybe<Scalars['String']['input']>;
-  serialNumber?: InputMaybe<Scalars['String']['input']>;
+  locationId: Scalars['String']['input'];
+  purchaseCost: Scalars['Float']['input'];
+  purchaseDate: Scalars['String']['input'];
+  serialNumber: Scalars['String']['input'];
   status?: InputMaybe<AssetStatusEnum>;
+  subCategoryId: Scalars['String']['input'];
 };
 
 export type CreateAssignmentInput = {
@@ -612,7 +614,7 @@ export type DeleteAssetMutation = { __typename?: 'Mutation', deleteAsset: Respon
 export type GetAssetsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetAssetsQuery = { __typename?: 'Query', getAssets?: Array<{ __typename?: 'Asset', assetTag: string, serialNumber?: string | null, status: AssetStatusEnum, currentBookValue?: number | null, assignedTo?: string | null, id: string, category?: { __typename?: 'Category', name: string } | null } | null> | null };
+export type GetAssetsQuery = { __typename?: 'Query', getAssets?: Array<{ __typename?: 'Asset', id: string, assetTag: string, serialNumber?: string | null, status: AssetStatusEnum, purchaseDate?: string | null, purchaseCost?: number | null, currentBookValue?: number | null, locationId?: string | null, assignedTo?: string | null, deletedAt?: string | null, imageUrl: string, qrUrl: string, category?: { __typename?: 'Category', id: string, name: string, description?: string | null, assets?: Array<{ __typename?: 'Asset', id: string, assetTag: string, serialNumber?: string | null, status: AssetStatusEnum, purchaseDate?: string | null, purchaseCost?: number | null, currentBookValue?: number | null, locationId?: string | null, assignedTo?: string | null, deletedAt?: string | null, imageUrl: string, qrUrl: string }> | null } | null, subCategory?: { __typename?: 'SubCategory', id: string, name: string, categoryId?: string | null } | null } | null> | null };
 
 export type GetCategoriesQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -862,15 +864,42 @@ export type DeleteAssetMutationOptions = Apollo.BaseMutationOptions<DeleteAssetM
 export const GetAssetsDocument = gql`
     query GetAssets {
   getAssets {
+    id
     assetTag
     category {
+      id
       name
+      description
+      assets {
+        id
+        assetTag
+        serialNumber
+        status
+        purchaseDate
+        purchaseCost
+        currentBookValue
+        locationId
+        assignedTo
+        deletedAt
+        imageUrl
+        qrUrl
+      }
+    }
+    subCategory {
+      id
+      name
+      categoryId
     }
     serialNumber
     status
+    purchaseDate
+    purchaseCost
     currentBookValue
+    locationId
     assignedTo
-    id
+    deletedAt
+    imageUrl
+    qrUrl
   }
 }
     `;

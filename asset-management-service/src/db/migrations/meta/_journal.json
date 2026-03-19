@@ -92,6 +92,13 @@
       "when": 1773887482240,
       "tag": "0012_careless_tarantula",
       "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "6",
+      "when": 1773915727829,
+      "tag": "0013_confused_black_queen",
+      "breakpoints": true
     }
   ]
 }
