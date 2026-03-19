@@ -152,6 +152,16 @@ export type CreateEmployeeInput = {
   status: EmployeeStatus;
 };
 
+export type CreateMaintenanceTicketInput = {
+  assetId: Scalars['ID']['input'];
+  description: Scalars['String']['input'];
+  repairCost?: InputMaybe<Scalars['Float']['input']>;
+  reporterId: Scalars['ID']['input'];
+  severity?: InputMaybe<MaintenanceSeverityEnum>;
+  status?: InputMaybe<TicketStatusEnum>;
+  vendorId?: InputMaybe<Scalars['String']['input']>;
+};
+
 export type DeleteEmployeeInput = {
   terminationDate: Scalars['String']['input'];
 };
@@ -188,6 +198,28 @@ export enum EmployeeStatus {
   Terminated = 'TERMINATED'
 }
 
+export enum MaintenanceSeverityEnum {
+  Critical = 'CRITICAL',
+  High = 'HIGH',
+  Low = 'LOW',
+  Medium = 'MEDIUM'
+}
+
+export type MaintenanceTicket = {
+  __typename?: 'MaintenanceTicket';
+  assetId: Scalars['ID']['output'];
+  createdAt?: Maybe<Scalars['String']['output']>;
+  description: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  repairCost?: Maybe<Scalars['Float']['output']>;
+  reporterId: Scalars['ID']['output'];
+  resolvedAt?: Maybe<Scalars['String']['output']>;
+  severity?: Maybe<MaintenanceSeverityEnum>;
+  status: TicketStatusEnum;
+  updatedAt?: Maybe<Scalars['String']['output']>;
+  vendorId?: Maybe<Scalars['String']['output']>;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   createAsset: Response;
@@ -195,17 +227,20 @@ export type Mutation = {
   createCategory: Response;
   createCensusEvent: Response;
   createEmployee: Response;
+  createMaintenanceTicket: Response;
   deleteAsset: Response;
   deleteAssignment: Response;
   deleteCategory: Response;
   deleteCategoryByIds: Response;
   deleteEmployee: Response;
+  deleteMaintenanceTicket: Response;
   editCategoryById: Response;
   finalizeCensusEvent: Response;
   updateAsset: Response;
   updateAssignment: Response;
   updateCensusTask: Response;
   updateEmployee: Response;
+  updateMaintenanceTicket: Response;
 };
 
 
@@ -234,6 +269,11 @@ export type MutationCreateEmployeeArgs = {
 };
 
 
+export type MutationCreateMaintenanceTicketArgs = {
+  input: CreateMaintenanceTicketInput;
+};
+
+
 export type MutationDeleteAssetArgs = {
   id: Scalars['ID']['input'];
 };
@@ -257,6 +297,11 @@ export type MutationDeleteCategoryByIdsArgs = {
 export type MutationDeleteEmployeeArgs = {
   id: Scalars['ID']['input'];
   input: DeleteEmployeeInput;
+};
+
+
+export type MutationDeleteMaintenanceTicketArgs = {
+  id: Scalars['ID']['input'];
 };
 
 
@@ -292,6 +337,12 @@ export type MutationUpdateEmployeeArgs = {
   input: UpdateEmployeeInput;
 };
 
+
+export type MutationUpdateMaintenanceTicketArgs = {
+  id: Scalars['ID']['input'];
+  input: UpdateMaintenanceTicketInput;
+};
+
 export enum PosStatusEnum {
   Approved = 'APPROVED',
   Cancelled = 'CANCELLED',
@@ -320,7 +371,10 @@ export type Query = {
   getEmployeeById?: Maybe<Employee>;
   getEmployees: Array<Employee>;
   getEmployeesByStatus: Array<Employee>;
+  getMaintenanceTicketById?: Maybe<MaintenanceTicket>;
+  getMaintenanceTickets?: Maybe<Array<Maybe<MaintenanceTicket>>>;
   getPendingAssignments: Array<Assignment>;
+  getTicketsByAssetId?: Maybe<Array<Maybe<MaintenanceTicket>>>;
 };
 
 
@@ -390,8 +444,18 @@ export type QueryGetEmployeesByStatusArgs = {
 };
 
 
+export type QueryGetMaintenanceTicketByIdArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
 export type QueryGetPendingAssignmentsArgs = {
   token: Scalars['String']['input'];
+};
+
+
+export type QueryGetTicketsByAssetIdArgs = {
+  assetId: Scalars['ID']['input'];
 };
 
 export enum Response {
@@ -452,6 +516,17 @@ export type UpdateEmployeeInput = {
   numberOfVacationDays?: InputMaybe<Scalars['Int']['input']>;
   status?: InputMaybe<EmployeeStatus>;
   terminationDate?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type UpdateMaintenanceTicketInput = {
+  assetId?: InputMaybe<Scalars['ID']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  repairCost?: InputMaybe<Scalars['Float']['input']>;
+  reporterId?: InputMaybe<Scalars['ID']['input']>;
+  resolvedAt?: InputMaybe<Scalars['String']['input']>;
+  severity?: InputMaybe<MaintenanceSeverityEnum>;
+  status?: InputMaybe<TicketStatusEnum>;
+  vendorId?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type EditCategoryByIdInput = {
