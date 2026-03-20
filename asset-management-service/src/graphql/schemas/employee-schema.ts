@@ -108,6 +108,11 @@ type EmployeeWithAssets {
 
   assetLength: Int!   
 }
+type GetEmployeeInfByIdProps {
+	totalAssetCount:Int
+	totalCensusTask:Int
+	totalAssigmentCount:Int
+}
     type Query {
 		# Get all employees (ideal for the main AMSS table)
 		getEmployees: [EmployeeWithAssets!]!
@@ -119,6 +124,7 @@ type EmployeeWithAssets {
 		# Filtered lists for specific workflows (e.g., Offboarding)
 		getEmployeesByStatus(status: EmployeeStatus!): [Employee!]!
 		getEmployeeByClerkID(clerkId:String!):Employee!
+		getEmployeeInfById(id:ID!):GetEmployeeInfByIdProps!
 	}
 	type Mutation {
 		createEmployee(input: CreateEmployeeInput!): Response!

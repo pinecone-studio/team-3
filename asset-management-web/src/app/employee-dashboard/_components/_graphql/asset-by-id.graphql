@@ -1,7 +1,0 @@
-query getAssetById($getAssetByIdId: ID!) {
-  getAssetById(id: $getAssetByIdId) {
-    id
-    serialNumber
-    assetTag
-  }
-}
