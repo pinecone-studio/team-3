@@ -14,13 +14,16 @@ import {
   useGetCategoriesQuery,
   useGetSubCategoriesWithCategoryQuery
 } from "@/gql/graphql"
+import { AddSubCategoryAndSearch } from "./AddSubCategoryAndSearch"
+import { SubCategoryHeader } from "./SubCategoryHeader"
 
-import { SubCategoryPagination } from "./_components/SubCategoryPagination"
-import { AddSubCategoryAndSearch } from "./_components/AddSubCategoryAndSearch"
-import { DeleteAndEditCategory } from "./_components/DeleteAndEditSubCategory"
-import { SubCategoryHeader } from "./_components/SubCategoryHeader"
 
-export default function CategoryPage() {
+import { DeleteAndEditCategory } from "./DeleteAndEditSubCategory"
+import { SubCategoryPagination } from "./SubCategoryPagination"
+
+
+
+export default function SubCategoryPage() {
   const [searchQuery, setSearchQuery] = useState("")
   const [selectedCategories, setSelectedCategories] = useState<string[]>([])
   const [currentPage, setCurrentPage] = useState(1)

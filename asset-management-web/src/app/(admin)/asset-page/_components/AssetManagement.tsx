@@ -19,7 +19,7 @@ type AssetManagementProps = {
 
 }
 export default function AssetManagement({ assets, refetch }: AssetManagementProps) {
-const router = useRouter()
+  const router = useRouter()
   const [category, setCategory] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
   const [search, setSearch] = useState("");
@@ -88,19 +88,6 @@ const router = useRouter()
 
   return (
     <div className="flex min-h-screen bg-white">
-      {/* Header */}
-      <header className="fixed top-0 left-0 right-0 h-14 bg-white border-b border-gray-200 flex items-center px-6 z-50">
-        <div className="flex items-center gap-3">
-          <button className="p-1.5 hover:bg-gray-100 rounded-md transition-colors">
-            <PanelLeft size={20} className="text-gray-500" />
-          </button>
-          <div className="w-px h-6 bg-gray-200" />
-          <span className="text-[15px] font-semibold text-gray-900">
-            Asset Management System
-          </span>
-        </div>
-      </header>
-
       <main className="flex-1 pt-14">
         <div className="p-6 space-y-6">
           {/* Page Header */}
@@ -237,7 +224,7 @@ const router = useRouter()
                     <td className="py-4 font-medium text-gray-900">
                       <div className="flex items-center gap-3">
                         <div className="border border-gray-200 p-1.5 w-12 h-12 rounded-md flex items-center justify-center bg-white">
-                          <Image src={item.imageUrl} width={32} height={32} alt="zurag" className="object-contain" />
+                          <img src={item.imageUrl} width={32} height={32} alt="zurag" className="object-contain" />
                         </div>
                         <div className="flex flex-col gap-1">
                           <p className="text-sm font-medium text-gray-900">{item.name}</p>
@@ -257,8 +244,8 @@ const router = useRouter()
                       </div>
                     </td>
 
-                    <td className="px-4 py-4">
-                      <span className="px-3 py-1.5 bg-gray-100 rounded-full text-xs  font-medium">
+                    <td className="px-4 py-4 max-w-[140px] text-center">
+                      <span className="block truncate px-3 py-1.5 bg-gray-100 rounded-full text-xs font-medium">
                         {item?.category?.name || "—"}
                       </span>
                     </td>
