@@ -80,20 +80,22 @@ export default function QrTab({ items = [], onOpenScanner }: QrTabProps) {
               <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-5">
                 {/* Device icon */}
                 <div className="flex h-20 w-20 sm:h-24 sm:w-24 items-center justify-center overflow-hidden rounded-2xl bg-[#F8FAFC]">
-                  <DeviceIcon type={item.type} size={40} />
+                  <DeviceIcon type={item.type || "monitor"} size={40} />
                 </div>
 
                 {/* Text content */}
                 <div className="min-w-0 flex-1 flex flex-col gap-2">
                   <div className="mb-2 flex flex-wrap items-center gap-2">
                     <h3 className="text-[18px] font-semibold text-gray-900">
-                      {item.name}
+                      {item.asset.assetTag}
                     </h3>
                     <PendingBadge />
                   </div>
 
                   <p className="text-sm text-gray-500">{item.code}</p>
-                  <p className="mt-1 text-sm text-gray-400">{item.description}</p>
+                  <p className="mt-1 text-sm text-gray-400">
+                    {item.description}
+                  </p>
                 </div>
               </div>
 
@@ -111,12 +113,16 @@ export default function QrTab({ items = [], onOpenScanner }: QrTabProps) {
 
                 <div>
                   <p className="mb-1 text-sm text-gray-400">Олгосон огноо</p>
-                  <p className="text-[15px] font-semibold text-gray-900">{item.date}</p>
+                  <p className="text-[15px] font-semibold text-gray-900">
+                    {item.date}
+                  </p>
                 </div>
 
                 <div>
                   <p className="mb-1 text-sm text-gray-400">Олгосон</p>
-                  <p className="text-[15px] font-semibold text-gray-900">{item.owner}</p>
+                  <p className="text-[15px] font-semibold text-gray-900">
+                    {item.owner}
+                  </p>
                 </div>
               </div>
             </div>

@@ -1,8 +1,20 @@
 "use client";
 
 import { Asset, AssetStatusEnum } from "@/gql/graphql";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/libs";
-import { ChevronLeft, ChevronRight, Download, PanelLeft, Search } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/libs";
+import {
+  ChevronLeft,
+  ChevronRight,
+  Download,
+  PanelLeft,
+  Search,
+} from "lucide-react";
 import { useState, useMemo } from "react";
 import { AddAsset } from "./add-asset/AddAsset";
 import Image from "next/image";
@@ -10,23 +22,23 @@ import { AssetActions } from "./AssetActions";
 import { exportAssetsToExcel } from "../_utils/exportAssetsToExcel";
 import { useRouter } from "next/navigation";
 
-
 type AssetManagementProps = {
   assets: Asset[];
   onDelete: (id: string) => void;
   onUpdate?: (id: string, input: any) => void;
   refetch: () => void;
-
-}
-export default function AssetManagement({ assets, refetch }: AssetManagementProps) {
-  const router = useRouter()
+};
+export default function AssetManagement({
+  assets,
+  refetch,
+}: AssetManagementProps) {
+  const router = useRouter();
   const [category, setCategory] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
   const pageSize = 12;
-
 
   const getStatusLabel = (status: string) => {
     switch (status) {
@@ -65,12 +77,12 @@ export default function AssetManagement({ assets, refetch }: AssetManagementProp
 
   const paginatedAssets = filteredAssets.slice(
     (page - 1) * pageSize,
-    page * pageSize
+    page * pageSize,
   );
 
   const toggleSelectItem = (id: string) => {
     setSelectedItems((prev) =>
-      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
+      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id],
     );
   };
 
@@ -187,15 +199,29 @@ export default function AssetManagement({ assets, refetch }: AssetManagementProp
                       className="rounded border-gray-300 w-4 h-4 accent-amber-500 cursor-pointer"
                     />
                   </th>
-                  <th className="py-4 font-normal text-left" style={{ width: '40%' }}>Хөрөнгө</th>
+                  <th
+                    className="py-4 font-normal text-left"
+                    style={{ width: "40%" }}
+                  >
+                    Хөрөнгө
+                  </th>
                   <th className="px-4 py-4 font-normal text-left">Ангилал</th>
 
                   <th className="px-4 py-4 font-normal text-left">
                     <span className="inline-flex items-center gap-1">
                       Хуваарилагдсан
-                      <svg className="w-3.5 h-3.5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <svg
+                        className="w-3.5 h-3.5 text-gray-400"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
                         <circle cx="12" cy="12" r="10" strokeWidth="1.5" />
-                        <path strokeLinecap="round" strokeWidth="1.5" d="M12 16v-4m0-4h.01" />
+                        <path
+                          strokeLinecap="round"
+                          strokeWidth="1.5"
+                          d="M12 16v-4m0-4h.01"
+                        />
                       </svg>
                     </span>
                   </th>
@@ -224,20 +250,40 @@ export default function AssetManagement({ assets, refetch }: AssetManagementProp
                     <td className="py-4 font-medium text-gray-900">
                       <div className="flex items-center gap-3">
                         <div className="border border-gray-200 p-1.5 w-12 h-12 rounded-md flex items-center justify-center bg-white">
-                          <img src={item.imageUrl} width={32} height={32} alt="zurag" className="object-contain" />
+                          <img
+                            src={item.imageUrl as string}
+                            width={32}
+                            height={32}
+                            alt="zurag"
+                            className="object-contain"
+                          />
                         </div>
                         <div className="flex flex-col gap-1">
-                          <p className="text-sm font-medium text-gray-900">{item.name}</p>
+                          <p className="text-sm font-medium text-gray-900">
+                            {item.name}
+                          </p>
                           <span
-                            className={`inline-flex items-center gap-1.5 text-xs font-medium ${item.status === AssetStatusEnum.Available ? "text-emerald-600" :
-                              item.status === AssetStatusEnum.Assigned ? "text-blue-600" :
-                                item.status === AssetStatusEnum.InRepair ? "text-amber-600" : "text-red-600"
-                              }`}
+                            className={`inline-flex items-center gap-1.5 text-xs font-medium ${
+                              item.status === AssetStatusEnum.Available
+                                ? "text-emerald-600"
+                                : item.status === AssetStatusEnum.Assigned
+                                  ? "text-blue-600"
+                                  : item.status === AssetStatusEnum.InRepair
+                                    ? "text-amber-600"
+                                    : "text-red-600"
+                            }`}
                           >
-                            <span className={`w-1.5 h-1.5 rounded-full ${item.status === AssetStatusEnum.Available ? "bg-emerald-500" :
-                              item.status === AssetStatusEnum.Assigned ? "bg-blue-500" :
-                                item.status === AssetStatusEnum.InRepair ? "bg-amber-500" : "bg-red-500"
-                              }`}></span>
+                            <span
+                              className={`w-1.5 h-1.5 rounded-full ${
+                                item.status === AssetStatusEnum.Available
+                                  ? "bg-emerald-500"
+                                  : item.status === AssetStatusEnum.Assigned
+                                    ? "bg-blue-500"
+                                    : item.status === AssetStatusEnum.InRepair
+                                      ? "bg-amber-500"
+                                      : "bg-red-500"
+                              }`}
+                            ></span>
                             {getStatusLabel(item.status)}
                           </span>
                         </div>
@@ -258,7 +304,6 @@ export default function AssetManagement({ assets, refetch }: AssetManagementProp
                     <td className="px-4 py-4 text-gray-400 text-sm">
                       {item.purchaseCost}
                     </td>
-
 
                     <td className="px-4 py-4">
                       <AssetActions item={item} refetch={refetch} />
@@ -286,10 +331,11 @@ export default function AssetManagement({ assets, refetch }: AssetManagementProp
               <button
                 onClick={() => setPage((p) => Math.max(1, p - 1))}
                 disabled={page === 1}
-                className={`flex items-center gap-1.5 border border-gray-200 px-4 py-2 rounded-lg text-sm font-medium transition-all ${page === 1
-                  ? "text-gray-300 cursor-not-allowed"
-                  : "text-gray-700 hover:bg-gray-50"
-                  }`}
+                className={`flex items-center gap-1.5 border border-gray-200 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                  page === 1
+                    ? "text-gray-300 cursor-not-allowed"
+                    : "text-gray-700 hover:bg-gray-50"
+                }`}
               >
                 <ChevronLeft size={16} />
                 Өмнөх
@@ -298,10 +344,11 @@ export default function AssetManagement({ assets, refetch }: AssetManagementProp
               <button
                 onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
                 disabled={page === totalPages || totalPages === 0}
-                className={`flex items-center gap-1.5 border border-gray-200 px-4 py-2 rounded-lg text-sm font-medium transition-all ${page === totalPages || totalPages === 0
-                  ? "text-gray-300 cursor-not-allowed"
-                  : "text-gray-700 hover:bg-gray-50"
-                  }`}
+                className={`flex items-center gap-1.5 border border-gray-200 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                  page === totalPages || totalPages === 0
+                    ? "text-gray-300 cursor-not-allowed"
+                    : "text-gray-700 hover:bg-gray-50"
+                }`}
               >
                 Дараах
                 <ChevronRight size={16} />

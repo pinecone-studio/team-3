@@ -128,7 +128,11 @@ export const mockGarItems: GarItem[] = [
 ];
 
 export interface QrItem {
-  name: string;
+  asset: {
+    assetTag: string;
+    imageUrl: string;
+  };
+  assetId: string;
   code: string;
   description: string;
   location: string;
@@ -136,42 +140,3 @@ export interface QrItem {
   owner: string;
   type: string;
 }
-
-export const mockQrItems: QrItem[] = [
-  {
-    name: "Magic Keyboard",
-    code: "PER-2026-008 - FVFXX0IGSYK",
-    description: "Touch ID, Numeric Keypad",
-    location: "Шинэ",
-    date: "2026.03.08",
-    owner: "Бат-Эрдэнэ А.",
-    type: "keyboard",
-  },
-  {
-    name: "iPhone 14 Pro",
-    code: "PHN-2026-014 - GH7KL9MNPQR",
-    description: "256GB, Space Black",
-    location: "Шинэ",
-    date: "2026.03.08",
-    owner: "Бат-Эрдэнэ А.",
-    type: "phone",
-  },
-  {
-    name: 'MacBook Pro 14"',
-    code: "MAC-2026-005 - XK9PLMW2TYQ",
-    description: "M3 Pro, 18GB RAM, 512GB SSD",
-    location: "Шинэ",
-    date: "2026.03.10",
-    owner: "Дорж Б.",
-    type: "laptop",
-  },
-  {
-    name: 'Dell UltraSharp 27"',
-    code: "MON-2026-021 - DU27QHD9VBZ",
-    description: "4K UHD, USB-C Hub",
-    location: "Шинэ",
-    date: "2026.03.10",
-    owner: "Дорж Б.",
-    type: "monitor",
-  },
-];
