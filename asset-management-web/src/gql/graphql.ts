@@ -253,6 +253,13 @@ export type EmployeeWithAssets = {
   terminationDate?: Maybe<Scalars['String']['output']>;
 };
 
+export type GetEmployeeInfByIdProps = {
+  __typename?: 'GetEmployeeInfByIdProps';
+  totalAssetCount?: Maybe<Scalars['Int']['output']>;
+  totalAssigmentCount?: Maybe<Scalars['Int']['output']>;
+  totalCensusTask?: Maybe<Scalars['Int']['output']>;
+};
+
 export enum MaintenanceSeverityEnum {
   Critical = 'CRITICAL',
   High = 'HIGH',
@@ -451,6 +458,7 @@ export type Query = {
   getEmployeeByClerkID: Employee;
   getEmployeeByCode?: Maybe<Employee>;
   getEmployeeById?: Maybe<Employee>;
+  getEmployeeInfById: GetEmployeeInfByIdProps;
   getEmployees: Array<EmployeeWithAssets>;
   getEmployeesByStatus: Array<Employee>;
   getMaintenanceTicketById?: Maybe<MaintenanceTicket>;
@@ -524,6 +532,11 @@ export type QueryGetEmployeeByCodeArgs = {
 
 
 export type QueryGetEmployeeByIdArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type QueryGetEmployeeInfByIdArgs = {
   id: Scalars['ID']['input'];
 };
 
@@ -669,6 +682,13 @@ export type DuplicateAssetMutationVariables = Exact<{
 
 export type DuplicateAssetMutation = { __typename?: 'Mutation', duplicateAsset: Response };
 
+export type GetAssetByIdQueryVariables = Exact<{
+  getAssetByIdId: Scalars['ID']['input'];
+}>;
+
+
+export type GetAssetByIdQuery = { __typename?: 'Query', getAssetById: { __typename?: 'Asset', id: string, assetTag: string, serialNumber?: string | null, status: AssetStatusEnum, purchaseDate?: string | null, purchaseCost?: number | null, currentBookValue?: number | null, locationId?: string | null, assignedTo?: string | null, deletedAt?: string | null, imageUrl: string, qrUrl: string, name: string, category?: { __typename?: 'Category', id: string, name: string, description?: string | null, assets?: Array<{ __typename?: 'Asset', id: string, assetTag: string, serialNumber?: string | null, status: AssetStatusEnum, purchaseDate?: string | null, purchaseCost?: number | null, currentBookValue?: number | null, locationId?: string | null, assignedTo?: string | null, deletedAt?: string | null, imageUrl: string, qrUrl: string, name: string }> | null } | null, subCategory?: { __typename?: 'SubCategory', id: string, name: string, categoryId?: string | null } | null, department?: { __typename?: 'Department', id: string, name: string } | null } };
+
 export type GetAssetsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -704,6 +724,13 @@ export type CreateCategoryMutationVariables = Exact<{
 
 export type CreateCategoryMutation = { __typename?: 'Mutation', createCategory: Response };
 
+export type CreateSubCategoryMutationVariables = Exact<{
+  input: CreateSubCategoryInput;
+}>;
+
+
+export type CreateSubCategoryMutation = { __typename?: 'Mutation', createSubCategory: Response };
+
 export type DeleteCategoryByIdsMutationVariables = Exact<{
   ids: Array<Scalars['String']['input']> | Scalars['String']['input'];
 }>;
@@ -718,6 +745,13 @@ export type DeleteCategoryMutationVariables = Exact<{
 
 export type DeleteCategoryMutation = { __typename?: 'Mutation', deleteCategory: Response };
 
+export type DeleteSubCategoryByIdMutationVariables = Exact<{
+  deleteSubCategoryByIdId: Scalars['ID']['input'];
+}>;
+
+
+export type DeleteSubCategoryByIdMutation = { __typename?: 'Mutation', deleteSubCategoryById: Response };
+
 export type EditCategoryByIdMutationVariables = Exact<{
   input: EditCategoryByIdInput;
 }>;
@@ -725,10 +759,22 @@ export type EditCategoryByIdMutationVariables = Exact<{
 
 export type EditCategoryByIdMutation = { __typename?: 'Mutation', editCategoryById: Response };
 
+export type EditSubCategoryByIdMutationVariables = Exact<{
+  input: EditSubCategoryInput;
+}>;
+
+
+export type EditSubCategoryByIdMutation = { __typename?: 'Mutation', editSubCategoryById: Response };
+
 export type GetCategoriesWithAssetsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetCategoriesWithAssetsQuery = { __typename?: 'Query', getCategories: Array<{ __typename?: 'Category', id: string, name: string, description?: string | null, assets?: Array<{ __typename?: 'Asset', id: string, assetTag: string, serialNumber?: string | null, status: AssetStatusEnum, purchaseDate?: string | null, purchaseCost?: number | null, currentBookValue?: number | null, locationId?: string | null, assignedTo?: string | null, deletedAt?: string | null, imageUrl: string, category?: { __typename?: 'Category', id: string, name: string, description?: string | null } | null }> | null }> };
+
+export type GetSubCategoriesWithCategoryQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetSubCategoriesWithCategoryQuery = { __typename?: 'Query', getSubCategoriesWithCategory: Array<{ __typename?: 'getSubCategoriesProps', categories?: { __typename?: 'Category', id: string, name: string, description?: string | null, assets?: Array<{ __typename?: 'Asset', id: string, assetTag: string, serialNumber?: string | null, status: AssetStatusEnum, purchaseDate?: string | null, purchaseCost?: number | null, currentBookValue?: number | null, locationId?: string | null, assignedTo?: string | null, deletedAt?: string | null, category?: { __typename?: 'Category', id: string, name: string, description?: string | null } | null }> | null } | null, sub_categories: { __typename?: 'SubCategory', id: string, name: string, categoryId?: string | null } }> };
 
 export type CreateCensusEventMutationVariables = Exact<{
   input: CreateCensusEventInput;
@@ -785,32 +831,6 @@ export type UpdateMaintenanceTicketMutationVariables = Exact<{
 
 export type UpdateMaintenanceTicketMutation = { __typename?: 'Mutation', updateMaintenanceTicket: Response };
 
-export type CreateSubCategoryMutationVariables = Exact<{
-  input: CreateSubCategoryInput;
-}>;
-
-
-export type CreateSubCategoryMutation = { __typename?: 'Mutation', createSubCategory: Response };
-
-export type DeleteSubCategoryByIdMutationVariables = Exact<{
-  deleteSubCategoryByIdId: Scalars['ID']['input'];
-}>;
-
-
-export type DeleteSubCategoryByIdMutation = { __typename?: 'Mutation', deleteSubCategoryById: Response };
-
-export type EditSubCategoryByIdMutationVariables = Exact<{
-  input: EditSubCategoryInput;
-}>;
-
-
-export type EditSubCategoryByIdMutation = { __typename?: 'Mutation', editSubCategoryById: Response };
-
-export type GetSubCategoriesWithCategoryQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type GetSubCategoriesWithCategoryQuery = { __typename?: 'Query', getSubCategoriesWithCategory: Array<{ __typename?: 'getSubCategoriesProps', categories?: { __typename?: 'Category', id: string, name: string, description?: string | null, assets?: Array<{ __typename?: 'Asset', id: string, assetTag: string, serialNumber?: string | null, status: AssetStatusEnum, purchaseDate?: string | null, purchaseCost?: number | null, currentBookValue?: number | null, locationId?: string | null, assignedTo?: string | null, deletedAt?: string | null, category?: { __typename?: 'Category', id: string, name: string, description?: string | null } | null }> | null } | null, sub_categories: { __typename?: 'SubCategory', id: string, name: string, categoryId?: string | null } }> };
-
 export type GetAdminEmployeesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -834,13 +854,6 @@ export type GetEmployeeByIdQueryVariables = Exact<{
 
 
 export type GetEmployeeByIdQuery = { __typename?: 'Query', getEmployeeById?: { __typename?: 'Employee', id: string, firstName: string, lastName: string, terminationDate?: string | null, department: string, branch: string } | null };
-
-export type GetAssetByIdQueryVariables = Exact<{
-  getAssetByIdId: Scalars['ID']['input'];
-}>;
-
-
-export type GetAssetByIdQuery = { __typename?: 'Query', getAssetById: { __typename?: 'Asset', id: string, serialNumber?: string | null, assetTag: string } };
 
 export type GetAssetsByEmployeeIdQueryVariables = Exact<{
   employeeId: Scalars['ID']['input'];
@@ -955,6 +968,73 @@ export function useDuplicateAssetMutation(baseOptions?: Apollo.MutationHookOptio
 export type DuplicateAssetMutationHookResult = ReturnType<typeof useDuplicateAssetMutation>;
 export type DuplicateAssetMutationResult = Apollo.MutationResult<DuplicateAssetMutation>;
 export type DuplicateAssetMutationOptions = Apollo.BaseMutationOptions<DuplicateAssetMutation, DuplicateAssetMutationVariables>;
+export const GetAssetByIdDocument = gql`
+    query GetAssetById($getAssetByIdId: ID!) {
+  getAssetById(id: $getAssetByIdId) {
+    id
+    assetTag
+    category {
+      id
+      name
+      description
+      assets {
+        id
+        assetTag
+        serialNumber
+        status
+        purchaseDate
+        purchaseCost
+        currentBookValue
+        locationId
+        assignedTo
+        deletedAt
+        imageUrl
+        qrUrl
+        name
+      }
+    }
+    subCategory {
+      id
+      name
+      categoryId
+    }
+    serialNumber
+    status
+    purchaseDate
+    purchaseCost
+    currentBookValue
+    locationId
+    assignedTo
+    deletedAt
+    department {
+      id
+      name
+    }
+    imageUrl
+    qrUrl
+    name
+  }
+}
+    `;
+export function useGetAssetByIdQuery(baseOptions: Apollo.QueryHookOptions<GetAssetByIdQuery, GetAssetByIdQueryVariables> & ({ variables: GetAssetByIdQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetAssetByIdQuery, GetAssetByIdQueryVariables>(GetAssetByIdDocument, options);
+      }
+export function useGetAssetByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAssetByIdQuery, GetAssetByIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetAssetByIdQuery, GetAssetByIdQueryVariables>(GetAssetByIdDocument, options);
+        }
+// @ts-ignore
+export function useGetAssetByIdSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetAssetByIdQuery, GetAssetByIdQueryVariables>): Apollo.UseSuspenseQueryResult<GetAssetByIdQuery, GetAssetByIdQueryVariables>;
+export function useGetAssetByIdSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetAssetByIdQuery, GetAssetByIdQueryVariables>): Apollo.UseSuspenseQueryResult<GetAssetByIdQuery | undefined, GetAssetByIdQueryVariables>;
+export function useGetAssetByIdSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetAssetByIdQuery, GetAssetByIdQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetAssetByIdQuery, GetAssetByIdQueryVariables>(GetAssetByIdDocument, options);
+        }
+export type GetAssetByIdQueryHookResult = ReturnType<typeof useGetAssetByIdQuery>;
+export type GetAssetByIdLazyQueryHookResult = ReturnType<typeof useGetAssetByIdLazyQuery>;
+export type GetAssetByIdSuspenseQueryHookResult = ReturnType<typeof useGetAssetByIdSuspenseQuery>;
+export type GetAssetByIdQueryResult = Apollo.QueryResult<GetAssetByIdQuery, GetAssetByIdQueryVariables>;
 export const GetAssetsDocument = gql`
     query GetAssets {
   getAssets {
@@ -1130,6 +1210,19 @@ export function useCreateCategoryMutation(baseOptions?: Apollo.MutationHookOptio
 export type CreateCategoryMutationHookResult = ReturnType<typeof useCreateCategoryMutation>;
 export type CreateCategoryMutationResult = Apollo.MutationResult<CreateCategoryMutation>;
 export type CreateCategoryMutationOptions = Apollo.BaseMutationOptions<CreateCategoryMutation, CreateCategoryMutationVariables>;
+export const CreateSubCategoryDocument = gql`
+    mutation CreateSubCategory($input: createSubCategoryInput!) {
+  createSubCategory(input: $input)
+}
+    `;
+export type CreateSubCategoryMutationFn = Apollo.MutationFunction<CreateSubCategoryMutation, CreateSubCategoryMutationVariables>;
+export function useCreateSubCategoryMutation(baseOptions?: Apollo.MutationHookOptions<CreateSubCategoryMutation, CreateSubCategoryMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateSubCategoryMutation, CreateSubCategoryMutationVariables>(CreateSubCategoryDocument, options);
+      }
+export type CreateSubCategoryMutationHookResult = ReturnType<typeof useCreateSubCategoryMutation>;
+export type CreateSubCategoryMutationResult = Apollo.MutationResult<CreateSubCategoryMutation>;
+export type CreateSubCategoryMutationOptions = Apollo.BaseMutationOptions<CreateSubCategoryMutation, CreateSubCategoryMutationVariables>;
 export const DeleteCategoryByIdsDocument = gql`
     mutation DeleteCategoryByIds($ids: [String!]!) {
   deleteCategoryByIds(ids: $ids)
@@ -1156,6 +1249,19 @@ export function useDeleteCategoryMutation(baseOptions?: Apollo.MutationHookOptio
 export type DeleteCategoryMutationHookResult = ReturnType<typeof useDeleteCategoryMutation>;
 export type DeleteCategoryMutationResult = Apollo.MutationResult<DeleteCategoryMutation>;
 export type DeleteCategoryMutationOptions = Apollo.BaseMutationOptions<DeleteCategoryMutation, DeleteCategoryMutationVariables>;
+export const DeleteSubCategoryByIdDocument = gql`
+    mutation DeleteSubCategoryById($deleteSubCategoryByIdId: ID!) {
+  deleteSubCategoryById(id: $deleteSubCategoryByIdId)
+}
+    `;
+export type DeleteSubCategoryByIdMutationFn = Apollo.MutationFunction<DeleteSubCategoryByIdMutation, DeleteSubCategoryByIdMutationVariables>;
+export function useDeleteSubCategoryByIdMutation(baseOptions?: Apollo.MutationHookOptions<DeleteSubCategoryByIdMutation, DeleteSubCategoryByIdMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteSubCategoryByIdMutation, DeleteSubCategoryByIdMutationVariables>(DeleteSubCategoryByIdDocument, options);
+      }
+export type DeleteSubCategoryByIdMutationHookResult = ReturnType<typeof useDeleteSubCategoryByIdMutation>;
+export type DeleteSubCategoryByIdMutationResult = Apollo.MutationResult<DeleteSubCategoryByIdMutation>;
+export type DeleteSubCategoryByIdMutationOptions = Apollo.BaseMutationOptions<DeleteSubCategoryByIdMutation, DeleteSubCategoryByIdMutationVariables>;
 export const EditCategoryByIdDocument = gql`
     mutation EditCategoryById($input: editCategoryByIdInput!) {
   editCategoryById(input: $input)
@@ -1169,6 +1275,19 @@ export function useEditCategoryByIdMutation(baseOptions?: Apollo.MutationHookOpt
 export type EditCategoryByIdMutationHookResult = ReturnType<typeof useEditCategoryByIdMutation>;
 export type EditCategoryByIdMutationResult = Apollo.MutationResult<EditCategoryByIdMutation>;
 export type EditCategoryByIdMutationOptions = Apollo.BaseMutationOptions<EditCategoryByIdMutation, EditCategoryByIdMutationVariables>;
+export const EditSubCategoryByIdDocument = gql`
+    mutation EditSubCategoryById($input: editSubCategoryInput!) {
+  editSubCategoryById(input: $input)
+}
+    `;
+export type EditSubCategoryByIdMutationFn = Apollo.MutationFunction<EditSubCategoryByIdMutation, EditSubCategoryByIdMutationVariables>;
+export function useEditSubCategoryByIdMutation(baseOptions?: Apollo.MutationHookOptions<EditSubCategoryByIdMutation, EditSubCategoryByIdMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<EditSubCategoryByIdMutation, EditSubCategoryByIdMutationVariables>(EditSubCategoryByIdDocument, options);
+      }
+export type EditSubCategoryByIdMutationHookResult = ReturnType<typeof useEditSubCategoryByIdMutation>;
+export type EditSubCategoryByIdMutationResult = Apollo.MutationResult<EditSubCategoryByIdMutation>;
+export type EditSubCategoryByIdMutationOptions = Apollo.BaseMutationOptions<EditSubCategoryByIdMutation, EditSubCategoryByIdMutationVariables>;
 export const GetCategoriesWithAssetsDocument = gql`
     query GetCategoriesWithAssets {
   getCategories {
@@ -1215,6 +1334,58 @@ export type GetCategoriesWithAssetsQueryHookResult = ReturnType<typeof useGetCat
 export type GetCategoriesWithAssetsLazyQueryHookResult = ReturnType<typeof useGetCategoriesWithAssetsLazyQuery>;
 export type GetCategoriesWithAssetsSuspenseQueryHookResult = ReturnType<typeof useGetCategoriesWithAssetsSuspenseQuery>;
 export type GetCategoriesWithAssetsQueryResult = Apollo.QueryResult<GetCategoriesWithAssetsQuery, GetCategoriesWithAssetsQueryVariables>;
+export const GetSubCategoriesWithCategoryDocument = gql`
+    query GetSubCategoriesWithCategory {
+  getSubCategoriesWithCategory {
+    categories {
+      id
+      name
+      description
+      assets {
+        id
+        assetTag
+        category {
+          id
+          name
+          description
+        }
+        serialNumber
+        status
+        purchaseDate
+        purchaseCost
+        currentBookValue
+        locationId
+        assignedTo
+        deletedAt
+      }
+    }
+    sub_categories {
+      id
+      name
+      categoryId
+    }
+  }
+}
+    `;
+export function useGetSubCategoriesWithCategoryQuery(baseOptions?: Apollo.QueryHookOptions<GetSubCategoriesWithCategoryQuery, GetSubCategoriesWithCategoryQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetSubCategoriesWithCategoryQuery, GetSubCategoriesWithCategoryQueryVariables>(GetSubCategoriesWithCategoryDocument, options);
+      }
+export function useGetSubCategoriesWithCategoryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetSubCategoriesWithCategoryQuery, GetSubCategoriesWithCategoryQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetSubCategoriesWithCategoryQuery, GetSubCategoriesWithCategoryQueryVariables>(GetSubCategoriesWithCategoryDocument, options);
+        }
+// @ts-ignore
+export function useGetSubCategoriesWithCategorySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetSubCategoriesWithCategoryQuery, GetSubCategoriesWithCategoryQueryVariables>): Apollo.UseSuspenseQueryResult<GetSubCategoriesWithCategoryQuery, GetSubCategoriesWithCategoryQueryVariables>;
+export function useGetSubCategoriesWithCategorySuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetSubCategoriesWithCategoryQuery, GetSubCategoriesWithCategoryQueryVariables>): Apollo.UseSuspenseQueryResult<GetSubCategoriesWithCategoryQuery | undefined, GetSubCategoriesWithCategoryQueryVariables>;
+export function useGetSubCategoriesWithCategorySuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetSubCategoriesWithCategoryQuery, GetSubCategoriesWithCategoryQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetSubCategoriesWithCategoryQuery, GetSubCategoriesWithCategoryQueryVariables>(GetSubCategoriesWithCategoryDocument, options);
+        }
+export type GetSubCategoriesWithCategoryQueryHookResult = ReturnType<typeof useGetSubCategoriesWithCategoryQuery>;
+export type GetSubCategoriesWithCategoryLazyQueryHookResult = ReturnType<typeof useGetSubCategoriesWithCategoryLazyQuery>;
+export type GetSubCategoriesWithCategorySuspenseQueryHookResult = ReturnType<typeof useGetSubCategoriesWithCategorySuspenseQuery>;
+export type GetSubCategoriesWithCategoryQueryResult = Apollo.QueryResult<GetSubCategoriesWithCategoryQuery, GetSubCategoriesWithCategoryQueryVariables>;
 export const CreateCensusEventDocument = gql`
     mutation CreateCensusEvent($input: CreateCensusEventInput!) {
   createCensusEvent(input: $input)
@@ -1449,97 +1620,6 @@ export function useUpdateMaintenanceTicketMutation(baseOptions?: Apollo.Mutation
 export type UpdateMaintenanceTicketMutationHookResult = ReturnType<typeof useUpdateMaintenanceTicketMutation>;
 export type UpdateMaintenanceTicketMutationResult = Apollo.MutationResult<UpdateMaintenanceTicketMutation>;
 export type UpdateMaintenanceTicketMutationOptions = Apollo.BaseMutationOptions<UpdateMaintenanceTicketMutation, UpdateMaintenanceTicketMutationVariables>;
-export const CreateSubCategoryDocument = gql`
-    mutation CreateSubCategory($input: createSubCategoryInput!) {
-  createSubCategory(input: $input)
-}
-    `;
-export type CreateSubCategoryMutationFn = Apollo.MutationFunction<CreateSubCategoryMutation, CreateSubCategoryMutationVariables>;
-export function useCreateSubCategoryMutation(baseOptions?: Apollo.MutationHookOptions<CreateSubCategoryMutation, CreateSubCategoryMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<CreateSubCategoryMutation, CreateSubCategoryMutationVariables>(CreateSubCategoryDocument, options);
-      }
-export type CreateSubCategoryMutationHookResult = ReturnType<typeof useCreateSubCategoryMutation>;
-export type CreateSubCategoryMutationResult = Apollo.MutationResult<CreateSubCategoryMutation>;
-export type CreateSubCategoryMutationOptions = Apollo.BaseMutationOptions<CreateSubCategoryMutation, CreateSubCategoryMutationVariables>;
-export const DeleteSubCategoryByIdDocument = gql`
-    mutation DeleteSubCategoryById($deleteSubCategoryByIdId: ID!) {
-  deleteSubCategoryById(id: $deleteSubCategoryByIdId)
-}
-    `;
-export type DeleteSubCategoryByIdMutationFn = Apollo.MutationFunction<DeleteSubCategoryByIdMutation, DeleteSubCategoryByIdMutationVariables>;
-export function useDeleteSubCategoryByIdMutation(baseOptions?: Apollo.MutationHookOptions<DeleteSubCategoryByIdMutation, DeleteSubCategoryByIdMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<DeleteSubCategoryByIdMutation, DeleteSubCategoryByIdMutationVariables>(DeleteSubCategoryByIdDocument, options);
-      }
-export type DeleteSubCategoryByIdMutationHookResult = ReturnType<typeof useDeleteSubCategoryByIdMutation>;
-export type DeleteSubCategoryByIdMutationResult = Apollo.MutationResult<DeleteSubCategoryByIdMutation>;
-export type DeleteSubCategoryByIdMutationOptions = Apollo.BaseMutationOptions<DeleteSubCategoryByIdMutation, DeleteSubCategoryByIdMutationVariables>;
-export const EditSubCategoryByIdDocument = gql`
-    mutation EditSubCategoryById($input: editSubCategoryInput!) {
-  editSubCategoryById(input: $input)
-}
-    `;
-export type EditSubCategoryByIdMutationFn = Apollo.MutationFunction<EditSubCategoryByIdMutation, EditSubCategoryByIdMutationVariables>;
-export function useEditSubCategoryByIdMutation(baseOptions?: Apollo.MutationHookOptions<EditSubCategoryByIdMutation, EditSubCategoryByIdMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<EditSubCategoryByIdMutation, EditSubCategoryByIdMutationVariables>(EditSubCategoryByIdDocument, options);
-      }
-export type EditSubCategoryByIdMutationHookResult = ReturnType<typeof useEditSubCategoryByIdMutation>;
-export type EditSubCategoryByIdMutationResult = Apollo.MutationResult<EditSubCategoryByIdMutation>;
-export type EditSubCategoryByIdMutationOptions = Apollo.BaseMutationOptions<EditSubCategoryByIdMutation, EditSubCategoryByIdMutationVariables>;
-export const GetSubCategoriesWithCategoryDocument = gql`
-    query GetSubCategoriesWithCategory {
-  getSubCategoriesWithCategory {
-    categories {
-      id
-      name
-      description
-      assets {
-        id
-        assetTag
-        category {
-          id
-          name
-          description
-        }
-        serialNumber
-        status
-        purchaseDate
-        purchaseCost
-        currentBookValue
-        locationId
-        assignedTo
-        deletedAt
-      }
-    }
-    sub_categories {
-      id
-      name
-      categoryId
-    }
-  }
-}
-    `;
-export function useGetSubCategoriesWithCategoryQuery(baseOptions?: Apollo.QueryHookOptions<GetSubCategoriesWithCategoryQuery, GetSubCategoriesWithCategoryQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetSubCategoriesWithCategoryQuery, GetSubCategoriesWithCategoryQueryVariables>(GetSubCategoriesWithCategoryDocument, options);
-      }
-export function useGetSubCategoriesWithCategoryLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetSubCategoriesWithCategoryQuery, GetSubCategoriesWithCategoryQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetSubCategoriesWithCategoryQuery, GetSubCategoriesWithCategoryQueryVariables>(GetSubCategoriesWithCategoryDocument, options);
-        }
-// @ts-ignore
-export function useGetSubCategoriesWithCategorySuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetSubCategoriesWithCategoryQuery, GetSubCategoriesWithCategoryQueryVariables>): Apollo.UseSuspenseQueryResult<GetSubCategoriesWithCategoryQuery, GetSubCategoriesWithCategoryQueryVariables>;
-export function useGetSubCategoriesWithCategorySuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetSubCategoriesWithCategoryQuery, GetSubCategoriesWithCategoryQueryVariables>): Apollo.UseSuspenseQueryResult<GetSubCategoriesWithCategoryQuery | undefined, GetSubCategoriesWithCategoryQueryVariables>;
-export function useGetSubCategoriesWithCategorySuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetSubCategoriesWithCategoryQuery, GetSubCategoriesWithCategoryQueryVariables>) {
-          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<GetSubCategoriesWithCategoryQuery, GetSubCategoriesWithCategoryQueryVariables>(GetSubCategoriesWithCategoryDocument, options);
-        }
-export type GetSubCategoriesWithCategoryQueryHookResult = ReturnType<typeof useGetSubCategoriesWithCategoryQuery>;
-export type GetSubCategoriesWithCategoryLazyQueryHookResult = ReturnType<typeof useGetSubCategoriesWithCategoryLazyQuery>;
-export type GetSubCategoriesWithCategorySuspenseQueryHookResult = ReturnType<typeof useGetSubCategoriesWithCategorySuspenseQuery>;
-export type GetSubCategoriesWithCategoryQueryResult = Apollo.QueryResult<GetSubCategoriesWithCategoryQuery, GetSubCategoriesWithCategoryQueryVariables>;
 export const GetAdminEmployeesDocument = gql`
     query GetAdminEmployees {
   getEmployees {
@@ -1669,34 +1749,6 @@ export type GetEmployeeByIdQueryHookResult = ReturnType<typeof useGetEmployeeByI
 export type GetEmployeeByIdLazyQueryHookResult = ReturnType<typeof useGetEmployeeByIdLazyQuery>;
 export type GetEmployeeByIdSuspenseQueryHookResult = ReturnType<typeof useGetEmployeeByIdSuspenseQuery>;
 export type GetEmployeeByIdQueryResult = Apollo.QueryResult<GetEmployeeByIdQuery, GetEmployeeByIdQueryVariables>;
-export const GetAssetByIdDocument = gql`
-    query getAssetById($getAssetByIdId: ID!) {
-  getAssetById(id: $getAssetByIdId) {
-    id
-    serialNumber
-    assetTag
-  }
-}
-    `;
-export function useGetAssetByIdQuery(baseOptions: Apollo.QueryHookOptions<GetAssetByIdQuery, GetAssetByIdQueryVariables> & ({ variables: GetAssetByIdQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetAssetByIdQuery, GetAssetByIdQueryVariables>(GetAssetByIdDocument, options);
-      }
-export function useGetAssetByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetAssetByIdQuery, GetAssetByIdQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetAssetByIdQuery, GetAssetByIdQueryVariables>(GetAssetByIdDocument, options);
-        }
-// @ts-ignore
-export function useGetAssetByIdSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetAssetByIdQuery, GetAssetByIdQueryVariables>): Apollo.UseSuspenseQueryResult<GetAssetByIdQuery, GetAssetByIdQueryVariables>;
-export function useGetAssetByIdSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetAssetByIdQuery, GetAssetByIdQueryVariables>): Apollo.UseSuspenseQueryResult<GetAssetByIdQuery | undefined, GetAssetByIdQueryVariables>;
-export function useGetAssetByIdSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetAssetByIdQuery, GetAssetByIdQueryVariables>) {
-          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<GetAssetByIdQuery, GetAssetByIdQueryVariables>(GetAssetByIdDocument, options);
-        }
-export type GetAssetByIdQueryHookResult = ReturnType<typeof useGetAssetByIdQuery>;
-export type GetAssetByIdLazyQueryHookResult = ReturnType<typeof useGetAssetByIdLazyQuery>;
-export type GetAssetByIdSuspenseQueryHookResult = ReturnType<typeof useGetAssetByIdSuspenseQuery>;
-export type GetAssetByIdQueryResult = Apollo.QueryResult<GetAssetByIdQuery, GetAssetByIdQueryVariables>;
 export const GetAssetsByEmployeeIdDocument = gql`
     query GetAssetsByEmployeeId($employeeId: ID!) {
   getAssetsByEmployeeId(employeeId: $employeeId) {

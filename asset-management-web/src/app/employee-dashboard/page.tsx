@@ -15,13 +15,13 @@ import type { QrItem } from "./_components/mockData";
 import { mockStats } from "./_components/mockData";
 import loaderAnimation from "../../libs/lottie/animation.json";
 
+import { useEmployee } from "../_providers/user-provider";
 import {
   useGetActiveCensusIdQuery,
   useGetAssetsByEmployeeIdQuery,
   useGetAssignmentsByEmployeeQuery,
   useGetEmployeeDataQuery,
 } from "@/gql/graphql";
-import { useEmployee } from "../_providers/user-provider";
 
 type AssignmentsDataType = ReturnType<
   typeof useGetAssignmentsByEmployeeQuery
@@ -39,8 +39,9 @@ type PendingAssignmentItem = NonNullable<
 export default function AssetsPage() {
   const { isLoaded: isClerkLoaded } = useUser();
   const { employee } = useEmployee();
+  console.log(" employee", employee);
 
-  const [activeTab, setActiveTab] = useState("qr");
+  const [activeTab, setActiveTab] = useState("gar");
   const [isScannerOpen, setIsScannerOpen] = useState(false);
 
   const employeeId = employee?.id || "";
@@ -115,11 +116,7 @@ export default function AssetsPage() {
     const visibleAssignments = assignments.filter(
       (assignment: AssignmentItem) => {
         const assignmentAssetId = assignment.assetId || assignment.asset?.id;
-        return (
-          !assignment.returnedAt &&
-          !!assignmentAssetId &&
-          pendingAssetIds.has(assignmentAssetId)
-        );
+        return !!assignmentAssetId && pendingAssetIds.has(assignmentAssetId);
       },
     );
 
@@ -128,7 +125,7 @@ export default function AssetsPage() {
       code: item.asset?.serialNumber || item.asset?.assetTag || item.assetId,
       description:
         item.asset?.category?.name ||
-        item.asset?.category?.description ||
+        item.asset?.category?.name ||
         "Тоног төхөөрөмж",
       date: item.assignedAt
         ? new Date(item.assignedAt).toLocaleDateString("en-CA")
