@@ -223,6 +223,35 @@ export enum EmployeeStatus {
   Terminated = 'TERMINATED'
 }
 
+export type EmployeeWithAssets = {
+  __typename?: 'EmployeeWithAssets';
+  assetLength: Scalars['Int']['output'];
+  birthDayAndMonth?: Maybe<Scalars['String']['output']>;
+  birthdayPoster?: Maybe<Scalars['String']['output']>;
+  branch: Scalars['String']['output'];
+  clerkId: Scalars['String']['output'];
+  department: Scalars['String']['output'];
+  email: Scalars['String']['output'];
+  employeeCode: Scalars['String']['output'];
+  entraId: Scalars['String']['output'];
+  firstName: Scalars['String']['output'];
+  firstNameEng: Scalars['String']['output'];
+  github?: Maybe<Scalars['String']['output']>;
+  hireDate: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  imageUrl?: Maybe<Scalars['String']['output']>;
+  isAdmin?: Maybe<Scalars['Boolean']['output']>;
+  isKpi: Scalars['Boolean']['output'];
+  isSalaryCompany: Scalars['Boolean']['output'];
+  lastName: Scalars['String']['output'];
+  lastNameEng: Scalars['String']['output'];
+  level: Scalars['String']['output'];
+  numberOfVacationDays?: Maybe<Scalars['Int']['output']>;
+  role: Scalars['String']['output'];
+  status: EmployeeStatus;
+  terminationDate?: Maybe<Scalars['String']['output']>;
+};
+
 export enum MaintenanceSeverityEnum {
   Critical = 'CRITICAL',
   High = 'HIGH',
@@ -241,7 +270,7 @@ export type MaintenanceTicket = {
   reporterId: Scalars['ID']['output'];
   resolvedAt?: Maybe<Scalars['String']['output']>;
   severity?: Maybe<MaintenanceSeverityEnum>;
-  status: TicketStatusEnum;
+  status?: Maybe<TicketStatusEnum>;
   updatedAt: Scalars['String']['output'];
   vendorId?: Maybe<Scalars['String']['output']>;
 };
@@ -421,7 +450,7 @@ export type Query = {
   getEmployeeByClerkID: Employee;
   getEmployeeByCode?: Maybe<Employee>;
   getEmployeeById?: Maybe<Employee>;
-  getEmployees: Array<Employee>;
+  getEmployees: Array<EmployeeWithAssets>;
   getEmployeesByStatus: Array<Employee>;
   getMaintenanceTicketById?: Maybe<MaintenanceTicket>;
   getMaintenanceTickets: Array<MaintenanceTicket>;
@@ -707,6 +736,7 @@ export type ResolversTypes = {
   Employee: ResolverTypeWrapper<Employee>;
   EmployeeRole: EmployeeRole;
   EmployeeStatus: EmployeeStatus;
+  EmployeeWithAssets: ResolverTypeWrapper<EmployeeWithAssets>;
   Float: ResolverTypeWrapper<Scalars['Float']['output']>;
   ID: ResolverTypeWrapper<Scalars['ID']['output']>;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
@@ -749,6 +779,7 @@ export type ResolversParentTypes = {
   Department: Department;
   DuplicateAssetInput: DuplicateAssetInput;
   Employee: Employee;
+  EmployeeWithAssets: EmployeeWithAssets;
   Float: Scalars['Float']['output'];
   ID: Scalars['ID']['output'];
   Int: Scalars['Int']['output'];
@@ -872,6 +903,34 @@ export type EmployeeResolvers<ContextType = Context, ParentType extends Resolver
   terminationDate?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
 };
 
+export type EmployeeWithAssetsResolvers<ContextType = Context, ParentType extends ResolversParentTypes['EmployeeWithAssets'] = ResolversParentTypes['EmployeeWithAssets']> = {
+  assetLength?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  birthDayAndMonth?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  birthdayPoster?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  branch?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  clerkId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  department?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  employeeCode?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  entraId?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  firstName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  firstNameEng?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  github?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  hireDate?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  imageUrl?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  isAdmin?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  isKpi?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  isSalaryCompany?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  lastName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  lastNameEng?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  level?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  numberOfVacationDays?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  role?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  status?: Resolver<ResolversTypes['EmployeeStatus'], ParentType, ContextType>;
+  terminationDate?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+};
+
 export type MaintenanceTicketResolvers<ContextType = Context, ParentType extends ResolversParentTypes['MaintenanceTicket'] = ResolversParentTypes['MaintenanceTicket']> = {
   asset?: Resolver<Maybe<ResolversTypes['Asset']>, ParentType, ContextType>;
   assetId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
@@ -882,7 +941,7 @@ export type MaintenanceTicketResolvers<ContextType = Context, ParentType extends
   reporterId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   resolvedAt?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   severity?: Resolver<Maybe<ResolversTypes['MaintenanceSeverityEnum']>, ParentType, ContextType>;
-  status?: Resolver<ResolversTypes['TicketStatusEnum'], ParentType, ContextType>;
+  status?: Resolver<Maybe<ResolversTypes['TicketStatusEnum']>, ParentType, ContextType>;
   updatedAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   vendorId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
 };
@@ -933,7 +992,7 @@ export type QueryResolvers<ContextType = Context, ParentType extends ResolversPa
   getEmployeeByClerkID?: Resolver<ResolversTypes['Employee'], ParentType, ContextType, RequireFields<QueryGetEmployeeByClerkIdArgs, 'clerkId'>>;
   getEmployeeByCode?: Resolver<Maybe<ResolversTypes['Employee']>, ParentType, ContextType, RequireFields<QueryGetEmployeeByCodeArgs, 'employeeCode'>>;
   getEmployeeById?: Resolver<Maybe<ResolversTypes['Employee']>, ParentType, ContextType, RequireFields<QueryGetEmployeeByIdArgs, 'id'>>;
-  getEmployees?: Resolver<Array<ResolversTypes['Employee']>, ParentType, ContextType>;
+  getEmployees?: Resolver<Array<ResolversTypes['EmployeeWithAssets']>, ParentType, ContextType>;
   getEmployeesByStatus?: Resolver<Array<ResolversTypes['Employee']>, ParentType, ContextType, RequireFields<QueryGetEmployeesByStatusArgs, 'status'>>;
   getMaintenanceTicketById?: Resolver<Maybe<ResolversTypes['MaintenanceTicket']>, ParentType, ContextType, RequireFields<QueryGetMaintenanceTicketByIdArgs, 'id'>>;
   getMaintenanceTickets?: Resolver<Array<ResolversTypes['MaintenanceTicket']>, ParentType, ContextType>;
@@ -963,6 +1022,7 @@ export type Resolvers<ContextType = Context> = {
   CensusTask?: CensusTaskResolvers<ContextType>;
   Department?: DepartmentResolvers<ContextType>;
   Employee?: EmployeeResolvers<ContextType>;
+  EmployeeWithAssets?: EmployeeWithAssetsResolvers<ContextType>;
   MaintenanceTicket?: MaintenanceTicketResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;

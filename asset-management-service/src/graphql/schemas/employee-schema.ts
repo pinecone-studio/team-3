@@ -80,10 +80,37 @@ export const employeeTypeDefs = gql`
 	input DeleteEmployeeInput {
 		terminationDate: String!
 	}
+type EmployeeWithAssets {
+  id: ID!
+  entraId: String!
+  employeeCode: String!
+  firstName: String!
+  lastName: String!
+  firstNameEng: String!
+  lastNameEng: String!
+  email: String!
+  imageUrl: String
+  hireDate: String!
+  terminationDate: String
+  status: EmployeeStatus!
+  numberOfVacationDays: Int
+  github: String
+  department: String!
+  branch: String!
+  level: String!
+  isKpi: Boolean!
+  isAdmin: Boolean
+  isSalaryCompany: Boolean!
+  birthDayAndMonth: String
+  birthdayPoster: String
+  clerkId: String!
+  role: String!
 
+  assetLength: Int!   
+}
     type Query {
 		# Get all employees (ideal for the main AMSS table)
-		getEmployees: [Employee!]!
+		getEmployees: [EmployeeWithAssets!]!
 
 		# Get a single employee by internal ID or HR Code
 		getEmployeeById(id: ID!): Employee

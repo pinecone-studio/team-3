@@ -224,6 +224,35 @@ export enum EmployeeStatus {
   Terminated = 'TERMINATED'
 }
 
+export type EmployeeWithAssets = {
+  __typename?: 'EmployeeWithAssets';
+  assetLength: Scalars['Int']['output'];
+  birthDayAndMonth?: Maybe<Scalars['String']['output']>;
+  birthdayPoster?: Maybe<Scalars['String']['output']>;
+  branch: Scalars['String']['output'];
+  clerkId: Scalars['String']['output'];
+  department: Scalars['String']['output'];
+  email: Scalars['String']['output'];
+  employeeCode: Scalars['String']['output'];
+  entraId: Scalars['String']['output'];
+  firstName: Scalars['String']['output'];
+  firstNameEng: Scalars['String']['output'];
+  github?: Maybe<Scalars['String']['output']>;
+  hireDate: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  imageUrl?: Maybe<Scalars['String']['output']>;
+  isAdmin?: Maybe<Scalars['Boolean']['output']>;
+  isKpi: Scalars['Boolean']['output'];
+  isSalaryCompany: Scalars['Boolean']['output'];
+  lastName: Scalars['String']['output'];
+  lastNameEng: Scalars['String']['output'];
+  level: Scalars['String']['output'];
+  numberOfVacationDays?: Maybe<Scalars['Int']['output']>;
+  role: Scalars['String']['output'];
+  status: EmployeeStatus;
+  terminationDate?: Maybe<Scalars['String']['output']>;
+};
+
 export enum MaintenanceSeverityEnum {
   Critical = 'CRITICAL',
   High = 'HIGH',
@@ -234,15 +263,16 @@ export enum MaintenanceSeverityEnum {
 export type MaintenanceTicket = {
   __typename?: 'MaintenanceTicket';
   asset?: Maybe<Asset>;
-  createdAt?: Maybe<Scalars['String']['output']>;
+  assetId: Scalars['ID']['output'];
+  createdAt: Scalars['String']['output'];
   description: Scalars['String']['output'];
   id: Scalars['ID']['output'];
   repairCost?: Maybe<Scalars['Float']['output']>;
   reporterId: Scalars['ID']['output'];
   resolvedAt?: Maybe<Scalars['String']['output']>;
   severity?: Maybe<MaintenanceSeverityEnum>;
-  status: TicketStatusEnum;
-  updatedAt?: Maybe<Scalars['String']['output']>;
+  status?: Maybe<TicketStatusEnum>;
+  updatedAt: Scalars['String']['output'];
   vendorId?: Maybe<Scalars['String']['output']>;
 };
 
@@ -421,14 +451,14 @@ export type Query = {
   getEmployeeByClerkID: Employee;
   getEmployeeByCode?: Maybe<Employee>;
   getEmployeeById?: Maybe<Employee>;
-  getEmployees: Array<Employee>;
+  getEmployees: Array<EmployeeWithAssets>;
   getEmployeesByStatus: Array<Employee>;
   getMaintenanceTicketById?: Maybe<MaintenanceTicket>;
-  getMaintenanceTickets?: Maybe<Array<Maybe<MaintenanceTicket>>>;
+  getMaintenanceTickets: Array<MaintenanceTicket>;
   getPendingAssignments: Array<Assignment>;
   getSubCategories: Array<SubCategory>;
   getSubCategoriesWithCategory: Array<GetSubCategoriesProps>;
-  getTicketsByAssetId?: Maybe<Array<Maybe<MaintenanceTicket>>>;
+  getTicketsByAssetId: Array<MaintenanceTicket>;
 };
 
 
@@ -732,7 +762,7 @@ export type GetAssetsForAssetPageQuery = { __typename?: 'Query', getAssets?: Arr
 export type GetEmployeesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetEmployeesQuery = { __typename?: 'Query', getEmployees: Array<{ __typename?: 'Employee', firstName: string, lastName: string, employeeCode: string, department: string, level: string, status: EmployeeStatus, id: string, branch: string }> };
+export type GetEmployeesQuery = { __typename?: 'Query', getEmployees: Array<{ __typename?: 'EmployeeWithAssets', id: string, entraId: string, employeeCode: string, firstName: string, lastName: string, firstNameEng: string, lastNameEng: string, email: string, imageUrl?: string | null, hireDate: string, terminationDate?: string | null, status: EmployeeStatus, numberOfVacationDays?: number | null, github?: string | null, department: string, branch: string, level: string, isKpi: boolean, isAdmin?: boolean | null, isSalaryCompany: boolean, birthDayAndMonth?: string | null, birthdayPoster?: string | null, clerkId: string, role: string, assetLength: number }> };
 
 export type UpdateEmployeeMutationVariables = Exact<{
   updateEmployeeId: Scalars['ID']['input'];
@@ -745,7 +775,7 @@ export type UpdateEmployeeMutation = { __typename?: 'Mutation', updateEmployee: 
 export type GetAdminMaintenanceTicketsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetAdminMaintenanceTicketsQuery = { __typename?: 'Query', getMaintenanceTickets?: Array<{ __typename?: 'MaintenanceTicket', id: string, reporterId: string, description: string, createdAt?: string | null, resolvedAt?: string | null, severity?: MaintenanceSeverityEnum | null, status: TicketStatusEnum, asset?: { __typename?: 'Asset', assetTag: string, name: string, id: string, locationId?: string | null, department?: { __typename?: 'Department', name: string } | null } | null } | null> | null };
+export type GetAdminMaintenanceTicketsQuery = { __typename?: 'Query', getMaintenanceTickets: Array<{ __typename?: 'MaintenanceTicket', id: string, reporterId: string, description: string, createdAt: string, resolvedAt?: string | null, severity?: MaintenanceSeverityEnum | null, status?: TicketStatusEnum | null, asset?: { __typename?: 'Asset', assetTag: string, name: string, id: string, locationId?: string | null, department?: { __typename?: 'Department', name: string } | null } | null }> };
 
 export type UpdateMaintenanceTicketMutationVariables = Exact<{
   updateMaintenanceTicketId: Scalars['ID']['input'];
@@ -784,7 +814,7 @@ export type GetSubCategoriesWithCategoryQuery = { __typename?: 'Query', getSubCa
 export type GetAdminEmployeesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetAdminEmployeesQuery = { __typename?: 'Query', getEmployees: Array<{ __typename?: 'Employee', id: string, entraId: string, firstName: string, lastName: string, terminationDate?: string | null, department: string, branch: string }> };
+export type GetAdminEmployeesQuery = { __typename?: 'Query', getEmployees: Array<{ __typename?: 'EmployeeWithAssets', id: string, entraId: string, firstName: string, lastName: string, terminationDate?: string | null, department: string, branch: string }> };
 
 export type GetEmployeeByClerkIdQueryVariables = Exact<{
   clerkId: Scalars['String']['input'];
@@ -817,7 +847,7 @@ export type GetAssetsByEmployeeIdQueryVariables = Exact<{
 }>;
 
 
-export type GetAssetsByEmployeeIdQuery = { __typename?: 'Query', getAssetsByEmployeeId?: Array<{ __typename?: 'Asset', assetTag: string, serialNumber?: string | null, category?: { __typename?: 'Category', name: string } | null } | null> | null };
+export type GetAssetsByEmployeeIdQuery = { __typename?: 'Query', getAssetsByEmployeeId?: Array<{ __typename?: 'Asset', id: string, assetTag: string, serialNumber?: string | null, status: AssetStatusEnum, purchaseDate?: string | null, purchaseCost?: number | null, currentBookValue?: number | null, locationId?: string | null, assignedTo?: string | null, deletedAt?: string | null, imageUrl: string, qrUrl: string, name: string, category?: { __typename?: 'Category', id: string, name: string, description?: string | null, assets?: Array<{ __typename?: 'Asset', id: string, assetTag: string, serialNumber?: string | null, status: AssetStatusEnum, purchaseDate?: string | null, purchaseCost?: number | null, currentBookValue?: number | null, locationId?: string | null, assignedTo?: string | null, deletedAt?: string | null, imageUrl: string, qrUrl: string, name: string }> | null } | null, subCategory?: { __typename?: 'SubCategory', id: string, name: string, categoryId?: string | null } | null, department?: { __typename?: 'Department', id: string, name: string } | null } | null> | null };
 
 export type GetAssetsAtEmployeeQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -883,7 +913,7 @@ export type GetAssetsByEmployeeIdForReportQuery = { __typename?: 'Query', getAss
 export type GetMaintenanceTicketsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetMaintenanceTicketsQuery = { __typename?: 'Query', getMaintenanceTickets?: Array<{ __typename?: 'MaintenanceTicket', id: string, reporterId: string, description: string, status: TicketStatusEnum, createdAt?: string | null, resolvedAt?: string | null, asset?: { __typename?: 'Asset', id: string, name: string } | null } | null> | null };
+export type GetMaintenanceTicketsQuery = { __typename?: 'Query', getMaintenanceTickets: Array<{ __typename?: 'MaintenanceTicket', id: string, reporterId: string, description: string, createdAt: string, resolvedAt?: string | null, severity?: MaintenanceSeverityEnum | null, status?: TicketStatusEnum | null, asset?: { __typename?: 'Asset', id: string, name: string, assetTag: string } | null }> };
 
 
 export const CreateAssetDocument = gql`
@@ -1305,14 +1335,31 @@ export type GetAssetsForAssetPageQueryResult = Apollo.QueryResult<GetAssetsForAs
 export const GetEmployeesDocument = gql`
     query GetEmployees {
   getEmployees {
+    id
+    entraId
+    employeeCode
     firstName
     lastName
-    employeeCode
-    department
-    level
+    firstNameEng
+    lastNameEng
+    email
+    imageUrl
+    hireDate
+    terminationDate
     status
-    id
+    numberOfVacationDays
+    github
+    department
     branch
+    level
+    isKpi
+    isAdmin
+    isSalaryCompany
+    birthDayAndMonth
+    birthdayPoster
+    clerkId
+    role
+    assetLength
   }
 }
     `;
@@ -1653,11 +1700,48 @@ export type GetAssetByIdQueryResult = Apollo.QueryResult<GetAssetByIdQuery, GetA
 export const GetAssetsByEmployeeIdDocument = gql`
     query GetAssetsByEmployeeId($employeeId: ID!) {
   getAssetsByEmployeeId(employeeId: $employeeId) {
+    id
+    assetTag
     category {
+      id
+      name
+      description
+      assets {
+        id
+        assetTag
+        serialNumber
+        status
+        purchaseDate
+        purchaseCost
+        currentBookValue
+        locationId
+        assignedTo
+        deletedAt
+        imageUrl
+        qrUrl
+        name
+      }
+    }
+    subCategory {
+      id
+      name
+      categoryId
+    }
+    serialNumber
+    status
+    purchaseDate
+    purchaseCost
+    currentBookValue
+    locationId
+    assignedTo
+    deletedAt
+    department {
+      id
       name
     }
-    assetTag
-    serialNumber
+    imageUrl
+    qrUrl
+    name
   }
 }
     `;

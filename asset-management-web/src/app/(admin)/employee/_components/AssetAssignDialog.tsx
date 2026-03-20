@@ -5,6 +5,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/libs";
 
 import { AssetStatusEnum, useCreateAssignmentMutation } from "@/gql/graphql";
 import { User, Package, AlertCircle, X, ChevronDown } from "lucide-react";
+import { toast } from "sonner";
 
 type Employee = {
   id: string;
@@ -14,7 +15,7 @@ type Employee = {
   employeeCode: string;
 };
 
-interface Asset {
+type Asset = {
   id: string;
   assetTag: string;
   model?: string;
@@ -39,13 +40,18 @@ export default function AssetAssignDialog({
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedAssetId, setSelectedAssetId] = useState("");
   const [loading, setLoading] = useState(false);
-  const [createAssignment] = useCreateAssignmentMutation();
+  const [createAssignment] = useCreateAssignmentMutation({
+    onCompleted: () => {
+      onClose();
+      toast.success("Амжилттай олголоо");
+    }
+  });
 
   const handleAssign = async () => {
     if (!selectedAssetId) return;
     setLoading(true);
     try {
-      const res = await createAssignment({
+      await createAssignment({
         variables: {
           input: {
             employeeId: employee.id,
@@ -55,10 +61,8 @@ export default function AssetAssignDialog({
         },
       });
 
-      if (res.data?.createAssignment) {
-        onClose();
-        alert("Амжилттай олголоо");
-      }
+
+
     } catch (err) {
       console.error("Assignment error:", err);
     } finally {
@@ -78,9 +82,9 @@ export default function AssetAssignDialog({
 
   const filteredAssets = selectedCategory
     ? availableAssets.filter(
-        (a) =>
-          a.category?.name === selectedCategory && a.status === "AVAILABLE",
-      )
+      (a) =>
+        a.category?.name === selectedCategory && a.status === "AVAILABLE",
+    )
     : [];
 
   return (
