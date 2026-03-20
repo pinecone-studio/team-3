@@ -8,10 +8,19 @@ import Lottie from "lottie-react";
 import loaderAnimation from "../../libs/lottie/animation.json";
 import { MacBook } from "@/app/_components/icons/icons";
 import { GetMaintenanceTicketsQuery } from "@/gql/graphql";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
+import { useEmployee } from "../_providers/user-provider";
 
 export default function ReportPage() {
   const { data, loading, error } = useGetMaintenanceTicketsQuery();
+  const { employee } = useEmployee();
+  console.log(data, "data");
+  useEffect(() => {}, [data]);
+  const filteredMaintenanceTicket = data?.getMaintenanceTickets.filter(
+    (ticket) => {
+      return ticket.reporterId == employee?.id;
+    },
+  );
 
   // const allReports = (data?.getMaintenanceTickets ?? []).filter(
   //   (r): r is NonNullable<typeof r> => r != null,
@@ -21,7 +30,7 @@ export default function ReportPage() {
   // const resolvedReports = allReports.filter((r) => r.status === "RESOLVED");
   const allReports = useMemo(
     () =>
-      (data?.getMaintenanceTickets ?? []).filter(
+      (filteredMaintenanceTicket ?? []).filter(
         (r): r is NonNullable<typeof r> => r != null,
       ),
     [data],
