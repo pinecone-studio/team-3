@@ -97,9 +97,9 @@ export default function AssetManagement({ assets, refetch }: AssetManagementProp
   };
 
   return (
-    <div className="flex min-h-screen bg-white">
-      <main className="flex-1 pt-14">
-        <div className="p-6 space-y-6">
+    <div className="flex  min-h-screen bg-white">
+      <main className="flex-1 ">
+        <div className="p-2 space-y-6">
           {/* Page Header */}
           <div className="flex justify-between items-start">
             <div>

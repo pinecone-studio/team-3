@@ -147,10 +147,9 @@ export default function MaintenanceTable({
   };
 
   return (
-    <div className="p-6 min-h-screen ">
-   
-      <div className="mb-6">
-        <h1 className="text-[24px] font-bold text-[#020617] tracking-tight">
+    <div className="p-2 bg-white min-h-screen">
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold text-gray-900 mb-1">
           Асуудал шийдвэрлэх
         </h1>
         <p className="text-[13px] text-gray-500 mt-1">

@@ -87,7 +87,7 @@ export default function EmployeePage() {
   });
 
   return (
-    <div className="p-8 min-h-screen ">
+    <div className="p-2 min-h-screen ">
       <div className="flex justify-between items-start mb-6">
         <div>
           <h1 className="text-[24px] font-bold text-[#020617] tracking-tight">
