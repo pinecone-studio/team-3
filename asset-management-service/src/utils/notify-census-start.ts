@@ -14,7 +14,7 @@ export async function notifyCensusStart(context: any, employee: { email: string;
               </ul>
           </div>
 
-          <a href="${context.env.FRONTEND_URL}/employee-dashboard" 
+          <a href="https://asset-management-web.ariuntuguldur3.workers.dev/employee-dashboard" 
              style="padding: 12px 24px; background-color: #0f172a; color: #ffc300; text-decoration: none; border-radius: 6px; display: inline-block; font-weight: bold;">
               Confirm My Assets
           </a>
