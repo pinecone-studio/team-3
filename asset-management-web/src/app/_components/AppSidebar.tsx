@@ -2,7 +2,6 @@
 
 import {
   EmployeeRole,
-  useGetAdminEmployeesQuery,
   useGetEmployeeByIdQuery,
 } from "@/gql/graphql";
 import {
@@ -13,13 +12,14 @@ import {
   SidebarMenuItem,
   cn,
 } from "@/libs";
-import { useUser } from "@clerk/nextjs";
 import {
   LayoutDashboard,
   AlertTriangle,
   Boxes,
-  Settings,
-  User,
+  Users,
+  Box,
+  ChartBar,
+  ArrowDown01,
 } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import { useEmployee } from "../_providers/user-provider";
@@ -31,7 +31,7 @@ export function AppSidebar() {
 
   const employeeId = employee?.id;
 
-  const { data, loading } = useGetEmployeeByIdQuery({
+  const { data } = useGetEmployeeByIdQuery({
     variables: {
       getEmployeeByIdId: employeeId!,
     },
@@ -57,13 +57,13 @@ export function AppSidebar() {
   ];
 
   const adminItems = [
-    { title: "Ажилтан", icon: Settings, path: "/employee" },
-    { title: "Бүх хөрөнгүүд", icon: Settings, path: "/asset-page" },
-    { title: "Ангилал", icon: Settings, path: "/category" },
-    { title: "дэд ангилал", icon: Settings, path: "/sub-category" },
+    { title: "Ажилтан", icon: Users, path: "/employee" },
+    { title: "Бүх хөрөнгүүд", icon: Box, path: "/asset-page" },
+    { title: "Ангилалууд", icon: ChartBar, path: "/categories" },
+    { title: "Тооллого", icon: ArrowDown01, path: "/census" },
     {
       title: "Асуудал шийдвэрлэх",
-      icon: Settings,
+      icon: AlertTriangle,
       path: "/issue-resolution",
     },
   ];

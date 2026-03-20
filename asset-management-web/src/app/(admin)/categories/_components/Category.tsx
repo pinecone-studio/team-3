@@ -11,10 +11,11 @@ import {
   TableRow,
 } from "@/libs";
 import { useGetCategoriesWithAssetsQuery } from "@/gql/graphql";
-import { CategoryHeader } from "./_components/CategoryHeader";
-import { CategoryPagination } from "./_components/CategoryPagination";
-import { AddCategoryAndSearch } from "./_components/AddCategoryAndSearch";
-import { DeleteAndEditCategory } from "./_components/DeleteAndEditCategory";
+import { AddCategoryAndSearch } from "./AddCategoryAndSearch";
+import { CategoryHeader } from "./CategoryHeader";
+import { DeleteAndEditCategory } from "./DeleteAndEditCategory";
+import { CategoryPagination } from "./CategoryPagination";
+
 
 export default function CategoryPage() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -71,7 +72,7 @@ export default function CategoryPage() {
 
   return (
     <div className="p-6 space-y-6">
-      <h1 className="font-bold text-[22px]">Categories</h1>
+      <h1 className="font-bold text-[22px]">Ангилал</h1>
       <AddCategoryAndSearch
         refetch={refetch}
         searchQuery={searchQuery}
@@ -114,7 +115,7 @@ export default function CategoryPage() {
                   colSpan={4}
                   className="text-center text-muted-foreground py-8"
                 >
-                  No categories found
+                  Ангилал байхгүй байна
                 </TableCell>
               </TableRow>
             ) : (

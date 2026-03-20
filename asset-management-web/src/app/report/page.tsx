@@ -42,7 +42,7 @@ export default function ReportPage() {
   }
 
   return (
-    <div className="p-8 flex flex-col w-full bg-[#F8FAFC] min-h-screen font-gilroy">
+    <div className="flex flex-col w-full bg-[#F8FAFC] min-h-screen font-gilroy">
       <div className="flex justify-between items-start mb-8">
         <div>
           <h1 className="text-[24px] font-bold text-[#0F172A] mb-1">
