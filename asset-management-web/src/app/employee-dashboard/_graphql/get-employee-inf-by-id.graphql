@@ -1,0 +1,7 @@
+query GetEmployeeInfById($getEmployeeInfByIdId: ID!) {
+  getEmployeeInfById(id: $getEmployeeInfByIdId) {
+    totalAssetCount
+    totalCensusTask
+    totalAssigmentCount
+  }
+}
