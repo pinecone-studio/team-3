@@ -9,8 +9,6 @@ export const updateCensusTask: MutationResolvers['updateCensusTask'] = async (_,
 	try {
 		// Normalize to YYYY-MM-DD at midnight
 		const dateToStore = input.verifiedAt ? new Date(input.verifiedAt) : new Date();
-		console.log('dateToStore', dateToStore);
-		console.log('input', input);
 
 		await DB.update(censusTasks)
 			.set({

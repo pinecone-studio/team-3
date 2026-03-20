@@ -14,7 +14,7 @@ import { useEmployee } from "../_providers/user-provider";
 export default function ReportPage() {
   const { data, loading, error } = useGetMaintenanceTicketsQuery();
   const { employee } = useEmployee();
-  console.log(data, "data");
+
   useEffect(() => {}, [data]);
   const filteredMaintenanceTicket = data?.getMaintenanceTickets.filter(
     (ticket) => {

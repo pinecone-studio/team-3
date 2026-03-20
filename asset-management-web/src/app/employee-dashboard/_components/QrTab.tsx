@@ -94,7 +94,7 @@ interface QrTabProps {
 }
 
 export default function QrTab({ items = [], onOpenScanner }: QrTabProps) {
-  console.log(items)
+
   const not = items.filter((item) => item.verifiedAt === null)
 
   const total = not.length;
@@ -103,7 +103,6 @@ export default function QrTab({ items = [], onOpenScanner }: QrTabProps) {
 
   return (
     <div className="space-y-8">
-      {/* Top progress card */}
       <div className="rounded-3xl border border-gray-200 bg-white p-4 sm:p-6">
         <div className="mb-6 flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 sm:gap-0">
           <div>
@@ -162,7 +161,7 @@ export default function QrTab({ items = [], onOpenScanner }: QrTabProps) {
 
         {/* QR items grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-2 gap-4 sm:gap-6">
-          {items.map((item, i) => (
+          {not.map((item, i) => (
             <div
               key={i}
               className="rounded-3xl border border-gray-200 bg-white p-4 sm:p-6"

@@ -53,7 +53,6 @@ export default function GarTab({ onSuccess }: GarTabProps) {
     variables: { token: effectiveToken ?? "" },
     skip: !effectiveToken,
   });
-  console.log("data", data);
 
   const [updateAssignment, { loading: isUpdating }] =
     useUpdateAssignmentMutation();

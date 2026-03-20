@@ -60,7 +60,6 @@ export const AddSubCategoryAndSearch = ({
       },
     });
   }
-  console.log(categories, 'asd')
   return (
     <div className="flex justify-between">
       <div className="relative max-w-xs">
