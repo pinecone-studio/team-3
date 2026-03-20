@@ -60,7 +60,7 @@ export function AppSidebar() {
     { title: "Ажилтан", icon: Users, path: "/employee" },
     { title: "Бүх хөрөнгүүд", icon: Box, path: "/asset-page" },
     { title: "Ангилалууд", icon: ChartBar, path: "/categories" },
-    { title: "Тооллого", icon: ArrowDown01, path: "/sub-category" },
+    { title: "Тооллого", icon: ArrowDown01, path: "/census" },
     {
       title: "Асуудал шийдвэрлэх",
       icon: AlertTriangle,
