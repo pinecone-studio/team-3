@@ -12,29 +12,21 @@ import {
 import {
   Asset,
   EmployeeStatus,
+  EmployeeWithAssets,
   useGetAssetsForAssetPageQuery,
   useUpdateEmployeeMutation,
 } from "@/gql/graphql";
 import AssetAssignDialog from "./AssetAssignDialog";
 import TerminateEmployeeDialog from "./TerminateEmployeeDialog";
 
-type Employee = {
-  id: string;
-  firstName: string;
-  lastName: string;
-  department: string;
-  employeeCode: string;
-  branch: string;
-  level: string;
-  status: EmployeeStatus;
-};
 
-export default function EmployeeTable({ data }: { data: Employee[] }) {
+
+export default function EmployeeTable({ data }: { data: EmployeeWithAssets[] }) {
   const [page, setPage] = useState(1);
-  const [selectedEmployee, setSelectedEmployee] = useState<Employee | null>(
+  const [selectedEmployee, setSelectedEmployee] = useState<EmployeeWithAssets | null>(
     null,
   );
-  const [terminateEmployee, setTerminateEmployee] = useState<Employee | null>(
+  const [terminateEmployee, setTerminateEmployee] = useState<EmployeeWithAssets | null>(
     null,
   );
   const [updateEmployee] = useUpdateEmployeeMutation();
@@ -98,13 +90,12 @@ export default function EmployeeTable({ data }: { data: Employee[] }) {
                 </td>
                 <td className="px-6 py-4 text-center">
                   <span
-                    className={`inline-flex px-3 py-0.5 rounded-md text-[11px] font-medium border ${
-                      emp.status === "ACTIVE"
+                    className={`inline-flex px-3 py-0.5 rounded-md text-[11px] font-medium border ${emp.status === "ACTIVE"
                         ? "bg-[#F0FDF4] text-[#16A34A] border-[#DCFCE7]"
                         : emp.status === "TERMINATED"
                           ? "bg-red-50 text-red-500 border-red-100"
                           : "bg-[#FFF7ED] text-[#EA580C] border-[#FFEDD5]"
-                    }`}
+                      }`}
                   >
                     {emp.status === "ACTIVE"
                       ? "Идэвхтэй"
@@ -115,7 +106,7 @@ export default function EmployeeTable({ data }: { data: Employee[] }) {
                 </td>
                 <td className="px-6 py-4 text-center">
                   <span className="inline-flex items-center justify-center min-w-[24px] px-1.5 py-0.5 border border-gray-200 rounded-md text-gray-500 text-[11px] bg-white">
-                    3
+                    {emp.assetLength}
                   </span>
                 </td>
                 <td className="px-6 py-4 text-right">

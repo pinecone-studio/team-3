@@ -1,12 +1,29 @@
 query GetEmployees {
   getEmployees {
+    id
+    entraId
+    employeeCode
     firstName
     lastName
-    employeeCode
-    department
-    level
+    firstNameEng
+    lastNameEng
+    email
+    imageUrl
+    hireDate
+    terminationDate
     status
-    id
+    numberOfVacationDays
+    github
+    department
     branch
+    level
+    isKpi
+    isAdmin
+    isSalaryCompany
+    birthDayAndMonth
+    birthdayPoster
+    clerkId
+    role
+    assetLength
   }
 }

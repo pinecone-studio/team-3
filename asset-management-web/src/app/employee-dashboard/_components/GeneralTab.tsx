@@ -1,5 +1,5 @@
-import { Asset, Assignment, GetAssetByIdDocument } from "@/gql/graphql";
-import { DeviceIcon } from "./icons";
+import { Asset, Assignment} from "@/gql/graphql";
+import MyAssets from "./MyAssets";
 export type AssetWithCategory = Asset & { category?: { name: string } };
 
 export interface GeneralTabProps {
@@ -14,43 +14,12 @@ export default function GeneralTab({
   assets: AssetWithCategory[];
   history: Assignment[];
 }) {
+
   return (
     <div className="space-y-8 ">
-     <div className="bg-[#F8FAFC] border border-[#E2E8F0] rounded-2xl p-3 sm:p-5">
-        <h3 className="text-lg  font-semibold text-[#000000] mb-1">
-          Миний хөрөнгө
-        </h3>
-        <p className="text-sm text-[#666666] mb-4">
-          Танд олгогдсон төхөөрөмжүүд
-        </p>
-        <div className=" bg-white/100 border border-[#E2E8F0] rounded-2xl p-3 sm:p-5 shadow-sm">
-         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
-            {assets.map((asset, i) => (
-              <div
-                key={i}
-               className="bg-white border border-gray-200 rounded-xl p-3 sm:p-5 shadow-sm"
-              >
-                <div className="flex items-center gap-3 mb-4">
-                 <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gray-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                   
-                  </div>
-                  <div className="min-w-0">
-                 <p className="text-sm sm:text-base font-semibold text-gray-900 truncate">
-                      {asset.category?.name || "Төхөөрмөж"}
-                    </p>
-                   <p className="text-xs sm:text-sm text-gray-400 truncate">
-                      {asset.assetTag} · {asset.serialNumber}
-                    </p>
-                  </div>
-                </div>
-                <p className="text-sm text-blue-600 font-medium">
-                  {asset.status}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
+
+         <MyAssets assets={assets}/>
+
 
       {/* History */}
       <div className="border border-[#E2E8F0] rounded-2xl">
