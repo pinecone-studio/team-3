@@ -51,6 +51,18 @@ export const censusTypeDefs = gql`
 		discrepancyFlag: Boolean
 	}
 
+	type CensusTaskProps {
+		id: ID!
+		censusId: ID!
+		assetId: ID!
+		verifierId: ID
+		verifiedAt: String
+		conditionReported: String
+		locationConfirmed: Boolean
+		discrepancyFlag: Boolean
+asset:Asset
+employee:Employee
+	}
 	extend type Query {
 		getCensusEvents: [CensusEvent!]!
 		getCensusEventById(id: ID!): CensusEvent
@@ -60,6 +72,7 @@ export const censusTypeDefs = gql`
 		getCensusReport(censusId: ID!): CensusReport!
 		# The new query for the employee's pending tasks
 		censusTasksByEmployee(employeeId: ID!): [CensusTask]
+		getCensusTasksByCensusId(censusId:ID!):[CensusTaskProps!]!
 	}
 
 	extend type Mutation {

@@ -254,6 +254,13 @@ export type EmployeeWithAssets = {
   terminationDate?: Maybe<Scalars['String']['output']>;
 };
 
+export type GetEmployeeInfByIdProps = {
+  __typename?: 'GetEmployeeInfByIdProps';
+  totalAssetCount?: Maybe<Scalars['Int']['output']>;
+  totalAssigmentCount?: Maybe<Scalars['Int']['output']>;
+  totalCensusTask?: Maybe<Scalars['Int']['output']>;
+};
+
 export enum MaintenanceSeverityEnum {
   Critical = 'CRITICAL',
   High = 'HIGH',
@@ -453,6 +460,7 @@ export type Query = {
   getEmployeeByClerkID: Employee;
   getEmployeeByCode?: Maybe<Employee>;
   getEmployeeById?: Maybe<Employee>;
+  getEmployeeInfById: GetEmployeeInfByIdProps;
   getEmployees: Array<EmployeeWithAssets>;
   getEmployeesByStatus: Array<Employee>;
   getMaintenanceTicketById?: Maybe<MaintenanceTicket>;
@@ -531,6 +539,11 @@ export type QueryGetEmployeeByCodeArgs = {
 
 
 export type QueryGetEmployeeByIdArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type QueryGetEmployeeInfByIdArgs = {
   id: Scalars['ID']['input'];
 };
 
@@ -681,7 +694,7 @@ export type GetAssetByIdQueryVariables = Exact<{
 }>;
 
 
-export type GetAssetByIdQuery = { __typename?: 'Query', getAssetById: { __typename?: 'Asset', id: string, assetTag: string, serialNumber?: string | null, status: AssetStatusEnum, purchaseDate?: string | null, purchaseCost?: number | null, currentBookValue?: number | null, locationId?: string | null, assignedTo?: string | null, deletedAt?: string | null, imageUrl?: string | null, qrUrl: string, name: string, category?: { __typename?: 'Category', id: string, name: string, description?: string | null, assets?: Array<{ __typename?: 'Asset', id: string, assetTag: string, serialNumber?: string | null, status: AssetStatusEnum, purchaseDate?: string | null, purchaseCost?: number | null, currentBookValue?: number | null, locationId?: string | null, assignedTo?: string | null, deletedAt?: string | null, imageUrl?: string | null, qrUrl: string, name: string }> | null } | null, subCategory?: { __typename?: 'SubCategory', id: string, name: string, categoryId?: string | null } | null, department?: { __typename?: 'Department', id: string, name: string } | null } };
+export type GetAssetByIdQuery = { __typename?: 'Query', getAssetById: { __typename?: 'Asset', id: string, assetTag: string, serialNumber?: string | null, status: AssetStatusEnum, purchaseDate?: string | null, purchaseCost?: number | null, currentBookValue?: number | null, locationId?: string | null, assignedTo?: string | null, deletedAt?: string | null, imageUrl: string, qrUrl: string, name: string, category?: { __typename?: 'Category', id: string, name: string, description?: string | null, assets?: Array<{ __typename?: 'Asset', id: string, assetTag: string, serialNumber?: string | null, status: AssetStatusEnum, purchaseDate?: string | null, purchaseCost?: number | null, currentBookValue?: number | null, locationId?: string | null, assignedTo?: string | null, deletedAt?: string | null, imageUrl: string, qrUrl: string, name: string }> | null } | null, subCategory?: { __typename?: 'SubCategory', id: string, name: string, categoryId?: string | null } | null, department?: { __typename?: 'Department', id: string, name: string } | null } };
 
 export type GetAssetsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -770,12 +783,24 @@ export type GetSubCategoriesWithCategoryQueryVariables = Exact<{ [key: string]: 
 
 export type GetSubCategoriesWithCategoryQuery = { __typename?: 'Query', getSubCategoriesWithCategory: Array<{ __typename?: 'getSubCategoriesProps', categories?: { __typename?: 'Category', id: string, name: string, description?: string | null, assets?: Array<{ __typename?: 'Asset', id: string, assetTag: string, serialNumber?: string | null, status: AssetStatusEnum, purchaseDate?: string | null, purchaseCost?: number | null, currentBookValue?: number | null, locationId?: string | null, assignedTo?: string | null, deletedAt?: string | null, category?: { __typename?: 'Category', id: string, name: string, description?: string | null } | null }> | null } | null, sub_categories: { __typename?: 'SubCategory', id: string, name: string, categoryId?: string | null } }> };
 
+export type GetSubCategoriesWithCategoryQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetSubCategoriesWithCategoryQuery = { __typename?: 'Query', getSubCategoriesWithCategory: Array<{ __typename?: 'getSubCategoriesProps', categories?: { __typename?: 'Category', id: string, name: string, description?: string | null, assets?: Array<{ __typename?: 'Asset', id: string, assetTag: string, serialNumber?: string | null, status: AssetStatusEnum, purchaseDate?: string | null, purchaseCost?: number | null, currentBookValue?: number | null, locationId?: string | null, assignedTo?: string | null, deletedAt?: string | null, category?: { __typename?: 'Category', id: string, name: string, description?: string | null } | null }> | null } | null, sub_categories: { __typename?: 'SubCategory', id: string, name: string, categoryId?: string | null } }> };
+
 export type CreateCensusEventMutationVariables = Exact<{
   input: CreateCensusEventInput;
 }>;
 
 
 export type CreateCensusEventMutation = { __typename?: 'Mutation', createCensusEvent: Response };
+
+export type GetCensusReportQueryVariables = Exact<{
+  censusId: Scalars['ID']['input'];
+}>;
+
+
+export type GetCensusReportQuery = { __typename?: 'Query', getCensusReport: { __typename?: 'CensusReport', totalAssets: number, verifiedCount: number, verifiedPercentage: number, discrepancies: number, conditionChanges: number, actionItems: number } };
 
 export type GetCensusTasksQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -909,6 +934,13 @@ export type UpdateCensusTaskMutationVariables = Exact<{
 
 
 export type UpdateCensusTaskMutation = { __typename?: 'Mutation', updateCensusTask: Response };
+
+export type GetEmployeeInfByIdQueryVariables = Exact<{
+  getEmployeeInfByIdId: Scalars['ID']['input'];
+}>;
+
+
+export type GetEmployeeInfByIdQuery = { __typename?: 'Query', getEmployeeInfById: { __typename?: 'GetEmployeeInfByIdProps', totalAssetCount?: number | null, totalCensusTask?: number | null, totalAssigmentCount?: number | null } };
 
 export type CreateMaintenanceTicketMutationVariables = Exact<{
   input: CreateMaintenanceTicketInput;
@@ -1400,6 +1432,37 @@ export function useCreateCensusEventMutation(baseOptions?: Apollo.MutationHookOp
 export type CreateCensusEventMutationHookResult = ReturnType<typeof useCreateCensusEventMutation>;
 export type CreateCensusEventMutationResult = Apollo.MutationResult<CreateCensusEventMutation>;
 export type CreateCensusEventMutationOptions = Apollo.BaseMutationOptions<CreateCensusEventMutation, CreateCensusEventMutationVariables>;
+export const GetCensusReportDocument = gql`
+    query GetCensusReport($censusId: ID!) {
+  getCensusReport(censusId: $censusId) {
+    totalAssets
+    verifiedCount
+    verifiedPercentage
+    discrepancies
+    conditionChanges
+    actionItems
+  }
+}
+    `;
+export function useGetCensusReportQuery(baseOptions: Apollo.QueryHookOptions<GetCensusReportQuery, GetCensusReportQueryVariables> & ({ variables: GetCensusReportQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetCensusReportQuery, GetCensusReportQueryVariables>(GetCensusReportDocument, options);
+      }
+export function useGetCensusReportLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCensusReportQuery, GetCensusReportQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetCensusReportQuery, GetCensusReportQueryVariables>(GetCensusReportDocument, options);
+        }
+// @ts-ignore
+export function useGetCensusReportSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetCensusReportQuery, GetCensusReportQueryVariables>): Apollo.UseSuspenseQueryResult<GetCensusReportQuery, GetCensusReportQueryVariables>;
+export function useGetCensusReportSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetCensusReportQuery, GetCensusReportQueryVariables>): Apollo.UseSuspenseQueryResult<GetCensusReportQuery | undefined, GetCensusReportQueryVariables>;
+export function useGetCensusReportSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetCensusReportQuery, GetCensusReportQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetCensusReportQuery, GetCensusReportQueryVariables>(GetCensusReportDocument, options);
+        }
+export type GetCensusReportQueryHookResult = ReturnType<typeof useGetCensusReportQuery>;
+export type GetCensusReportLazyQueryHookResult = ReturnType<typeof useGetCensusReportLazyQuery>;
+export type GetCensusReportSuspenseQueryHookResult = ReturnType<typeof useGetCensusReportSuspenseQuery>;
+export type GetCensusReportQueryResult = Apollo.QueryResult<GetCensusReportQuery, GetCensusReportQueryVariables>;
 export const GetCensusTasksDocument = gql`
     query GetCensusTasks {
   getCensusTasks {
@@ -2053,6 +2116,34 @@ export function useUpdateCensusTaskMutation(baseOptions?: Apollo.MutationHookOpt
 export type UpdateCensusTaskMutationHookResult = ReturnType<typeof useUpdateCensusTaskMutation>;
 export type UpdateCensusTaskMutationResult = Apollo.MutationResult<UpdateCensusTaskMutation>;
 export type UpdateCensusTaskMutationOptions = Apollo.BaseMutationOptions<UpdateCensusTaskMutation, UpdateCensusTaskMutationVariables>;
+export const GetEmployeeInfByIdDocument = gql`
+    query GetEmployeeInfById($getEmployeeInfByIdId: ID!) {
+  getEmployeeInfById(id: $getEmployeeInfByIdId) {
+    totalAssetCount
+    totalCensusTask
+    totalAssigmentCount
+  }
+}
+    `;
+export function useGetEmployeeInfByIdQuery(baseOptions: Apollo.QueryHookOptions<GetEmployeeInfByIdQuery, GetEmployeeInfByIdQueryVariables> & ({ variables: GetEmployeeInfByIdQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetEmployeeInfByIdQuery, GetEmployeeInfByIdQueryVariables>(GetEmployeeInfByIdDocument, options);
+      }
+export function useGetEmployeeInfByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetEmployeeInfByIdQuery, GetEmployeeInfByIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetEmployeeInfByIdQuery, GetEmployeeInfByIdQueryVariables>(GetEmployeeInfByIdDocument, options);
+        }
+// @ts-ignore
+export function useGetEmployeeInfByIdSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetEmployeeInfByIdQuery, GetEmployeeInfByIdQueryVariables>): Apollo.UseSuspenseQueryResult<GetEmployeeInfByIdQuery, GetEmployeeInfByIdQueryVariables>;
+export function useGetEmployeeInfByIdSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetEmployeeInfByIdQuery, GetEmployeeInfByIdQueryVariables>): Apollo.UseSuspenseQueryResult<GetEmployeeInfByIdQuery | undefined, GetEmployeeInfByIdQueryVariables>;
+export function useGetEmployeeInfByIdSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetEmployeeInfByIdQuery, GetEmployeeInfByIdQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetEmployeeInfByIdQuery, GetEmployeeInfByIdQueryVariables>(GetEmployeeInfByIdDocument, options);
+        }
+export type GetEmployeeInfByIdQueryHookResult = ReturnType<typeof useGetEmployeeInfByIdQuery>;
+export type GetEmployeeInfByIdLazyQueryHookResult = ReturnType<typeof useGetEmployeeInfByIdLazyQuery>;
+export type GetEmployeeInfByIdSuspenseQueryHookResult = ReturnType<typeof useGetEmployeeInfByIdSuspenseQuery>;
+export type GetEmployeeInfByIdQueryResult = Apollo.QueryResult<GetEmployeeInfByIdQuery, GetEmployeeInfByIdQueryVariables>;
 export const CreateMaintenanceTicketDocument = gql`
     mutation CreateMaintenanceTicket($input: CreateMaintenanceTicketInput!) {
   createMaintenanceTicket(input: $input)

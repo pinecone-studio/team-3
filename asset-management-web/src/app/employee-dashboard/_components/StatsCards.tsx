@@ -20,8 +20,10 @@ const iconColors: Record<string, string> = {
 };
 
 export default function StatsCards({ stats }: StatsCardsProps) {
+  console.log(stats,'asdhoiu')
   return (
     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 sm:gap-4 lg:gap-6 mb-6 sm:mb-8 w-full">
+
       {stats.map((stat, i) => (
         <div
           key={i}
@@ -68,7 +70,7 @@ export default function StatsCards({ stats }: StatsCardsProps) {
               mb-1 sm:mb-2
             "
           >
-            {stat.value.toLocaleString()} {/* nicer number formatting */}
+            {stat?.value?.toLocaleString()} {/* nicer number formatting */}
           </p>
 
           {/* Sublabel */}

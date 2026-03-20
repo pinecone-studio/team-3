@@ -11,8 +11,8 @@ import GeneralTab, { AssetWithCategory } from "./_components/GeneralTab";
 import GarTab from "./_components/Signature";
 import QrTab from "./_components/QrTab";
 
-import type { QrItem } from "./_components/mockData";
-import { mockStats } from "./_components/mockData";
+import { mockStats, type QrItem } from "./_components/mockData";
+
 import loaderAnimation from "../../libs/lottie/animation.json";
 
 import { useEmployee } from "../_providers/user-provider";
@@ -22,6 +22,7 @@ import {
   useGetAssignmentsByEmployeeQuery,
   useCensusTasksByEmployeeQuery,
   useGetEmployeeDataQuery,
+  useGetEmployeeInfByIdQuery,
 } from "@/gql/graphql";
 
 type AssignmentsDataType = ReturnType<
@@ -77,6 +78,15 @@ export default function AssetsPage() {
     skip: !employeeId,
   });
 
+  const { data, loading } = useGetEmployeeInfByIdQuery({
+    variables: { getEmployeeInfByIdId: employeeId }
+  });
+  const employeeInf = data?.getEmployeeInfById
+  const totalAssetCount = employeeInf?.totalAssetCount
+  const totalAssigmentCount = employeeInf?.totalAssigmentCount
+  const totalCensusTask = employeeInf?.totalCensusTask
+
+  const infData = mockStats({totalAssetCount,totalAssigmentCount,totalCensusTask})
   const {
     data: censusData,
     loading: censusLoading,
@@ -197,7 +207,7 @@ export default function AssetsPage() {
       </header>
 
       <main className="w-full px-3 py-6 sm:px-8 sm:py-8">
-        <StatsCards stats={mockStats} />
+        <StatsCards stats={infData} />
 
         <div className="my-6">
           <Tabs activeTab={activeTab} setActiveTab={setActiveTab} />

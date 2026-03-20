@@ -1,0 +1,56 @@
+query GetCensusTasksByCensusId($censusId: ID!) {
+  getCensusTasksByCensusId(censusId: $censusId) {
+    id
+    censusId
+    assetId
+    verifierId
+    verifiedAt
+    conditionReported
+    locationConfirmed
+    discrepancyFlag
+    asset {
+      id
+      assetTag
+      category {
+        id
+        name
+        description
+        assets {
+          id
+          assetTag
+          serialNumber
+          status
+          purchaseDate
+          purchaseCost
+          currentBookValue
+          locationId
+          assignedTo
+          deletedAt
+          imageUrl
+          qrUrl
+          name
+        }
+      }
+      subCategory {
+        id
+        name
+        categoryId
+      }
+      serialNumber
+      status
+      purchaseDate
+      purchaseCost
+      currentBookValue
+      locationId
+      assignedTo
+      deletedAt
+      department {
+        id
+        name
+      }
+      imageUrl
+      qrUrl
+      name
+    }
+  }
+}

@@ -1,21 +1,31 @@
-export const mockStats = [
+type mockStateProps  = {
+  totalAssetCount: number | null | undefined,
+  totalAssigmentCount: number | null | undefined,
+  totalCensusTask: number | null | undefined
+}
+
+export const mockStats = ({
+  totalAssetCount,
+  totalAssigmentCount,
+  totalCensusTask
+}: mockStateProps) => [
   {
     label: "Миний хөрөнгө",
-    value: 4,
-    sublabel: "Хуваарилагдсан төхөөрмж",
+    value: totalAssetCount, 
+    sublabel: "Хуваарилагдсан төхөөрөмж",
     iconBg: "#EBF3FD",
     type: "cube",
   },
   {
     label: "Гарын үсэг баталгаажуулалт",
-    value: 3,
+    value: totalAssigmentCount,
     sublabel: "Хүлээгдэж буй гарын үсэг",
     iconBg: "#EAF3DE",
     type: "doc",
   },
   {
     label: "QR баталгаажуулалт",
-    value: 4,
+    value: totalCensusTask,
     sublabel: "Баталгаажуулах шаардлагатай",
     iconBg: "#FEF3C7",
     type: "qr",
