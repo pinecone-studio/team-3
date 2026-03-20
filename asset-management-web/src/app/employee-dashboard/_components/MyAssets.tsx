@@ -104,7 +104,7 @@ export default function MyAssets({ assets }: MyAssetsProps) {
                   {/* Image container */}
                   <div className="relative flex-shrink-0">
                     <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-xl bg-gradient-to-br from-slate-100 to-slate-50 border border-slate-200 flex items-center justify-center overflow-hidden group-hover:border-indigo-200 transition-colors">
-                      <Image
+                      <img
                         src={asset.imageUrl || ""}
                         width={72}
                         height={72}

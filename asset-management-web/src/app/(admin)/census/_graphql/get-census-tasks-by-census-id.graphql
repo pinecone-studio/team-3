@@ -52,5 +52,31 @@ query GetCensusTasksByCensusId($censusId: ID!) {
       qrUrl
       name
     }
+    employees {
+      id
+      entraId
+      employeeCode
+      firstName
+      lastName
+      firstNameEng
+      lastNameEng
+      email
+      imageUrl
+      hireDate
+      terminationDate
+      status
+      numberOfVacationDays
+      github
+      department
+      branch
+      level
+      isKpi
+      isAdmin
+      isSalaryCompany
+      birthDayAndMonth
+      birthdayPoster
+      clerkId
+      role
+    }
   }
 }

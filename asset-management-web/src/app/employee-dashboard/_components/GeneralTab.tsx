@@ -1,10 +1,28 @@
 import { Asset, Assignment} from "@/gql/graphql";
 import MyAssets from "./MyAssets";
 export type AssetWithCategory = Asset & { category?: { name: string } };
-
+type  assetsHistory= {
+  __typename?: "Assignment";
+  id: string;
+  employeeId: string;
+  assetId: string;
+  assignedAt: string;
+  conditionAtAssign: string;
+  signatureR2Key?: string | null;
+  asset?: {
+      __typename?: "Asset";
+      id: string;
+      assetTag: string;
+      serialNumber?: string | null;
+      category?: {
+          __typename?: "Category";
+          name: string;
+      } | null;
+  } | null;
+}[]
 export interface GeneralTabProps {
   assets: AssetWithCategory[];
-  history: Assignment[];
+  history: assetsHistory;
 }
 
 export default function GeneralTab({
@@ -12,7 +30,7 @@ export default function GeneralTab({
   history,
 }: {
   assets: AssetWithCategory[];
-  history: Assignment[];
+  history: assetsHistory;
 }) {
 
   return (

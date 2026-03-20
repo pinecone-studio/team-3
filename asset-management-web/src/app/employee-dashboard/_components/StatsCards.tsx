@@ -7,9 +7,15 @@ interface StatItem {
   iconBg: string;
   type: string;
 }
-
+type infData = {
+  label: string;
+  value: number | null | undefined;
+  sublabel: string;
+  iconBg: string;
+  type: string;
+}[]
 interface StatsCardsProps {
-  stats: StatItem[];
+  stats: infData;
 }
 
 const iconColors: Record<string, string> = {

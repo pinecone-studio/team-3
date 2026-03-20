@@ -61,7 +61,7 @@ export const censusTypeDefs = gql`
 		locationConfirmed: Boolean
 		discrepancyFlag: Boolean
 asset:Asset
-employee:Employee
+employees:Employee
 	}
 	extend type Query {
 		getCensusEvents: [CensusEvent!]!

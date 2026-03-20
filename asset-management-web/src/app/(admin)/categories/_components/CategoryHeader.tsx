@@ -4,7 +4,7 @@ import { Trash } from 'lucide-react'
 import React, { useState } from 'react'
 import { toast } from 'sonner'
 
-export type filteredCategories =  {
+export type  filteredCategories= {
     __typename?: "Category";
     id: string;
     name: string;
@@ -21,7 +21,7 @@ export type filteredCategories =  {
         locationId?: string | null;
         assignedTo?: string | null;
         deletedAt?: string | null;
-        imageUrl: string;
+        imageUrl?: string | null;
         category?: {
             __typename?: "Category";
             id: string;

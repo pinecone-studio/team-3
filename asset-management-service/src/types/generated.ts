@@ -111,7 +111,7 @@ export type CensusTaskProps = {
   censusId: Scalars['ID']['output'];
   conditionReported?: Maybe<Scalars['String']['output']>;
   discrepancyFlag?: Maybe<Scalars['Boolean']['output']>;
-  employee?: Maybe<Employee>;
+  employees?: Maybe<Employee>;
   id: Scalars['ID']['output'];
   locationConfirmed?: Maybe<Scalars['Boolean']['output']>;
   verifiedAt?: Maybe<Scalars['String']['output']>;
@@ -922,7 +922,7 @@ export type CensusTaskPropsResolvers<ContextType = Context, ParentType extends R
   censusId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   conditionReported?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   discrepancyFlag?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
-  employee?: Resolver<Maybe<ResolversTypes['Employee']>, ParentType, ContextType>;
+  employees?: Resolver<Maybe<ResolversTypes['Employee']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   locationConfirmed?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   verifiedAt?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;

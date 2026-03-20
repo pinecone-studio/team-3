@@ -149,4 +149,5 @@ export interface QrItem {
   date: string;
   owner: string;
   type: string;
+  verifiedAt:string | null
 }

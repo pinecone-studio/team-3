@@ -1,14 +1,104 @@
-import { DeviceIcon, PendingBadge, WarningTriangle } from "./icons";
-import { QrItem } from "./mockData";
+import { AssetStatusEnum, EmployeeStatus } from "@/gql/graphql";
+import { PendingBadge, WarningTriangle } from "./icons";
 
+type census = {
+  __typename?: "CensusTaskProps";
+  id: string;
+  censusId: string;
+  assetId: string;
+  verifierId?: string | null;
+  verifiedAt?: string | null;
+  conditionReported?: string | null;
+  locationConfirmed?: boolean | null;
+  discrepancyFlag?: boolean | null;
+  asset?: {
+    __typename?: "Asset";
+    id: string;
+    assetTag: string;
+    serialNumber?: string | null;
+    status: AssetStatusEnum;
+    purchaseDate?: string | null;
+    purchaseCost?: number | null;
+    currentBookValue?: number | null;
+    locationId?: string | null;
+    assignedTo?: string | null;
+    deletedAt?: string | null;
+    imageUrl: string;
+    qrUrl: string;
+    name: string;
+    category?: {
+      __typename?: "Category";
+      id: string;
+      name: string;
+      description?: string | null;
+      assets?: Array<{
+        __typename?: "Asset";
+        id: string;
+        assetTag: string;
+        serialNumber?: string | null;
+        status: AssetStatusEnum;
+        purchaseDate?: string | null;
+        purchaseCost?: number | null;
+        currentBookValue?: number | null;
+        locationId?: string | null;
+        assignedTo?: string | null;
+        deletedAt?: string | null;
+        imageUrl: string;
+        qrUrl: string;
+        name: string;
+      }> | null;
+    } | null;
+    subCategory?: {
+      __typename?: "SubCategory";
+      id: string;
+      name: string;
+      categoryId?: string | null;
+    } | null;
+    department?: {
+      __typename?: "Department";
+      id: string;
+      name: string;
+    } | null;
+  } | null;
+  employees?: {
+    __typename?: "Employee";
+    id: string;
+    entraId: string;
+    employeeCode: string;
+    firstName: string;
+    lastName: string;
+    firstNameEng: string;
+    lastNameEng: string;
+    email: string;
+    imageUrl?: string | null;
+    hireDate: string;
+    terminationDate?: string | null;
+    status: EmployeeStatus;
+    numberOfVacationDays?: number | null;
+    github?: string | null;
+    department: string;
+    branch: string;
+    level: string;
+    isKpi: boolean;
+    isAdmin?: boolean | null;
+    isSalaryCompany: boolean;
+    birthDayAndMonth?: string | null;
+    birthdayPoster?: string | null;
+    clerkId: string;
+    role: string;
+  } | null;
+}[] | undefined
 interface QrTabProps {
-  items?: QrItem[];
+  items?: census;
   onOpenScanner: () => void;
 }
 
 export default function QrTab({ items = [], onOpenScanner }: QrTabProps) {
-  const total = items.length;
-  const done = 2;
+  console.log(items)
+  const not = items.filter((item) => item.verifiedAt === null)
+
+  const total = not.length;
+  const done = items.length - not.length;
   const pct = total > 0 ? Math.round((done / total) * 100) : 0;
 
   return (
@@ -80,22 +170,17 @@ export default function QrTab({ items = [], onOpenScanner }: QrTabProps) {
               <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-5">
                 {/* Device icon */}
                 <div className="flex h-20 w-20 sm:h-24 sm:w-24 items-center justify-center overflow-hidden rounded-2xl bg-[#F8FAFC]">
-                  <DeviceIcon type={item.type || "monitor"} size={40} />
+                  <img src={item?.asset?.imageUrl || ""} width={100} height={50} alt="zurag" />
                 </div>
 
                 {/* Text content */}
                 <div className="min-w-0 flex-1 flex flex-col gap-2">
                   <div className="mb-2 flex flex-wrap items-center gap-2">
                     <h3 className="text-[18px] font-semibold text-gray-900">
-                      {item.asset.assetTag}
+                      {item?.asset?.assetTag}
                     </h3>
                     <PendingBadge />
                   </div>
-
-                  <p className="text-sm text-gray-500">{item.code}</p>
-                  <p className="mt-1 text-sm text-gray-400">
-                    {item.description}
-                  </p>
                 </div>
               </div>
 
@@ -107,21 +192,21 @@ export default function QrTab({ items = [], onOpenScanner }: QrTabProps) {
                 <div>
                   <p className="mb-1 text-sm text-gray-400">Нөхцөл</p>
                   <p className="text-[15px] font-semibold text-gray-900">
-                    {item.location}
+                    {item.asset?.locationId}
                   </p>
                 </div>
 
                 <div>
                   <p className="mb-1 text-sm text-gray-400">Олгосон огноо</p>
                   <p className="text-[15px] font-semibold text-gray-900">
-                    {item.date}
+                    {item.asset?.purchaseDate?.slice(0, 10)}
                   </p>
                 </div>
 
                 <div>
                   <p className="mb-1 text-sm text-gray-400">Олгосон</p>
                   <p className="text-[15px] font-semibold text-gray-900">
-                    {item.owner}
+                    Төгөлдөр
                   </p>
                 </div>
               </div>

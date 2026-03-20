@@ -105,6 +105,20 @@ export type CensusTask = {
   verifierId?: Maybe<Scalars['String']['output']>;
 };
 
+export type CensusTaskProps = {
+  __typename?: 'CensusTaskProps';
+  asset?: Maybe<Asset>;
+  assetId: Scalars['ID']['output'];
+  censusId: Scalars['ID']['output'];
+  conditionReported?: Maybe<Scalars['String']['output']>;
+  discrepancyFlag?: Maybe<Scalars['Boolean']['output']>;
+  employees?: Maybe<Employee>;
+  id: Scalars['ID']['output'];
+  locationConfirmed?: Maybe<Scalars['Boolean']['output']>;
+  verifiedAt?: Maybe<Scalars['String']['output']>;
+  verifierId?: Maybe<Scalars['ID']['output']>;
+};
+
 export type CreateAssetInput = {
   assetTag: Scalars['String']['input'];
   categoryId: Scalars['String']['input'];
@@ -456,6 +470,7 @@ export type Query = {
   getCensusTaskByAssetId?: Maybe<CensusTask>;
   getCensusTaskById?: Maybe<CensusTask>;
   getCensusTasks: Array<CensusTask>;
+  getCensusTasksByCensusId: Array<CensusTaskProps>;
   getDepartments: Array<Department>;
   getEmployeeByClerkID: Employee;
   getEmployeeByCode?: Maybe<Employee>;
@@ -525,6 +540,11 @@ export type QueryGetCensusTaskByAssetIdArgs = {
 
 export type QueryGetCensusTaskByIdArgs = {
   id: Scalars['ID']['input'];
+};
+
+
+export type QueryGetCensusTasksByCensusIdArgs = {
+  censusId: Scalars['ID']['input'];
 };
 
 
@@ -781,9 +801,8 @@ export type GetCategoriesWithAssetsQuery = { __typename?: 'Query', getCategories
 export type GetSubCategoriesWithCategoryQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetSubCategoriesWithCategoryQuery = { __typename?: 'Query', getSubCategoriesWithCategory: Array<{ __typename?: 'getSubCategoriesProps', categories?: { __typename?: 'Category', id: string, name: string, description?: string | null, assets?: Array<{ __typename?: 'Asset', id: string, assetTag: string, serialNumber?: string | null, status: AssetStatusEnum, purchaseDate?: string | null, purchaseCost?: number | null, currentBookValue?: number | null, locationId?: string | null, assignedTo?: string | null, deletedAt?: string | null, category?: { __typename?: 'Category', id: string, name: string, description?: string | null } | null }> | null } | null, sub_categories: { __typename?: 'SubCategory', id: string, name: string, categoryId?: string | null } }> };
 
-export type GetSubCategoriesWithCategoryQueryVariables = Exact<{ [key: string]: never; }>;
+
 
 
 export type GetSubCategoriesWithCategoryQuery = { __typename?: 'Query', getSubCategoriesWithCategory: Array<{ __typename?: 'getSubCategoriesProps', categories?: { __typename?: 'Category', id: string, name: string, description?: string | null, assets?: Array<{ __typename?: 'Asset', id: string, assetTag: string, serialNumber?: string | null, status: AssetStatusEnum, purchaseDate?: string | null, purchaseCost?: number | null, currentBookValue?: number | null, locationId?: string | null, assignedTo?: string | null, deletedAt?: string | null, category?: { __typename?: 'Category', id: string, name: string, description?: string | null } | null }> | null } | null, sub_categories: { __typename?: 'SubCategory', id: string, name: string, categoryId?: string | null } }> };
@@ -801,6 +820,13 @@ export type GetCensusReportQueryVariables = Exact<{
 
 
 export type GetCensusReportQuery = { __typename?: 'Query', getCensusReport: { __typename?: 'CensusReport', totalAssets: number, verifiedCount: number, verifiedPercentage: number, discrepancies: number, conditionChanges: number, actionItems: number } };
+
+export type GetCensusTasksByCensusIdQueryVariables = Exact<{
+  censusId: Scalars['ID']['input'];
+}>;
+
+
+export type GetCensusTasksByCensusIdQuery = { __typename?: 'Query', getCensusTasksByCensusId: Array<{ __typename?: 'CensusTaskProps', id: string, censusId: string, assetId: string, verifierId?: string | null, verifiedAt?: string | null, conditionReported?: string | null, locationConfirmed?: boolean | null, discrepancyFlag?: boolean | null, asset?: { __typename?: 'Asset', id: string, assetTag: string, serialNumber?: string | null, status: AssetStatusEnum, purchaseDate?: string | null, purchaseCost?: number | null, currentBookValue?: number | null, locationId?: string | null, assignedTo?: string | null, deletedAt?: string | null, imageUrl: string, qrUrl: string, name: string, category?: { __typename?: 'Category', id: string, name: string, description?: string | null, assets?: Array<{ __typename?: 'Asset', id: string, assetTag: string, serialNumber?: string | null, status: AssetStatusEnum, purchaseDate?: string | null, purchaseCost?: number | null, currentBookValue?: number | null, locationId?: string | null, assignedTo?: string | null, deletedAt?: string | null, imageUrl: string, qrUrl: string, name: string }> | null } | null, subCategory?: { __typename?: 'SubCategory', id: string, name: string, categoryId?: string | null } | null, department?: { __typename?: 'Department', id: string, name: string } | null } | null, employees?: { __typename?: 'Employee', id: string, entraId: string, employeeCode: string, firstName: string, lastName: string, firstNameEng: string, lastNameEng: string, email: string, imageUrl?: string | null, hireDate: string, terminationDate?: string | null, status: EmployeeStatus, numberOfVacationDays?: number | null, github?: string | null, department: string, branch: string, level: string, isKpi: boolean, isAdmin?: boolean | null, isSalaryCompany: boolean, birthDayAndMonth?: string | null, birthdayPoster?: string | null, clerkId: string, role: string } | null }> };
 
 export type GetCensusTasksQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1463,6 +1489,109 @@ export type GetCensusReportQueryHookResult = ReturnType<typeof useGetCensusRepor
 export type GetCensusReportLazyQueryHookResult = ReturnType<typeof useGetCensusReportLazyQuery>;
 export type GetCensusReportSuspenseQueryHookResult = ReturnType<typeof useGetCensusReportSuspenseQuery>;
 export type GetCensusReportQueryResult = Apollo.QueryResult<GetCensusReportQuery, GetCensusReportQueryVariables>;
+export const GetCensusTasksByCensusIdDocument = gql`
+    query GetCensusTasksByCensusId($censusId: ID!) {
+  getCensusTasksByCensusId(censusId: $censusId) {
+    id
+    censusId
+    assetId
+    verifierId
+    verifiedAt
+    conditionReported
+    locationConfirmed
+    discrepancyFlag
+    asset {
+      id
+      assetTag
+      category {
+        id
+        name
+        description
+        assets {
+          id
+          assetTag
+          serialNumber
+          status
+          purchaseDate
+          purchaseCost
+          currentBookValue
+          locationId
+          assignedTo
+          deletedAt
+          imageUrl
+          qrUrl
+          name
+        }
+      }
+      subCategory {
+        id
+        name
+        categoryId
+      }
+      serialNumber
+      status
+      purchaseDate
+      purchaseCost
+      currentBookValue
+      locationId
+      assignedTo
+      deletedAt
+      department {
+        id
+        name
+      }
+      imageUrl
+      qrUrl
+      name
+    }
+    employees {
+      id
+      entraId
+      employeeCode
+      firstName
+      lastName
+      firstNameEng
+      lastNameEng
+      email
+      imageUrl
+      hireDate
+      terminationDate
+      status
+      numberOfVacationDays
+      github
+      department
+      branch
+      level
+      isKpi
+      isAdmin
+      isSalaryCompany
+      birthDayAndMonth
+      birthdayPoster
+      clerkId
+      role
+    }
+  }
+}
+    `;
+export function useGetCensusTasksByCensusIdQuery(baseOptions: Apollo.QueryHookOptions<GetCensusTasksByCensusIdQuery, GetCensusTasksByCensusIdQueryVariables> & ({ variables: GetCensusTasksByCensusIdQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetCensusTasksByCensusIdQuery, GetCensusTasksByCensusIdQueryVariables>(GetCensusTasksByCensusIdDocument, options);
+      }
+export function useGetCensusTasksByCensusIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCensusTasksByCensusIdQuery, GetCensusTasksByCensusIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetCensusTasksByCensusIdQuery, GetCensusTasksByCensusIdQueryVariables>(GetCensusTasksByCensusIdDocument, options);
+        }
+// @ts-ignore
+export function useGetCensusTasksByCensusIdSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetCensusTasksByCensusIdQuery, GetCensusTasksByCensusIdQueryVariables>): Apollo.UseSuspenseQueryResult<GetCensusTasksByCensusIdQuery, GetCensusTasksByCensusIdQueryVariables>;
+export function useGetCensusTasksByCensusIdSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetCensusTasksByCensusIdQuery, GetCensusTasksByCensusIdQueryVariables>): Apollo.UseSuspenseQueryResult<GetCensusTasksByCensusIdQuery | undefined, GetCensusTasksByCensusIdQueryVariables>;
+export function useGetCensusTasksByCensusIdSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetCensusTasksByCensusIdQuery, GetCensusTasksByCensusIdQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetCensusTasksByCensusIdQuery, GetCensusTasksByCensusIdQueryVariables>(GetCensusTasksByCensusIdDocument, options);
+        }
+export type GetCensusTasksByCensusIdQueryHookResult = ReturnType<typeof useGetCensusTasksByCensusIdQuery>;
+export type GetCensusTasksByCensusIdLazyQueryHookResult = ReturnType<typeof useGetCensusTasksByCensusIdLazyQuery>;
+export type GetCensusTasksByCensusIdSuspenseQueryHookResult = ReturnType<typeof useGetCensusTasksByCensusIdSuspenseQuery>;
+export type GetCensusTasksByCensusIdQueryResult = Apollo.QueryResult<GetCensusTasksByCensusIdQuery, GetCensusTasksByCensusIdQueryVariables>;
 export const GetCensusTasksDocument = gql`
     query GetCensusTasks {
   getCensusTasks {

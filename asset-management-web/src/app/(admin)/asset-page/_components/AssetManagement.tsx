@@ -235,7 +235,6 @@ export default function AssetManagement({
                 {paginatedAssets.map((item) => (
                   <tr
                     key={item.id}
-                    onClick={() => handleRowClick(item.id)}
                     className="hover:bg-gray-50/50 transition-colors group cursor-pointer"
                   >
                     <td className="px-4 py-4">
@@ -248,7 +247,7 @@ export default function AssetManagement({
                     </td>
 
                     <td className="py-4 font-medium text-gray-900">
-                      <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-3 cursor-pointer" onClick={() => handleRowClick(item.id)}>
                         <div className="border border-gray-200 p-1.5 w-12 h-12 rounded-md flex items-center justify-center bg-white">
                           <img
                             src={item.imageUrl as string}

@@ -1,11 +1,10 @@
 import { eq } from "drizzle-orm";
 import { assets, censusTasks, createDB, employees } from "../../../../db";
-import { QueryResolvers } from "../../../../types/generated";
 
-export const getCensusTasksByCensusId: QueryResolvers['getCensusTasksByCensusId'] = async (
+export const getCensusTasksByCensusId = async (
   _: unknown,
-  { censusId },
-  context
+  { censusId }:{censusId:string},
+  context:Context
 ) => {
   const DB = createDB(context.env)
 
@@ -26,6 +25,10 @@ export const getCensusTasksByCensusId: QueryResolvers['getCensusTasksByCensusId'
       purchaseDate: asset.purchaseDate ? asset.purchaseDate.toISOString() : null,
       deletedAt: asset.deletedAt ? asset.deletedAt.toISOString() : null,
     } : null,
-    verifier: verifier ?? null,
+    employees: verifier ? {
+      ...verifier,
+      clerkId: verifier.clerkId ?? '',
+      hireDate: verifier.hireDate ? verifier.hireDate.toISOString() : '',
+    } : null,
   }))
 }
