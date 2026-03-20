@@ -50,7 +50,15 @@ export default function CreateModal({
 
     onCreate(form);
   };
-
+  const handleFillMockData = () => {
+    setForm((prev) => ({
+      ...prev,
+      name: "2026 Q1 Тооллого",
+      location: "Engineering",
+      startDate: "2026-03-01",
+      closedAt: "2026-03-31",
+    }))
+  }
   return (
     <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/40 px-4">
       <div className="w-full max-w-[420px] rounded-2xl bg-white p-6 shadow-2xl">
@@ -59,12 +67,21 @@ export default function CreateModal({
             Тооллого үүсгэх
           </h2>
 
-          <button
-            onClick={onClose}
-            className="rounded-full p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-600"
-          >
-            <X size={20} />
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={handleFillMockData}
+              className="text-xs px-2 py-1 rounded-md border border-dashed border-blue-400 text-blue-500 hover:bg-blue-50 transition-colors"
+            >
+              🧪 Demo
+            </button>
+            <button
+              onClick={onClose}
+              className="rounded-full p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-600"
+            >
+              <X size={20} />
+            </button>
+          </div>
         </div>
 
         <div className="space-y-5">

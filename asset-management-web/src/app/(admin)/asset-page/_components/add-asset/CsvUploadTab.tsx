@@ -20,8 +20,8 @@ const REQUIRED_HEADERS = [
 
 const TEMPLATE_CSV = [
   REQUIRED_HEADERS.join(","),
-  "TAG-001,SN-12345,cat-uuid,subcat-uuid,dept-uuid,loc-uuid,2024-01-15,1500000,https://example.com/img1.png",
-  "TAG-002,SN-67890,cat-uuid,subcat-uuid,dept-uuid,loc-uuid,2024-03-20,2300000,https://example.com/img2.png",
+  "TAG-001,SN-12345,570bed87-4414-4e0e-912c-9ce0bee2784b,m0NAssdgcoQ6NqbNT9nVd,1,LOC-001,2024-01-15,1500000,https://example.com/img1.png",
+  "TAG-002,SN-67890,2e166623-690f-400a-9c83-d1511f28977c,XXt6KaCUsBTjGFXa5pr-r,2,LOC-002,2024-03-20,2300000,https://example.com/img2.png"
 ].join("\n")
 
 type RowStatus = "pending" | "success" | "error"
@@ -37,8 +37,8 @@ type ParsedRow = {
   purchaseDate: string
   purchaseCost: string
   imgUrl?: string
-  status: AssetStatusEnum      
-  importStatus: RowStatus      
+  status: AssetStatusEnum
+  importStatus: RowStatus
   errorMessage?: string
 }
 
@@ -67,7 +67,7 @@ function parseCSV(text: string): ParsedRow[] {
       purchaseDate: getCol(cols, "purchaseDate"),
       purchaseCost: getCol(cols, "purchaseCost"),
       imgUrl: getCol(cols, "imgUrl"),
-      status: AssetStatusEnum.Available, 
+      status: AssetStatusEnum.Available,
       importStatus: "pending",
     }
   })
@@ -226,9 +226,8 @@ export const CsvUploadTab = ({ onSuccess, refetch }: Props) => {
           </Button>
         </div>
         <div
-          className={`border-2 border-dashed rounded-lg p-10 flex flex-col items-center justify-center text-center transition-colors ${
-            isDragging ? "border-[#0251CB] bg-blue-50/50" : "border-muted-foreground/25 hover:border-muted-foreground/50"
-          }`}
+          className={`border-2 border-dashed rounded-lg p-10 flex flex-col items-center justify-center text-center transition-colors ${isDragging ? "border-[#0251CB] bg-blue-50/50" : "border-muted-foreground/25 hover:border-muted-foreground/50"
+            }`}
           onDragOver={(e) => { e.preventDefault(); setIsDragging(true) }}
           onDragLeave={() => setIsDragging(false)}
           onDrop={handleDrop}
