@@ -35,7 +35,6 @@ export default function AssetDetailPage() {
 
     const asset = data?.getAssetById;
 
-    console.log(asset)
     return (
         <div className="min-h-screen bg-background">
             <div className="p-6">

@@ -17,7 +17,7 @@ import {
   Textarea,
   DialogFooter,
 } from "@/libs";
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 import {
   GetMaintenanceTicketsDocument,
   useCreateMaintenanceTicketMutation,
@@ -52,7 +52,7 @@ export default function ReportDialog() {
   }
   const handleSubmit = async () => {
     if (!selectedAsset || !description.trim() || !employeeId) return;
-    console.log(employeeId);
+
     try {
       await createTicket({
         variables: {

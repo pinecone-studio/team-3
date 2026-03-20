@@ -25,18 +25,18 @@ export const createCensusEvent: MutationResolvers['createCensusEvent'] = async (
 			.innerJoin(assets, eq(assignments.assetId, assets.id))
 			.innerJoin(employees, eq(assignments.employeeId, employees.id))
 			.where(and(isNull(assets.deletedAt), isNull(assignments.returnedAt)));
-		console.log('1');
+
 
 		// 2. Filter based on Scope
 		let filtered = assignedAssets;
-		if (input.scope === 'category' && input.scopeFilter) {
-			filtered = assignedAssets.filter((a) => a.category === input.scopeFilter);
-		} else if (input.scope === 'department' && input.scopeFilter) {
-			filtered = assignedAssets.filter((a) => a.department === input.scopeFilter);
-		}
+		// if (input.scope === 'category' && input.scopeFilter) {
+		// 	filtered = assignedAssets.filter((a) => a.category === input.scopeFilter);
+		// } else if (input.scope === 'department' && input.scopeFilter) {
+		// 	filtered = assignedAssets.filter((a) => a.department === input.scopeFilter);
+		// }
 		console.log('2');
 
-		// 3. De-duplicate assets
+
 		const uniqueAssets = Array.from(new Map(filtered.map((a) => [a.assetId, a])).values());
 
 		if (uniqueAssets.length > 0) {
@@ -61,8 +61,6 @@ export const createCensusEvent: MutationResolvers['createCensusEvent'] = async (
 				locationConfirmed: false, // Explicitly false as it has no default in schema
 				discrepancyFlag: false, // Matches your schema default
 			}));
-
-			console.log('3');
 
 			// 5. Execute in Chunks using Batch
 			// We push the event creation as the first statement in the batch

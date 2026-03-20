@@ -76,10 +76,27 @@ export const AssetInfoSection = ({
       console.error(err)
     }
   }
+  const handleFillMockData = () => {
+    setValue("serialNumber", "MON-2026-099")
+    setValue("assetTag", "IT-LAP-099")
+    setValue("purchaseDate", new Date("2024-03-15"))
+    setValue("price", 2500000)
+    setValue('usageDuration', 1)
+
+  }
 
   return (
     <div className="border rounded-lg p-5">
-      <h3 className="font-semibold text-base mb-1">Хөрөнгийн мэдээлэл</h3>
+      <div className="flex justify-between">
+        <h3 className="font-semibold text-base mb-1">Хөрөнгийн мэдээлэл</h3>
+        <button
+          type="button"
+          onClick={handleFillMockData}
+          className="text-xs px-3 py-1 rounded-md border border-dashed border-blue-400 text-blue-500 hover:bg-blue-50 transition-colors"
+        >
+          🧪 Demo бөглөх
+        </button>
+      </div>
       <p className="text-sm text-muted-foreground mb-5">Хөрөнгийн үндсэн мэдээлэл оруулах</p>
       <FieldGroup>
         <div className="grid grid-cols-2 gap-4">

@@ -52,7 +52,6 @@ const getCategoryIcon = (categoryName: string | undefined) => {
 };
 
 export default function MyAssets({ assets }: MyAssetsProps) {
-    console.log(assets)
   const getStatusStyle = (status: string) => {
     return (
       statusStyles[status] || {

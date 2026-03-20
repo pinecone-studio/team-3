@@ -83,7 +83,7 @@ export default function AssetsPage() {
     loading: censusLoading,
     error: censusError,
   } = useGetActiveCensusIdQuery();
-const censusID = censusData?.getCensusEvents[censusData.getCensusEvents.length -1].id
+const censusID = censusData?.getCensusEvents[censusData.getCensusEvents.length -1]?.id
 
 const { data: censusTasksByCensusId } =
   useGetCensusTasksByCensusIdQuery({
@@ -104,7 +104,6 @@ const { data: censusTasksByCensusId } =
     variables: { employeeId },
     skip: !employeeId || !activeCensusId,
   });
-
   const employeeName = useMemo(() => {
     const firstName = employeeData?.getEmployeeById?.firstName || "";
     const lastName = employeeData?.getEmployeeById?.lastName || "";
@@ -116,7 +115,6 @@ const { data: censusTasksByCensusId } =
     assignmentsData?.getAssignmentsByEmployee?.filter(
       (assignment) => assignment.signatureR2Key !== null,
     ) || [];
-  const qrItems = censusTasksData?.censusTasksByEmployee || [];
 
 
   if (
