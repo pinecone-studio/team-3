@@ -79,14 +79,18 @@ export default function AssetsPage() {
   });
 
   const { data, loading } = useGetEmployeeInfByIdQuery({
-    variables: { getEmployeeInfByIdId: employeeId }
+    variables: { getEmployeeInfByIdId: employeeId },
   });
-  const employeeInf = data?.getEmployeeInfById
-  const totalAssetCount = employeeInf?.totalAssetCount
-  const totalAssigmentCount = employeeInf?.totalAssigmentCount
-  const totalCensusTask = employeeInf?.totalCensusTask
+  const employeeInf = data?.getEmployeeInfById;
+  const totalAssetCount = employeeInf?.totalAssetCount;
+  const totalAssigmentCount = employeeInf?.totalAssigmentCount;
+  const totalCensusTask = employeeInf?.totalCensusTask;
 
-  const infData = mockStats({totalAssetCount,totalAssigmentCount,totalCensusTask})
+  const infData = mockStats({
+    totalAssetCount,
+    totalAssigmentCount,
+    totalCensusTask,
+  });
   const {
     data: censusData,
     loading: censusLoading,
@@ -192,8 +196,8 @@ export default function AssetsPage() {
   }
 
   return (
-    <div className=" p-8 min-h-screen w-full overflow-hidden bg-gray-50">
-      <header className="bg-white px-4  sm:px-8">
+    <div className="  min-h-screen w-full overflow-hidden bg-gray-50">
+      <header className="bg-white">
         <div className="flex w-full items-center justify-between">
           <div>
             <h1 className="text-[24px] font-bold">
