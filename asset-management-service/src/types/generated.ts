@@ -103,6 +103,20 @@ export type CensusTask = {
   verifierId?: Maybe<Scalars['String']['output']>;
 };
 
+export type CensusTaskProps = {
+  __typename?: 'CensusTaskProps';
+  asset?: Maybe<Asset>;
+  assetId: Scalars['ID']['output'];
+  censusId: Scalars['ID']['output'];
+  conditionReported?: Maybe<Scalars['String']['output']>;
+  discrepancyFlag?: Maybe<Scalars['Boolean']['output']>;
+  employee?: Maybe<Employee>;
+  id: Scalars['ID']['output'];
+  locationConfirmed?: Maybe<Scalars['Boolean']['output']>;
+  verifiedAt?: Maybe<Scalars['String']['output']>;
+  verifierId?: Maybe<Scalars['ID']['output']>;
+};
+
 export type CreateAssetInput = {
   assetTag: Scalars['String']['input'];
   categoryId: Scalars['String']['input'];
@@ -453,6 +467,7 @@ export type Query = {
   getCensusTaskByAssetId?: Maybe<CensusTask>;
   getCensusTaskById?: Maybe<CensusTask>;
   getCensusTasks: Array<CensusTask>;
+  getCensusTasksByCensusId: Array<CensusTaskProps>;
   getDepartments: Array<Department>;
   getEmployeeByClerkID: Employee;
   getEmployeeByCode?: Maybe<Employee>;
@@ -517,6 +532,11 @@ export type QueryGetCensusTaskByAssetIdArgs = {
 
 export type QueryGetCensusTaskByIdArgs = {
   id: Scalars['ID']['input'];
+};
+
+
+export type QueryGetCensusTasksByCensusIdArgs = {
+  censusId: Scalars['ID']['input'];
 };
 
 
@@ -737,6 +757,7 @@ export type ResolversTypes = {
   CensusEvent: ResolverTypeWrapper<CensusEvent>;
   CensusReport: ResolverTypeWrapper<CensusReport>;
   CensusTask: ResolverTypeWrapper<CensusTask>;
+  CensusTaskProps: ResolverTypeWrapper<CensusTaskProps>;
   CreateAssetInput: CreateAssetInput;
   CreateAssignmentInput: CreateAssignmentInput;
   CreateCategoryInput: CreateCategoryInput;
@@ -783,6 +804,7 @@ export type ResolversParentTypes = {
   CensusEvent: CensusEvent;
   CensusReport: CensusReport;
   CensusTask: CensusTask;
+  CensusTaskProps: CensusTaskProps;
   CreateAssetInput: CreateAssetInput;
   CreateAssignmentInput: CreateAssignmentInput;
   CreateCategoryInput: CreateCategoryInput;
@@ -884,6 +906,19 @@ export type CensusTaskResolvers<ContextType = Context, ParentType extends Resolv
   locationConfirmed?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   verifiedAt?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   verifierId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+};
+
+export type CensusTaskPropsResolvers<ContextType = Context, ParentType extends ResolversParentTypes['CensusTaskProps'] = ResolversParentTypes['CensusTaskProps']> = {
+  asset?: Resolver<Maybe<ResolversTypes['Asset']>, ParentType, ContextType>;
+  assetId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  censusId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  conditionReported?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  discrepancyFlag?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  employee?: Resolver<Maybe<ResolversTypes['Employee']>, ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  locationConfirmed?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  verifiedAt?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  verifierId?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
 };
 
 export type DepartmentResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Department'] = ResolversParentTypes['Department']> = {
@@ -1009,6 +1044,7 @@ export type QueryResolvers<ContextType = Context, ParentType extends ResolversPa
   getCensusTaskByAssetId?: Resolver<Maybe<ResolversTypes['CensusTask']>, ParentType, ContextType, RequireFields<QueryGetCensusTaskByAssetIdArgs, 'assetId' | 'censusId'>>;
   getCensusTaskById?: Resolver<Maybe<ResolversTypes['CensusTask']>, ParentType, ContextType, RequireFields<QueryGetCensusTaskByIdArgs, 'id'>>;
   getCensusTasks?: Resolver<Array<ResolversTypes['CensusTask']>, ParentType, ContextType>;
+  getCensusTasksByCensusId?: Resolver<Array<ResolversTypes['CensusTaskProps']>, ParentType, ContextType, RequireFields<QueryGetCensusTasksByCensusIdArgs, 'censusId'>>;
   getDepartments?: Resolver<Array<ResolversTypes['Department']>, ParentType, ContextType>;
   getEmployeeByClerkID?: Resolver<ResolversTypes['Employee'], ParentType, ContextType, RequireFields<QueryGetEmployeeByClerkIdArgs, 'clerkId'>>;
   getEmployeeByCode?: Resolver<Maybe<ResolversTypes['Employee']>, ParentType, ContextType, RequireFields<QueryGetEmployeeByCodeArgs, 'employeeCode'>>;
@@ -1042,6 +1078,7 @@ export type Resolvers<ContextType = Context> = {
   CensusEvent?: CensusEventResolvers<ContextType>;
   CensusReport?: CensusReportResolvers<ContextType>;
   CensusTask?: CensusTaskResolvers<ContextType>;
+  CensusTaskProps?: CensusTaskPropsResolvers<ContextType>;
   Department?: DepartmentResolvers<ContextType>;
   Employee?: EmployeeResolvers<ContextType>;
   EmployeeWithAssets?: EmployeeWithAssetsResolvers<ContextType>;

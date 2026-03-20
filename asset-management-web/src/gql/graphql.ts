@@ -783,6 +783,13 @@ export type CreateCensusEventMutationVariables = Exact<{
 
 export type CreateCensusEventMutation = { __typename?: 'Mutation', createCensusEvent: Response };
 
+export type GetCensusReportQueryVariables = Exact<{
+  censusId: Scalars['ID']['input'];
+}>;
+
+
+export type GetCensusReportQuery = { __typename?: 'Query', getCensusReport: { __typename?: 'CensusReport', totalAssets: number, verifiedCount: number, verifiedPercentage: number, discrepancies: number, conditionChanges: number, actionItems: number } };
+
 export type GetCensusTasksQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -1406,6 +1413,37 @@ export function useCreateCensusEventMutation(baseOptions?: Apollo.MutationHookOp
 export type CreateCensusEventMutationHookResult = ReturnType<typeof useCreateCensusEventMutation>;
 export type CreateCensusEventMutationResult = Apollo.MutationResult<CreateCensusEventMutation>;
 export type CreateCensusEventMutationOptions = Apollo.BaseMutationOptions<CreateCensusEventMutation, CreateCensusEventMutationVariables>;
+export const GetCensusReportDocument = gql`
+    query GetCensusReport($censusId: ID!) {
+  getCensusReport(censusId: $censusId) {
+    totalAssets
+    verifiedCount
+    verifiedPercentage
+    discrepancies
+    conditionChanges
+    actionItems
+  }
+}
+    `;
+export function useGetCensusReportQuery(baseOptions: Apollo.QueryHookOptions<GetCensusReportQuery, GetCensusReportQueryVariables> & ({ variables: GetCensusReportQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetCensusReportQuery, GetCensusReportQueryVariables>(GetCensusReportDocument, options);
+      }
+export function useGetCensusReportLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCensusReportQuery, GetCensusReportQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetCensusReportQuery, GetCensusReportQueryVariables>(GetCensusReportDocument, options);
+        }
+// @ts-ignore
+export function useGetCensusReportSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<GetCensusReportQuery, GetCensusReportQueryVariables>): Apollo.UseSuspenseQueryResult<GetCensusReportQuery, GetCensusReportQueryVariables>;
+export function useGetCensusReportSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetCensusReportQuery, GetCensusReportQueryVariables>): Apollo.UseSuspenseQueryResult<GetCensusReportQuery | undefined, GetCensusReportQueryVariables>;
+export function useGetCensusReportSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetCensusReportQuery, GetCensusReportQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetCensusReportQuery, GetCensusReportQueryVariables>(GetCensusReportDocument, options);
+        }
+export type GetCensusReportQueryHookResult = ReturnType<typeof useGetCensusReportQuery>;
+export type GetCensusReportLazyQueryHookResult = ReturnType<typeof useGetCensusReportLazyQuery>;
+export type GetCensusReportSuspenseQueryHookResult = ReturnType<typeof useGetCensusReportSuspenseQuery>;
+export type GetCensusReportQueryResult = Apollo.QueryResult<GetCensusReportQuery, GetCensusReportQueryVariables>;
 export const GetCensusTasksDocument = gql`
     query GetCensusTasks {
   getCensusTasks {
