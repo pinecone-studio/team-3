@@ -140,7 +140,7 @@ export default function MaintenanceTable({
   };
 
   return (
-    <div className="p-8 bg-white min-h-screen">
+    <div className="p-2 bg-white min-h-screen">
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900 mb-1">
           Асуудал шийдвэрлэх

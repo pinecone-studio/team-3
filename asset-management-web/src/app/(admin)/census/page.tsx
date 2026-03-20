@@ -135,7 +135,7 @@ export default function CensusPage() {
   ) {
     return (
       <div className="flex h-screen items-center justify-center bg-white">
-        <div className="bg-yellow-50 p-6 rounded-2xl border border-yellow-100 flex items-center gap-4">
+        <div className="bg-yellow-50 p- rounded-2xl border border-yellow-100 flex items-center gap-4">
           <AlertCircle className="w-6 h-6 text-yellow-400" />
           <p className="text-yellow-700 font-medium">
             Сүүлийн тооллого хаагдсан байна.
@@ -145,7 +145,7 @@ export default function CensusPage() {
     );
   }
   return (
-    <div className="min-h-screen bg-white p-8 font-sans text-[#2D3748]">
+    <div className="min-h-screen bg-white p-2 font-sans text-[#2D3748]">
       {/* Header */}
       <header className="flex justify-between items-center mb-8">
         <div>

@@ -10,7 +10,7 @@ export default function CategoriesPage() {
   const [activeTab, setActiveTab] = useState("categories")
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-2 space-y-6">
       <h1 className="font-bold text-2xl">Ангилал удирдлага</h1>
       
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
