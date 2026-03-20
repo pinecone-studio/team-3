@@ -1,7 +1,14 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { X } from "lucide-react";
+import {
+  X,
+  Calendar,
+  DollarSign,
+  AlignLeft,
+  CheckCircle2,
+  Info,
+} from "lucide-react";
 
 interface EditMaintenanceTicketModalProps {
   open: boolean;
@@ -29,7 +36,6 @@ export default function EditMaintenanceTicketModal({
     description: "",
     status: "OPEN",
   });
-
 
   useEffect(() => {
     if (open && ticket) {
@@ -61,18 +67,38 @@ export default function EditMaintenanceTicketModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60  ">
-      <div className="bg-white w-full max-w-[500px] rounded-md p-8 shadow-2xl relative">
-        <div className="flex items-center justify-between mb-8">
-          <h2 className="text-[20px] font-bold text-gray-900">Дэлгэрэнгүй</h2>
-          <button onClick={onClose}>
-            <X className="w-5 h-5 text-gray-500" />
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+
+      <div
+        className="absolute inset-0 backdrop-blur-xs transition-opacity"
+        onClick={onClose}
+      />
+
+  
+      <div className="relative bg-white w-full max-w-[560px] rounded-[24px] shadow-2xl shadow-blue-500/10 overflow-hidden animate-in fade-in zoom-in duration-200 border border-blue-50">
+  
+        <div className="px-8 pt-8 pb-4 flex items-center justify-between">
+          <div>
+            <h2 className="text-[18px] font-bold text-[#1E293B] tracking-tight">
+              Засварын мэдээлэл
+            </h2>
+            <p className="text-[13px] text-gray-400">
+              Шийдвэрлэлтийн явцыг тэмдэглэх
+            </p>
+          </div>
+          <button
+            onClick={onClose}
+            className="p-2 hover:bg-blue-50 rounded-full transition-colors text-gray-400 hover:text-blue-500"
+          >
+            <X className="w-5 h-5" />
           </button>
         </div>
 
-        <div className="space-y-5">
-          <div>
-            <label className="text-sm font-medium text-gray-700">
+        <div className="px-8 space-y-5">
+          {/* Resolved Date */}
+          <div className="space-y-1.5">
+            <label className="flex items-center gap-2 text-[13px] font-semibold text-gray-600 px-1">
+              <Calendar className="w-4 h-4 text-blue-500" />
               Шийдвэрлэгдсэн огноо
             </label>
             <input
@@ -81,57 +107,104 @@ export default function EditMaintenanceTicketModal({
               onChange={(e) =>
                 setFormData({ ...formData, resolvedAt: e.target.value })
               }
-              className="w-full px-4 py-3 border rounded-xl"
+              className="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-[14px] focus:outline-none focus:ring-2 focus:ring-blue-500/10 focus:border-blue-500 transition-all outline-none"
             />
           </div>
 
-          <div>
-            <label className="text-sm font-medium text-gray-700">Өртөг</label>
+          {/* Cost */}
+          <div className="space-y-1.5">
+            <label className="flex items-center gap-2 text-[13px] font-semibold text-gray-600 px-1">
+              <DollarSign className="w-4 h-4 text-blue-500" />
+              Засварын өртөг
+            </label>
             <input
               type="number"
+              placeholder="0.00"
               value={formData.cost}
               onChange={(e) =>
                 setFormData({ ...formData, cost: e.target.value })
               }
-              className="w-full px-4 py-3 border rounded-xl"
+              className="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-[14px] focus:outline-none focus:ring-2 focus:ring-blue-500/10 focus:border-blue-500 transition-all outline-none"
             />
           </div>
 
-          <div>
-            <label className="text-sm font-medium text-gray-700">Тайлбар</label>
+          {/* Description */}
+          <div className="space-y-1.5">
+            <label className="flex items-center gap-2 text-[13px] font-semibold text-gray-600 px-1">
+              <AlignLeft className="w-4 h-4 text-blue-500" />
+              Тайлбар
+            </label>
             <textarea
+              rows={3}
+              placeholder="Хийгдсэн ажлын тайлбар..."
               value={formData.description}
               onChange={(e) =>
                 setFormData({ ...formData, description: e.target.value })
               }
-              className="w-full px-4 py-3 border rounded-xl resize-none"
+              className="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-[14px] focus:outline-none focus:ring-2 focus:ring-blue-500/10 focus:border-blue-500 transition-all outline-none resize-none"
             />
           </div>
 
-          <div className="flex items-center gap-3">
-            <button
-              type="button"
-              onClick={toggleStatus}
-              className={`w-11 h-6 flex items-center rounded-full transition ${
-                formData.status === "RESOLVED" ? "bg-blue-600" : "bg-gray-300"
+          {/* Status Select Box */}
+          <div
+            onClick={toggleStatus}
+            className={`flex items-center justify-between p-4 rounded-xl border-2 cursor-pointer transition-all ${
+              formData.status === "RESOLVED"
+                ? "bg-blue-50/50 border-blue-100"
+                : "bg-gray-50 border-gray-100"
+            }`}
+          >
+            <div className="flex items-center gap-3">
+              <div
+                className={`p-2 rounded-lg ${formData.status === "RESOLVED" ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-500"}`}
+              >
+                {formData.status === "RESOLVED" ? (
+                  <CheckCircle2 className="w-4 h-4" />
+                ) : (
+                  <Info className="w-4 h-4" />
+                )}
+              </div>
+              <div>
+                <p
+                  className={`text-[13px] font-bold ${formData.status === "RESOLVED" ? "text-blue-700" : "text-gray-600"}`}
+                >
+                  {formData.status === "RESOLVED"
+                    ? "Шийдвэрлэгдсэн"
+                    : "Хүлээгдэж буй"}
+                </p>
+                <p className="text-[11px] text-gray-400">
+                  Төлөв солих бол дарна уу
+                </p>
+              </div>
+            </div>
+
+            <div
+              className={`w-10 h-5 flex items-center rounded-full px-0.5 transition-colors ${
+                formData.status === "RESOLVED" ? "bg-blue-500" : "bg-gray-300"
               }`}
             >
-              <span
-                className={`w-4 h-4 bg-white rounded-full transform transition ${
+              <div
+                className={`w-4 h-4 bg-white rounded-full shadow-md transform transition-transform duration-200 ${
                   formData.status === "RESOLVED"
-                    ? "translate-x-6"
-                    : "translate-x-1"
+                    ? "translate-x-5"
+                    : "translate-x-0"
                 }`}
               />
-            </button>
-            <span>Шийдвэрлэгдсэн</span>
+            </div>
           </div>
         </div>
 
-        <div className="mt-10 flex justify-end">
+        {/* Footer */}
+        <div className="p-8 flex gap-3">
+          <button
+            onClick={onClose}
+            className="flex-1 py-3 px-4 border border-blue-100 text-blue-600 rounded-xl text-[14px] font-bold hover:bg-blue-50 transition-colors"
+          >
+            Цуцлах
+          </button>
           <button
             onClick={handleSubmit}
-            className="w-32 py-3 bg-blue-600 text-white rounded-xl"
+            className="flex-[1.5] py-3 px-4 bg-blue-600 text-white rounded-xl text-[14px] font-bold hover:bg-blue-700 transition-all shadow-lg shadow-blue-500/20 active:scale-95"
           >
             Хадгалах
           </button>
