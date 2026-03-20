@@ -27,10 +27,12 @@ type AssetManagementProps = {
   onDelete: (id: string) => void;
   onUpdate?: (id: string, input: any) => void;
   refetch: () => void;
-
-}
-export default function AssetManagement({ assets, refetch }: AssetManagementProps) {
-  const router = useRouter()
+};
+export default function AssetManagement({
+  assets,
+  refetch,
+}: AssetManagementProps) {
+  const router = useRouter();
   const [category, setCategory] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
   const [search, setSearch] = useState("");
@@ -248,8 +250,8 @@ export default function AssetManagement({ assets, refetch }: AssetManagementProp
                     <td className="py-4 font-medium text-gray-900">
                       <div className="flex items-center gap-3">
                         <div className="border border-gray-200 p-1.5 w-12 h-12 rounded-md flex items-center justify-center bg-white">
-                          <Image
-                            src={item.imageUrl}
+                          <img
+                            src={item.imageUrl as string}
                             width={32}
                             height={32}
                             alt="zurag"

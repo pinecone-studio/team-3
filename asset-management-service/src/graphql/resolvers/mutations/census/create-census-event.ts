@@ -52,11 +52,12 @@ export const createCensusEvent: MutationResolvers['createCensusEvent'] = async (
 			});
 
 			// Map assets to task insert objects
-			// Note: We omit verifierId, verifiedAt, etc., so they naturally default to NULL in SQLite
+
 			const taskValues = uniqueAssets.map((item) => ({
 				id: crypto.randomUUID(),
 				censusId: censusId,
 				assetId: item.assetId,
+				verifierId: item.employeeId,
 				locationConfirmed: false, // Explicitly false as it has no default in schema
 				discrepancyFlag: false, // Matches your schema default
 			}));

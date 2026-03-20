@@ -26,7 +26,7 @@ export type Asset = {
   deletedAt?: Maybe<Scalars['String']['output']>;
   department?: Maybe<Department>;
   id: Scalars['ID']['output'];
-  imageUrl: Scalars['String']['output'];
+  imageUrl?: Maybe<Scalars['String']['output']>;
   locationId?: Maybe<Scalars['String']['output']>;
   name: Scalars['String']['output'];
   purchaseCost?: Maybe<Scalars['Float']['output']>;
@@ -101,6 +101,7 @@ export type CensusTask = {
   id: Scalars['ID']['output'];
   locationConfirmed?: Maybe<Scalars['Boolean']['output']>;
   verifiedAt?: Maybe<Scalars['String']['output']>;
+  verifier?: Maybe<Employee>;
   verifierId?: Maybe<Scalars['String']['output']>;
 };
 
@@ -439,6 +440,7 @@ export enum PosStatusEnum {
 
 export type Query = {
   __typename?: 'Query';
+  censusTasksByEmployee?: Maybe<Array<Maybe<CensusTask>>>;
   getAssetById: Asset;
   getAssets?: Maybe<Array<Maybe<Asset>>>;
   getAssetsByEmployeeId?: Maybe<Array<Maybe<Asset>>>;
@@ -467,6 +469,11 @@ export type Query = {
   getSubCategories: Array<SubCategory>;
   getSubCategoriesWithCategory: Array<GetSubCategoriesProps>;
   getTicketsByAssetId: Array<MaintenanceTicket>;
+};
+
+
+export type QueryCensusTasksByEmployeeArgs = {
+  employeeId: Scalars['ID']['input'];
 };
 
 
@@ -692,7 +699,7 @@ export type GetAssetByIdQuery = { __typename?: 'Query', getAssetById: { __typena
 export type GetAssetsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetAssetsQuery = { __typename?: 'Query', getAssets?: Array<{ __typename?: 'Asset', id: string, assetTag: string, serialNumber?: string | null, status: AssetStatusEnum, purchaseDate?: string | null, purchaseCost?: number | null, currentBookValue?: number | null, locationId?: string | null, assignedTo?: string | null, deletedAt?: string | null, imageUrl: string, qrUrl: string, name: string, category?: { __typename?: 'Category', id: string, name: string, description?: string | null, assets?: Array<{ __typename?: 'Asset', id: string, assetTag: string, serialNumber?: string | null, status: AssetStatusEnum, purchaseDate?: string | null, purchaseCost?: number | null, currentBookValue?: number | null, locationId?: string | null, assignedTo?: string | null, deletedAt?: string | null, imageUrl: string, qrUrl: string }> | null } | null, subCategory?: { __typename?: 'SubCategory', id: string, name: string, categoryId?: string | null } | null, department?: { __typename?: 'Department', id: string, name: string } | null } | null> | null };
+export type GetAssetsQuery = { __typename?: 'Query', getAssets?: Array<{ __typename?: 'Asset', id: string, assetTag: string, serialNumber?: string | null, status: AssetStatusEnum, purchaseDate?: string | null, purchaseCost?: number | null, currentBookValue?: number | null, locationId?: string | null, assignedTo?: string | null, deletedAt?: string | null, imageUrl?: string | null, qrUrl: string, name: string, category?: { __typename?: 'Category', id: string, name: string, description?: string | null, assets?: Array<{ __typename?: 'Asset', id: string, assetTag: string, serialNumber?: string | null, status: AssetStatusEnum, purchaseDate?: string | null, purchaseCost?: number | null, currentBookValue?: number | null, locationId?: string | null, assignedTo?: string | null, deletedAt?: string | null, imageUrl?: string | null, qrUrl: string }> | null } | null, subCategory?: { __typename?: 'SubCategory', id: string, name: string, categoryId?: string | null } | null, department?: { __typename?: 'Department', id: string, name: string } | null } | null> | null };
 
 export type GetCategoriesQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -769,7 +776,12 @@ export type EditSubCategoryByIdMutation = { __typename?: 'Mutation', editSubCate
 export type GetCategoriesWithAssetsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetCategoriesWithAssetsQuery = { __typename?: 'Query', getCategories: Array<{ __typename?: 'Category', id: string, name: string, description?: string | null, assets?: Array<{ __typename?: 'Asset', id: string, assetTag: string, serialNumber?: string | null, status: AssetStatusEnum, purchaseDate?: string | null, purchaseCost?: number | null, currentBookValue?: number | null, locationId?: string | null, assignedTo?: string | null, deletedAt?: string | null, imageUrl: string, category?: { __typename?: 'Category', id: string, name: string, description?: string | null } | null }> | null }> };
+export type GetCategoriesWithAssetsQuery = { __typename?: 'Query', getCategories: Array<{ __typename?: 'Category', id: string, name: string, description?: string | null, assets?: Array<{ __typename?: 'Asset', id: string, assetTag: string, serialNumber?: string | null, status: AssetStatusEnum, purchaseDate?: string | null, purchaseCost?: number | null, currentBookValue?: number | null, locationId?: string | null, assignedTo?: string | null, deletedAt?: string | null, imageUrl?: string | null, category?: { __typename?: 'Category', id: string, name: string, description?: string | null } | null }> | null }> };
+
+export type GetSubCategoriesWithCategoryQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetSubCategoriesWithCategoryQuery = { __typename?: 'Query', getSubCategoriesWithCategory: Array<{ __typename?: 'getSubCategoriesProps', categories?: { __typename?: 'Category', id: string, name: string, description?: string | null, assets?: Array<{ __typename?: 'Asset', id: string, assetTag: string, serialNumber?: string | null, status: AssetStatusEnum, purchaseDate?: string | null, purchaseCost?: number | null, currentBookValue?: number | null, locationId?: string | null, assignedTo?: string | null, deletedAt?: string | null, category?: { __typename?: 'Category', id: string, name: string, description?: string | null } | null }> | null } | null, sub_categories: { __typename?: 'SubCategory', id: string, name: string, categoryId?: string | null } }> };
 
 export type GetSubCategoriesWithCategoryQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -867,7 +879,7 @@ export type GetAssetsByEmployeeIdQueryVariables = Exact<{
 }>;
 
 
-export type GetAssetsByEmployeeIdQuery = { __typename?: 'Query', getAssetsByEmployeeId?: Array<{ __typename?: 'Asset', id: string, assetTag: string, serialNumber?: string | null, status: AssetStatusEnum, purchaseDate?: string | null, purchaseCost?: number | null, currentBookValue?: number | null, locationId?: string | null, assignedTo?: string | null, deletedAt?: string | null, imageUrl: string, qrUrl: string, name: string, category?: { __typename?: 'Category', id: string, name: string, description?: string | null, assets?: Array<{ __typename?: 'Asset', id: string, assetTag: string, serialNumber?: string | null, status: AssetStatusEnum, purchaseDate?: string | null, purchaseCost?: number | null, currentBookValue?: number | null, locationId?: string | null, assignedTo?: string | null, deletedAt?: string | null, imageUrl: string, qrUrl: string, name: string }> | null } | null, subCategory?: { __typename?: 'SubCategory', id: string, name: string, categoryId?: string | null } | null, department?: { __typename?: 'Department', id: string, name: string } | null } | null> | null };
+export type GetAssetsByEmployeeIdQuery = { __typename?: 'Query', getAssetsByEmployeeId?: Array<{ __typename?: 'Asset', id: string, assetTag: string, serialNumber?: string | null, status: AssetStatusEnum, purchaseDate?: string | null, purchaseCost?: number | null, currentBookValue?: number | null, locationId?: string | null, assignedTo?: string | null, deletedAt?: string | null, imageUrl?: string | null, qrUrl: string, name: string, category?: { __typename?: 'Category', id: string, name: string, description?: string | null, assets?: Array<{ __typename?: 'Asset', id: string, assetTag: string, serialNumber?: string | null, status: AssetStatusEnum, purchaseDate?: string | null, purchaseCost?: number | null, currentBookValue?: number | null, locationId?: string | null, assignedTo?: string | null, deletedAt?: string | null, imageUrl?: string | null, qrUrl: string, name: string }> | null } | null, subCategory?: { __typename?: 'SubCategory', id: string, name: string, categoryId?: string | null } | null, department?: { __typename?: 'Department', id: string, name: string } | null } | null> | null };
 
 export type GetAssetsAtEmployeeQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -885,6 +897,13 @@ export type GetActiveCensusIdQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetActiveCensusIdQuery = { __typename?: 'Query', getCensusEvents: Array<{ __typename?: 'CensusEvent', id: string }> };
+
+export type CensusTasksByEmployeeQueryVariables = Exact<{
+  employeeId: Scalars['ID']['input'];
+}>;
+
+
+export type CensusTasksByEmployeeQuery = { __typename?: 'Query', censusTasksByEmployee?: Array<{ __typename?: 'CensusTask', assetId: string, asset?: { __typename?: 'Asset', assetTag: string, assignedTo?: string | null } | null } | null> | null };
 
 export type GetEmployeeDataQueryVariables = Exact<{
   employeeId: Scalars['ID']['input'];
@@ -1957,6 +1976,36 @@ export type GetActiveCensusIdQueryHookResult = ReturnType<typeof useGetActiveCen
 export type GetActiveCensusIdLazyQueryHookResult = ReturnType<typeof useGetActiveCensusIdLazyQuery>;
 export type GetActiveCensusIdSuspenseQueryHookResult = ReturnType<typeof useGetActiveCensusIdSuspenseQuery>;
 export type GetActiveCensusIdQueryResult = Apollo.QueryResult<GetActiveCensusIdQuery, GetActiveCensusIdQueryVariables>;
+export const CensusTasksByEmployeeDocument = gql`
+    query CensusTasksByEmployee($employeeId: ID!) {
+  censusTasksByEmployee(employeeId: $employeeId) {
+    assetId
+    asset {
+      assetTag
+      assignedTo
+    }
+  }
+}
+    `;
+export function useCensusTasksByEmployeeQuery(baseOptions: Apollo.QueryHookOptions<CensusTasksByEmployeeQuery, CensusTasksByEmployeeQueryVariables> & ({ variables: CensusTasksByEmployeeQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<CensusTasksByEmployeeQuery, CensusTasksByEmployeeQueryVariables>(CensusTasksByEmployeeDocument, options);
+      }
+export function useCensusTasksByEmployeeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CensusTasksByEmployeeQuery, CensusTasksByEmployeeQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<CensusTasksByEmployeeQuery, CensusTasksByEmployeeQueryVariables>(CensusTasksByEmployeeDocument, options);
+        }
+// @ts-ignore
+export function useCensusTasksByEmployeeSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<CensusTasksByEmployeeQuery, CensusTasksByEmployeeQueryVariables>): Apollo.UseSuspenseQueryResult<CensusTasksByEmployeeQuery, CensusTasksByEmployeeQueryVariables>;
+export function useCensusTasksByEmployeeSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<CensusTasksByEmployeeQuery, CensusTasksByEmployeeQueryVariables>): Apollo.UseSuspenseQueryResult<CensusTasksByEmployeeQuery | undefined, CensusTasksByEmployeeQueryVariables>;
+export function useCensusTasksByEmployeeSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<CensusTasksByEmployeeQuery, CensusTasksByEmployeeQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<CensusTasksByEmployeeQuery, CensusTasksByEmployeeQueryVariables>(CensusTasksByEmployeeDocument, options);
+        }
+export type CensusTasksByEmployeeQueryHookResult = ReturnType<typeof useCensusTasksByEmployeeQuery>;
+export type CensusTasksByEmployeeLazyQueryHookResult = ReturnType<typeof useCensusTasksByEmployeeLazyQuery>;
+export type CensusTasksByEmployeeSuspenseQueryHookResult = ReturnType<typeof useCensusTasksByEmployeeSuspenseQuery>;
+export type CensusTasksByEmployeeQueryResult = Apollo.QueryResult<CensusTasksByEmployeeQuery, CensusTasksByEmployeeQueryVariables>;
 export const GetEmployeeDataDocument = gql`
     query GetEmployeeData($employeeId: ID!, $token: String!) {
   getAssignmentsByEmployee(employeeId: $employeeId) {

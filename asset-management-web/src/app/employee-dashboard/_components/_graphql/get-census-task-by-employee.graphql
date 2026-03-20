@@ -1,0 +1,9 @@
+query CensusTasksByEmployee($employeeId: ID!) {
+  censusTasksByEmployee(employeeId: $employeeId) {
+    assetId
+    asset {
+      assetTag
+      assignedTo
+    }
+  }
+}

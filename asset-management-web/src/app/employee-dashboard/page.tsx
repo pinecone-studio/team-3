@@ -15,14 +15,15 @@ import { mockStats, type QrItem } from "./_components/mockData";
 
 import loaderAnimation from "../../libs/lottie/animation.json";
 
+import { useEmployee } from "../_providers/user-provider";
 import {
   useGetActiveCensusIdQuery,
   useGetAssetsByEmployeeIdQuery,
   useGetAssignmentsByEmployeeQuery,
+  useCensusTasksByEmployeeQuery,
   useGetEmployeeDataQuery,
   useGetEmployeeInfByIdQuery,
 } from "@/gql/graphql";
-import { useEmployee } from "../_providers/user-provider";
 
 type AssignmentsDataType = ReturnType<
   typeof useGetAssignmentsByEmployeeQuery
@@ -40,8 +41,9 @@ type PendingAssignmentItem = NonNullable<
 export default function AssetsPage() {
   const { isLoaded: isClerkLoaded } = useUser();
   const { employee } = useEmployee();
+  console.log(" employee", employee);
 
-  const [activeTab, setActiveTab] = useState("qr");
+  const [activeTab, setActiveTab] = useState("gar");
   const [isScannerOpen, setIsScannerOpen] = useState(false);
 
   const employeeId = employee?.id || "";
@@ -94,6 +96,14 @@ export default function AssetsPage() {
   const activeCensusId =
     censusData?.getCensusEvents?.[censusData.getCensusEvents.length - 1]?.id ||
     "";
+  const {
+    data: censusTasksData,
+    loading: censusTasksLoading,
+    error: censusTasksError,
+  } = useCensusTasksByEmployeeQuery({
+    variables: { employeeId },
+    skip: !employeeId || !activeCensusId,
+  });
 
   const employeeName = useMemo(() => {
     const firstName = employeeData?.getEmployeeById?.firstName || "";
@@ -106,50 +116,49 @@ export default function AssetsPage() {
     assignmentsData?.getAssignmentsByEmployee?.filter(
       (assignment) => assignment.signatureR2Key !== null,
     ) || [];
+  const qrItems = censusTasksData?.censusTasksByEmployee || [];
+  console.log("qrItems", qrItems);
 
-  const qrItems = useMemo(() => {
-    const assignments = assignmentsData?.getAssignmentsByEmployee || [];
-    const pendingAssignments = employeeData?.getPendingAssignments || [];
+  // const qrItems = useMemo(() => {
+  //   const assignments = assignmentsData?.getAssignmentsByEmployee || [];
+  //   const pendingAssignments = employeeData?.getPendingAssignments || [];
 
-    // census эхлээгүй бол QR хэсэг хоосон
-    if (!activeCensusId) return [];
+  //   // census эхлээгүй бол QR хэсэг хоосон
+  //   if (!activeCensusId) return [];
 
-    // getPendingAssignments дээр assetId биш asset.id ирж байгаа тул asset?.id ашиглаж байна
-    const pendingAssetIds = new Set(
-      pendingAssignments
-        .map((task: PendingAssignmentItem) => task.asset?.id)
-        .filter((id): id is string => Boolean(id)),
-    );
+  //   // getPendingAssignments дээр assetId биш asset.id ирж байгаа тул asset?.id ашиглаж байна
+  //   const pendingAssetIds = new Set(
+  //     pendingAssignments
+  //       .map((task: PendingAssignmentItem) => task.asset?.assetTag)
+  //       .filter((id): id is string => Boolean(id)),
+  //   );
 
-    // assignment ∩ census pending
-    const visibleAssignments = assignments.filter(
-      (assignment: AssignmentItem) => {
-        const assignmentAssetId = assignment.assetId || assignment.asset?.id;
-        return (
-          !assignment.returnedAt &&
-          !!assignmentAssetId &&
-          pendingAssetIds.has(assignmentAssetId)
-        );
-      },
-    );
+  //   // assignment ∩ census pending
+  //   const visibleAssignments = assignments.filter(
+  //     (assignment: AssignmentItem) => {
+  //       const assignmentAssetId = assignment.assetId || assignment.asset?.id;
+  //       return !!assignmentAssetId && pendingAssetIds.has(assignmentAssetId);
+  //     },
+  //   );
 
-    const items: QrItem[] = visibleAssignments.map((item: AssignmentItem) => ({
-      name: item.asset?.assetTag || "Asset",
-      code: item.asset?.serialNumber || item.asset?.assetTag || item.assetId,
-      description:
-        item.asset?.category?.name ||
-        item.asset?.category?.description ||
-        "Тоног төхөөрөмж",
-      date: item.assignedAt
-        ? new Date(item.assignedAt).toLocaleDateString("en-CA")
-        : "",
-      type: mapAssetTypeToIconType(item.asset?.category?.name),
-      location: item.conditionAtAssign || "Тодорхойгүй",
-      owner: employeeName,
-    }));
+  //   const items: QrItem[] = visibleAssignments.map((item: AssignmentItem) => ({
+  //     name: item.asset?.assetTag || "Asset",
+  //     code: item.asset?.serialNumber || item.asset?.assetTag || item.assetId,
+  //     description:
+  //       item.asset?.category?.name ||
+  //       item.asset?.category?.name ||
+  //       "Тоног төхөөрөмж",
+  //     date: item.assignedAt
+  //       ? new Date(item.assignedAt).toLocaleDateString("en-CA")
+  //       : "",
+  //     type: mapAssetTypeToIconType(item.asset?.category?.name),
+  //     location: item.conditionAtAssign || "Тодорхойгүй",
+  //     owner: employeeName,
+  //   }));
 
-    return items;
-  }, [assignmentsData, employeeData, activeCensusId, employeeName]);
+  //   return items;
+  // }, [assignmentsData, employeeData, activeCensusId, employeeName]);
+  console.log("qrItems", qrItems);
 
   if (
     !isClerkLoaded ||
