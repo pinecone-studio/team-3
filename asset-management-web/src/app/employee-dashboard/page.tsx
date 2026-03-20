@@ -183,11 +183,11 @@ export default function AssetsPage() {
   }
 
   return (
-    <div className="min-h-screen w-full overflow-hidden bg-gray-50">
-      <header className="bg-white px-4 py-5 sm:px-8">
+    <div className=" p-8 min-h-screen w-full overflow-hidden bg-gray-50">
+      <header className="bg-white px-4  sm:px-8">
         <div className="flex w-full items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold">
+            <h1 className="text-[24px] font-bold">
               Сайн байна уу, {employeeName} 👋
             </h1>
             <p className="text-sm text-gray-500">
