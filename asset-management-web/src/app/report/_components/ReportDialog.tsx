@@ -76,7 +76,7 @@ export default function ReportDialog() {
   return (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
       <DialogTrigger asChild>
-        <Button className="bg-[#0251CB] hover:bg-[#0241a1] h-[36px] px-4 text-white text-[14px] font-medium rounded-lg flex items-center gap-2">
+        <Button className="bg-[#0251CB] hover:bg-[#0241a1] py-5 mt-1 px-4 text-white text-[14px] font-medium rounded-lg flex items-center gap-2">
           <Plus className="h-4 w-4" />
           Шинэ мэдэгдэл
         </Button>
