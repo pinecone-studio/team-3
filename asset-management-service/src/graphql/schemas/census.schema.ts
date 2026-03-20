@@ -49,6 +49,18 @@ export const censusTypeDefs = gql`
 		locationConfirmed: Boolean
 		discrepancyFlag: Boolean
 	}
+	type CensusTaskProps {
+		id: ID!
+		censusId: ID!
+		assetId: ID!
+		verifierId: ID
+		verifiedAt: String
+		conditionReported: String
+		locationConfirmed: Boolean
+		discrepancyFlag: Boolean
+asset:Asset
+employee:Employee
+	}
 	extend type Query {
 		getCensusEvents: [CensusEvent!]!
 		getCensusEventById(id: ID!): CensusEvent
@@ -56,6 +68,7 @@ export const censusTypeDefs = gql`
 		getCensusTaskById(id: ID!): CensusTask
 		getCensusTaskByAssetId(censusId: ID!, assetId: ID!): CensusTask
 		getCensusReport(censusId: ID!): CensusReport!
+		getCensusTasksByCensusId(censusId:ID!):[CensusTaskProps!]!
 	}
 	extend type Mutation {
 		createCensusEvent(input: CreateCensusEventInput!): Response!
