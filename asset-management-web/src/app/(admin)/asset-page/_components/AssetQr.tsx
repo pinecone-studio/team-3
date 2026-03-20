@@ -15,7 +15,7 @@ export const AssetQr = ({item}:{item:Asset}) => {
       <DialogTitle><p className="text-[20px] text-center font-bold">{item.subCategory?.name}</p></DialogTitle>
         <div className="border p-4 rounded-md">
           
-          <Image
+          <img
             id={`qr-image-${item.id}`}
             src={item.qrUrl}
             width={300}

@@ -3,7 +3,7 @@ import { AssetStatusEnum, useDeleteCategoryMutation, useEditCategoryByIdMutation
 import { Button, Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, Input, TableCell } from '@/libs';
 import { Pencil, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
-type category = {
+type category= {
     __typename?: "Category";
     id: string;
     name: string;
@@ -20,7 +20,7 @@ type category = {
         locationId?: string | null;
         assignedTo?: string | null;
         deletedAt?: string | null;
-        imageUrl: string;
+        imageUrl?: string | null;
         category?: {
             __typename?: "Category";
             id: string;

@@ -23,26 +23,13 @@ import {
   useCensusTasksByEmployeeQuery,
   useGetEmployeeDataQuery,
   useGetEmployeeInfByIdQuery,
+  useGetCensusTasksByCensusIdQuery,
 } from "@/gql/graphql";
 
-type AssignmentsDataType = ReturnType<
-  typeof useGetAssignmentsByEmployeeQuery
->["data"];
-type EmployeeDataType = ReturnType<typeof useGetEmployeeDataQuery>["data"];
-
-type AssignmentItem = NonNullable<
-  NonNullable<AssignmentsDataType>["getAssignmentsByEmployee"]
->[number];
-
-type PendingAssignmentItem = NonNullable<
-  NonNullable<EmployeeDataType>["getPendingAssignments"]
->[number];
 
 export default function AssetsPage() {
   const { isLoaded: isClerkLoaded } = useUser();
   const { employee } = useEmployee();
-  console.log(" employee", employee);
-
   const [activeTab, setActiveTab] = useState("gar");
   const [isScannerOpen, setIsScannerOpen] = useState(false);
 
@@ -78,8 +65,8 @@ export default function AssetsPage() {
     skip: !employeeId,
   });
 
-  const { data, loading } = useGetEmployeeInfByIdQuery({
-    variables: { getEmployeeInfByIdId: employeeId },
+  const { data } = useGetEmployeeInfByIdQuery({
+    variables: { getEmployeeInfByIdId: employeeId }
   });
   const employeeInf = data?.getEmployeeInfById;
   const totalAssetCount = employeeInf?.totalAssetCount;
@@ -96,6 +83,15 @@ export default function AssetsPage() {
     loading: censusLoading,
     error: censusError,
   } = useGetActiveCensusIdQuery();
+const censusID = censusData?.getCensusEvents[censusData.getCensusEvents.length -1].id
+
+const { data: censusTasksByCensusId } =
+  useGetCensusTasksByCensusIdQuery({
+    variables: { censusId: censusID! },
+    skip: !censusID,
+  });
+  const census = censusTasksByCensusId?.getCensusTasksByCensusId.filter((census)=>census?.employees?.id === employee?.id)
+
 
   const activeCensusId =
     censusData?.getCensusEvents?.[censusData.getCensusEvents.length - 1]?.id ||
@@ -121,48 +117,7 @@ export default function AssetsPage() {
       (assignment) => assignment.signatureR2Key !== null,
     ) || [];
   const qrItems = censusTasksData?.censusTasksByEmployee || [];
-  console.log("qrItems", qrItems);
 
-  // const qrItems = useMemo(() => {
-  //   const assignments = assignmentsData?.getAssignmentsByEmployee || [];
-  //   const pendingAssignments = employeeData?.getPendingAssignments || [];
-
-  //   // census эхлээгүй бол QR хэсэг хоосон
-  //   if (!activeCensusId) return [];
-
-  //   // getPendingAssignments дээр assetId биш asset.id ирж байгаа тул asset?.id ашиглаж байна
-  //   const pendingAssetIds = new Set(
-  //     pendingAssignments
-  //       .map((task: PendingAssignmentItem) => task.asset?.assetTag)
-  //       .filter((id): id is string => Boolean(id)),
-  //   );
-
-  //   // assignment ∩ census pending
-  //   const visibleAssignments = assignments.filter(
-  //     (assignment: AssignmentItem) => {
-  //       const assignmentAssetId = assignment.assetId || assignment.asset?.id;
-  //       return !!assignmentAssetId && pendingAssetIds.has(assignmentAssetId);
-  //     },
-  //   );
-
-  //   const items: QrItem[] = visibleAssignments.map((item: AssignmentItem) => ({
-  //     name: item.asset?.assetTag || "Asset",
-  //     code: item.asset?.serialNumber || item.asset?.assetTag || item.assetId,
-  //     description:
-  //       item.asset?.category?.name ||
-  //       item.asset?.category?.name ||
-  //       "Тоног төхөөрөмж",
-  //     date: item.assignedAt
-  //       ? new Date(item.assignedAt).toLocaleDateString("en-CA")
-  //       : "",
-  //     type: mapAssetTypeToIconType(item.asset?.category?.name),
-  //     location: item.conditionAtAssign || "Тодорхойгүй",
-  //     owner: employeeName,
-  //   }));
-
-  //   return items;
-  // }, [assignmentsData, employeeData, activeCensusId, employeeName]);
-  console.log("qrItems", qrItems);
 
   if (
     !isClerkLoaded ||
@@ -208,6 +163,7 @@ export default function AssetsPage() {
             </p>
           </div>
         </div>
+
       </header>
 
       <main className="w-full px-3 py-6 sm:px-8 sm:py-8">
@@ -239,7 +195,7 @@ export default function AssetsPage() {
 
           {activeTab === "qr" && (
             <QrTab
-              items={qrItems}
+              items={census}
               onOpenScanner={() => setIsScannerOpen(true)}
             />
           )}

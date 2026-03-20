@@ -69,7 +69,7 @@ await DuplicateAssetDocument({variables:{input:{count:num,assetId:item.id}}})
           <div className="flex flex-col gap-3 mt-2">
             <div className="border rounded-md flex gap-3 items-center p-3">
               <div className="border rounded-md p-2">
-                <Image
+                <img
                   src={item.imageUrl || "/placeholder.png"}
                   width={50}
                   height={50}
