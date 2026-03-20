@@ -39,7 +39,7 @@ export const createAssignment: MutationResolvers['createAssignment'] = async (_,
 				.setIssuedAt()
 				.setExpirationTime('72h')
 				.sign(secret);
-			const frontendUrl = context.env.FRONTEND_URL || 'http://localhost:3000';
+			const frontendUrl = 'https://asset-management-web.ariuntuguldur3.workers.dev';
 			const magicLink = `${frontendUrl}/employee-dashboard?token=${token}`;
 			await fetch('https://api.resend.com/emails', {
 				method: 'POST',
