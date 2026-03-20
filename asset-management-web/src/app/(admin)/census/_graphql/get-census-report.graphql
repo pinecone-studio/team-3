@@ -1,0 +1,10 @@
+query GetCensusReport($censusId: ID!) {
+  getCensusReport(censusId: $censusId) {
+    totalAssets
+    verifiedCount
+    verifiedPercentage
+    discrepancies
+    conditionChanges
+    actionItems
+  }
+}

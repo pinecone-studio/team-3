@@ -10,6 +10,8 @@ import CreateModal from "./_components/CreateModal";
 import Lottie from "lottie-react";
 import loaderAnimation from "../../../libs/lottie/animation.json";
 import { useGetCensusTasksQuery } from "@/gql/graphql";
+import Link from "next/link";
+import CensusStatus from "./_components/CensusStatus";
 
 /** * GQL Definitions */
 const GET_CENSUS_EVENTS = gql`
@@ -58,7 +60,7 @@ export default function CensusPage() {
   } = useQuery<GetCensusEventsResponse>(GET_CENSUS_EVENTS, {
     fetchPolicy: "network-only",
   });
-  console.log("eventData", eventData);
+
 
   const { data: tasksData, loading: tasksLoading } = useGetCensusTasksQuery();
 
@@ -68,7 +70,7 @@ export default function CensusPage() {
   const censusView = useMemo(() => {
     const events = eventData?.getCensusEvents || [];
     if (events.length === 0) return null;
-    console.log("events", events);
+
 
     const lastCensus = events[events.length - 1];
     const allTasks = tasksData?.getCensusTasks || [];
@@ -93,7 +95,7 @@ export default function CensusPage() {
       },
     };
   }, [eventData, tasksData]);
-  console.log("censusView", censusView);
+
 
   const handleCreate = async (formData: any) => {
     try {
@@ -132,6 +134,7 @@ export default function CensusPage() {
   }
   if (
     (censusView?.event.closedAt as unknown as string) < new Date().toISOString()
+
   ) {
     return (
       <div className="flex h-screen items-center justify-center bg-white">
@@ -172,79 +175,55 @@ export default function CensusPage() {
         {isLoading ? (
           <div className="p-12 text-center text-gray-400">Ачаалж байна...</div>
         ) : censusView ? (
-          <div className="flex flex-col  gap-6">
-            {/* Top Stats Row */}
-            <div className="flex border border-gray-200 rounded- flex-wrap md:flex-nowrap divide-x rounded-2xl divide-gray-50 border-b">
-              <div className="flex-1 p-6 min-w-62.5 flex items-center justify-center">
-                <div className="flex items-center gap-3">
-                  <span className="font-semibold text-sm">
-                    {censusView.event.name}
+          <Link href={`/census/detail?censusId=${censusView?.event.id}`}>
+            <div className="flex flex-col  gap-6">
+              {/* Top Stats Row */}
+             <CensusStatus censusView={censusView}/>
+
+              {/* Progress Section */}
+              <div className=" p-4.25 rounded-lg border ">
+                <div className="flex justify-between items-end mb-2">
+                  <span className="text-[11px] text-gray-400 font-medium">
+                    {censusView.stats.confirmed}/{censusView.stats.total}{" "}
+                    баталгаажсан
                   </span>
-                  <span className="bg-[#E6FCF5] text-[#20C997] text-[10px] px-2 py-0.5 rounded-md font-bold">
-                    Идэвхтэй
+                  <span className="text-[11px] text-gray-400 font-medium">
+                    {censusView.stats.progress}%
                   </span>
                 </div>
-              </div>
 
-              <StatDisplay
-                value={censusView.stats.total}
-                label="Нийт хөрөнгө"
-                color="text-[#4C6EF5]"
-              />
-              <StatDisplay
-                value={censusView.stats.confirmed}
-                label="Баталгаажсан"
-                color="text-[#20C997]"
-              />
-              <StatDisplay
-                value={censusView.stats.pending}
-                label="Хүлээгдэж буй"
-                color="text-[#FAB005]"
-              />
-            </div>
+                {/* The Blue Progress Bar */}
+                <div className="w-full bg-[#E9ECEF] h-[7px] rounded-full overflow-hidden mb-4">
+                  <div
+                    className="bg-[#4C6EF5] h-full rounded-full transition-all duration-700"
+                    style={{ width: `${censusView.stats.progress}%` }}
+                  />
+                </div>
 
-            {/* Progress Section */}
-            <div className=" p-4.25 rounded-lg border ">
-              <div className="flex justify-between items-end mb-2">
-                <span className="text-[11px] text-gray-400 font-medium">
-                  {censusView.stats.confirmed}/{censusView.stats.total}{" "}
-                  баталгаажсан
-                </span>
-                <span className="text-[11px] text-gray-400 font-medium">
-                  {censusView.stats.progress}%
-                </span>
-              </div>
+                {/* Bottom Meta */}
+                <div className="flex flex-wrap gap-8 text-[11px] text-gray-400">
+                  <p>
+                    Эцсийн хугацаа:{" "}
+                    <span className="text-gray-600 ml-1">2026.03.15</span>
+                  </p>
+                  <p>
+                    Хүлээгдэж буй:{" "}
+                    <span className="text-gray-600 ml-1 font-semibold">
+                      {censusView.stats.pending}
+                    </span>
+                  </p>
 
-              {/* The Blue Progress Bar */}
-              <div className="w-full bg-[#E9ECEF] h-[7px] rounded-full overflow-hidden mb-4">
-                <div
-                  className="bg-[#4C6EF5] h-full rounded-full transition-all duration-700"
-                  style={{ width: `${censusView.stats.progress}%` }}
-                />
-              </div>
-
-              {/* Bottom Meta */}
-              <div className="flex flex-wrap gap-8 text-[11px] text-gray-400">
-                <p>
-                  Эцсийн хугацаа:{" "}
-                  <span className="text-gray-600 ml-1">2026.03.15</span>
-                </p>
-                <p>
-                  Хүлээгдэж буй:{" "}
-                  <span className="text-gray-600 ml-1 font-semibold">
-                    {censusView.stats.pending}
-                  </span>
-                </p>
-
-                <p>
-                  Үүсгэсэн:{" "}
-                  <span className="text-gray-600 ml-1">
-                    {censusView.event.createdBy || "Бат-Эрдэнэ А."}
-                  </span>
-                </p>
+                  <p>
+                    Үүсгэсэн:{" "}
+                    <span className="text-gray-600 ml-1">
+                      {censusView.event.createdBy || "Бат-Эрдэнэ А."}
+                    </span>
+                  </p>
+                </div>
               </div>
             </div>
-          </div>
+          </Link>
+
         ) : (
           <div className="p-12 text-center text-gray-300">
             Тооллого олдсонгүй.
@@ -271,23 +250,3 @@ export default function CensusPage() {
   );
 }
 
-function StatDisplay({
-  value,
-  label,
-  color,
-}: {
-  value: number;
-  label: string;
-  color: string;
-}) {
-  return (
-    <div className="flex-1 p-6 flex flex-col items-center justify-center">
-      <div className="flex items-baseline gap-2">
-        <span className={`text-4xl font-bold tracking-tight ${color}`}>
-          {value}
-        </span>
-        <span className="text-gray-700 text-sm font-medium">{label}</span>
-      </div>
-    </div>
-  );
-}
